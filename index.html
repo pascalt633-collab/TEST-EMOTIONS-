@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Émotions & Besoins | Pascal Tamin - Coach Scolaire</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #FF6B4A 0%, #FF8C69 100%);
+            color: white;
+            padding: 50px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .instruction-box {
+            background: linear-gradient(135deg, #FFF8F0 0%, #FFE8DC 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #FF6B4A;
+        }
+        
+        .instruction-box h3 {
+            color: #FF6B4A;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .instruction-box ul {
+            list-style-position: inside;
+            color: #333;
+            line-height: 2;
+        }
+        
+        .progress-container {
+            background: #f0f0f0;
+            height: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #FF6B4A 0%, #FF8C69 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        .progress-text {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .dimension-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .dimension-title {
+            font-size: 1.5em;
+            color: #FF6B4A;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .dimension-description {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+        }
+        
+        .question-block {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .question-block:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .question-number {
+            color: #FF6B4A;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 1.15em;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .answer-option {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .answer-option:hover {
+            border-color: #FF6B4A;
+            background: #FFF8F0;
+            transform: translateX(5px);
+        }
+        
+        .answer-option.selected {
+            border-color: #FF6B4A;
+            background: linear-gradient(135deg, #FFF8F0 0%, #FFE8DC 100%);
+            font-weight: 600;
+        }
+        
+        .answer-option input[type="radio"] {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .answer-option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 1em;
+            color: #333;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #FF6B4A 0%, #FF8C69 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 30px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 74, 0.3);
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 74, 0.4);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 3% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #FF6B4A 0%, #FF8C69 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .modal-body {
+            padding: 40px;
+        }
+        
+        .formula-choice {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .formula-card {
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .formula-card:hover {
+            border-color: #FF6B4A;
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(255, 107, 74, 0.2);
+        }
+        
+        .formula-card.selected {
+            border-color: #FF6B4A;
+            background: linear-gradient(135deg, #FFF8F0 0%, #FFE8DC 100%);
+        }
+        
+        .formula-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .formula-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .formula-price {
+            font-size: 2em;
+            font-weight: bold;
+            color: #FF6B4A;
+            margin-bottom: 15px;
+        }
+        
+        .formula-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .formula-features li {
+            padding: 8px 0;
+            color: #666;
+            display: flex;
+            align-items: center;
+        }
+        
+        .formula-features li:before {
+            content: "✓";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .formula-btn {
+            background: linear-gradient(135deg, #FF6B4A 0%, #FF8C69 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .formula-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 74, 0.4);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #FFE8DC;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #FF6B4A;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .success-message .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .success-message h3 {
+            font-size: 1.8em;
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        
+        #results {
+            display: none;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .footer-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #FF6B4A;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8em; }
+            .content { padding: 20px; }
+            .modal-content { width: 95%; margin: 10% auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Test Émotions & Besoins</h1>
+            <p>Découvre ta connexion entre émotions et besoins fondamentaux</p>
+        </div>
+        
+        <div class="content">
+            <div class="instruction-box">
+                <h3>📋 Instructions</h3>
+                <ul>
+                    <li>Ce test contient <strong>32 questions</strong></li>
+                    <li>Réponds <strong>spontanément</strong>, sans trop réfléchir</li>
+                    <li>Il n'y a <strong>pas de bonnes ou mauvaises réponses</strong></li>
+                    <li>Durée estimée : <strong>8-10 minutes</strong></li>
+                </ul>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressFill">0%</div>
+                <div class="progress-text" id="progressText">0/32</div>
+            </div>
+            
+            <form id="emotionsForm">
+<!-- DIMENSION 1 : RECONNAISSANCE DES ÉMOTIONS -->
+                <div class="dimension-section">
+                    <div class="dimension-title">🎭 Dimension 1 : Reconnaissance des émotions</div>
+                    <div class="dimension-description">
+                        <strong>Cette dimension évalue</strong> ta capacité à identifier et nommer tes émotions dans différentes situations.
+                    </div>
+                    
+                    <!-- Question 1 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 1/32</div>
+                        <div class="question-text">Je reconnais facilement quand je me sens triste</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q1" value="1" id="q1_1">
+                                <label for="q1_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q1" value="2" id="q1_2">
+                                <label for="q1_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q1" value="3" id="q1_3">
+                                <label for="q1_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q1" value="4" id="q1_4">
+                                <label for="q1_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q1" value="5" id="q1_5">
+                                <label for="q1_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 2 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 2/32</div>
+                        <div class="question-text">Je peux identifier quand je ressens de la colère</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q2" value="1" id="q2_1">
+                                <label for="q2_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q2" value="2" id="q2_2">
+                                <label for="q2_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q2" value="3" id="q2_3">
+                                <label for="q2_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q2" value="4" id="q2_4">
+                                <label for="q2_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q2" value="5" id="q2_5">
+                                <label for="q2_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 3 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 3/32</div>
+                        <div class="question-text">Je reconnais quand je me sens joyeux(se)</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q3" value="1" id="q3_1">
+                                <label for="q3_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q3" value="2" id="q3_2">
+                                <label for="q3_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q3" value="3" id="q3_3">
+                                <label for="q3_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q3" value="4" id="q3_4">
+                                <label for="q3_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q3" value="5" id="q3_5">
+                                <label for="q3_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 4 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 4/32</div>
+                        <div class="question-text">Je sais identifier quand j'ai peur ou je suis anxieux(se)</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q4" value="1" id="q4_1">
+                                <label for="q4_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q4" value="2" id="q4_2">
+                                <label for="q4_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q4" value="3" id="q4_3">
+                                <label for="q4_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q4" value="4" id="q4_4">
+                                <label for="q4_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q4" value="5" id="q4_5">
+                                <label for="q4_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DIMENSION 2 : IDENTIFICATION DES BESOINS -->
+                <div class="dimension-section">
+                    <div class="dimension-title">💎 Dimension 2 : Identification des besoins</div>
+                    <div class="dimension-description">
+                        <strong>Cette dimension évalue</strong> ta capacité à identifier les besoins derrière tes émotions.
+                    </div>
+                    
+                    <!-- Question 5 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 5/32</div>
+                        <div class="question-text">Quand je me sens mal, je cherche à comprendre quel besoin n'est pas satisfait</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q5" value="1" id="q5_1">
+                                <label for="q5_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q5" value="2" id="q5_2">
+                                <label for="q5_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q5" value="3" id="q5_3">
+                                <label for="q5_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q5" value="4" id="q5_4">
+                                <label for="q5_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q5" value="5" id="q5_5">
+                                <label for="q5_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 6 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 6/32</div>
+                        <div class="question-text">Je fais le lien entre mes émotions et mes besoins fondamentaux (sécurité, reconnaissance, appartenance...)</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q6" value="1" id="q6_1">
+                                <label for="q6_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q6" value="2" id="q6_2">
+                                <label for="q6_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q6" value="3" id="q6_3">
+                                <label for="q6_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q6" value="4" id="q6_4">
+                                <label for="q6_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q6" value="5" id="q6_5">
+                                <label for="q6_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 7 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 7/32</div>
+                        <div class="question-text">Je sais identifier mes besoins de sécurité et de stabilité</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q7" value="1" id="q7_1">
+                                <label for="q7_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q7" value="2" id="q7_2">
+                                <label for="q7_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q7" value="3" id="q7_3">
+                                <label for="q7_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q7" value="4" id="q7_4">
+                                <label for="q7_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q7" value="5" id="q7_5">
+                                <label for="q7_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 8 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 8/32</div>
+                        <div class="question-text">Je reconnais quand j'ai besoin d'appartenir à un groupe ou d'être accepté(e)</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q8" value="1" id="q8_1">
+                                <label for="q8_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q8" value="2" id="q8_2">
+                                <label for="q8_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q8" value="3" id="q8_3">
+                                <label for="q8_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q8" value="4" id="q8_4">
+                                <label for="q8_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q8" value="5" id="q8_5">
+                                <label for="q8_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DIMENSION 3 : EXPRESSION DES ÉMOTIONS -->
+                <div class="dimension-section">
+                    <div class="dimension-title">💬 Dimension 3 : Expression des émotions</div>
+                    <div class="dimension-description">
+                        <strong>Cette dimension évalue</strong> ta capacité à exprimer tes émotions de manière appropriée.
+                    </div>
+                    
+                    <!-- Question 9 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 9/32</div>
+                        <div class="question-text">Je suis capable d'exprimer mes émotions aux autres</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q9" value="1" id="q9_1">
+                                <label for="q9_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q9" value="2" id="q9_2">
+                                <label for="q9_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q9" value="3" id="q9_3">
+                                <label for="q9_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q9" value="4" id="q9_4">
+                                <label for="q9_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q9" value="5" id="q9_5">
+                                <label for="q9_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 10 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 10/32</div>
+                        <div class="question-text">Je peux dire à quelqu'un que je suis triste ou blessé(e)</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q10" value="1" id="q10_1">
+                                <label for="q10_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q10" value="2" id="q10_2">
+                                <label for="q10_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q10" value="3" id="q10_3">
+                                <label for="q10_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q10" value="4" id="q10_4">
+                                <label for="q10_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q10" value="5" id="q10_5">
+                                <label for="q10_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Questions 11 et 12 continuent... -->
+<!-- Question 11 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 11/32</div>
+                        <div class="question-text">Je peux partager ma joie avec les autres</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q11" value="1" id="q11_1">
+                                <label for="q11_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q11" value="2" id="q11_2">
+                                <label for="q11_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q11" value="3" id="q11_3">
+                                <label for="q11_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q11" value="4" id="q11_4">
+                                <label for="q11_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q11" value="5" id="q11_5">
+                                <label for="q11_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 12 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 12/32</div>
+                        <div class="question-text">J'exprime ma colère de façon respectueuse</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q12" value="1" id="q12_1">
+                                <label for="q12_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q12" value="2" id="q12_2">
+                                <label for="q12_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q12" value="3" id="q12_3">
+                                <label for="q12_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q12" value="4" id="q12_4">
+                                <label for="q12_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q12" value="5" id="q12_5">
+                                <label for="q12_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DIMENSION 4 : SATISFACTION DES BESOINS -->
+                <div class="dimension-section">
+                    <div class="dimension-title">✨ Dimension 4 : Satisfaction des besoins</div>
+                    <div class="dimension-description">
+                        <strong>Cette dimension évalue</strong> ta capacité à prendre des actions pour satisfaire tes besoins.
+                    </div>
+                    
+                    <!-- Question 13 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 13/32</div>
+                        <div class="question-text">Je prends des mesures pour satisfaire mes besoins identifiés</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q13" value="1" id="q13_1">
+                                <label for="q13_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q13" value="2" id="q13_2">
+                                <label for="q13_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q13" value="3" id="q13_3">
+                                <label for="q13_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q13" value="4" id="q13_4">
+                                <label for="q13_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q13" value="5" id="q13_5">
+                                <label for="q13_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 14 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 14/32</div>
+                        <div class="question-text">Je demande de l'aide quand j'en ai besoin</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q14" value="1" id="q14_1">
+                                <label for="q14_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q14" value="2" id="q14_2">
+                                <label for="q14_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q14" value="3" id="q14_3">
+                                <label for="q14_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q14" value="4" id="q14_4">
+                                <label for="q14_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q14" value="5" id="q14_5">
+                                <label for="q14_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 15 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 15/32</div>
+                        <div class="question-text">Je trouve des moyens concrets de répondre à mes besoins</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q15" value="1" id="q15_1">
+                                <label for="q15_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q15" value="2" id="q15_2">
+                                <label for="q15_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q15" value="3" id="q15_3">
+                                <label for="q15_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q15" value="4" id="q15_4">
+                                <label for="q15_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q15" value="5" id="q15_5">
+                                <label for="q15_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 16 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 16/32</div>
+                        <div class="question-text">Je communique clairement mes besoins aux autres</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q16" value="1" id="q16_1">
+                                <label for="q16_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q16" value="2" id="q16_2">
+                                <label for="q16_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q16" value="3" id="q16_3">
+                                <label for="q16_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q16" value="4" id="q16_4">
+                                <label for="q16_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q16" value="5" id="q16_5">
+                                <label for="q16_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DIMENSION 5 : RÉGULATION ÉMOTIONNELLE -->
+                <div class="dimension-section">
+                    <div class="dimension-title">🎯 Dimension 5 : Régulation émotionnelle</div>
+                    <div class="dimension-description">
+                        <strong>Cette dimension évalue</strong> ta capacité à gérer tes émotions de manière saine.
+                    </div>
+                    
+                    <!-- Question 17 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 17/32</div>
+                        <div class="question-text">Je peux calmer mes émotions fortes quand c'est nécessaire</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q17" value="1" id="q17_1">
+                                <label for="q17_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q17" value="2" id="q17_2">
+                                <label for="q17_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q17" value="3" id="q17_3">
+                                <label for="q17_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q17" value="4" id="q17_4">
+                                <label for="q17_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q17" value="5" id="q17_5">
+                                <label for="q17_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 18 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 18/32</div>
+                        <div class="question-text">J'utilise des techniques de gestion du stress (respiration, relaxation, etc.)</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q18" value="1" id="q18_1">
+                                <label for="q18_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q18" value="2" id="q18_2">
+                                <label for="q18_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q18" value="3" id="q18_3">
+                                <label for="q18_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q18" value="4" id="q18_4">
+                                <label for="q18_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q18" value="5" id="q18_5">
+                                <label for="q18_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 19 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 19/32</div>
+                        <div class="question-text">Je gère mes émotions sans blesser les autres</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q19" value="1" id="q19_1">
+                                <label for="q19_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q19" value="2" id="q19_2">
+                                <label for="q19_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q19" value="3" id="q19_3">
+                                <label for="q19_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q19" value="4" id="q19_4">
+                                <label for="q19_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q19" value="5" id="q19_5">
+                                <label for="q19_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 20 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 20/32</div>
+                        <div class="question-text">Je rebondis facilement après une émotion difficile</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q20" value="1" id="q20_1">
+                                <label for="q20_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q20" value="2" id="q20_2">
+                                <label for="q20_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q20" value="3" id="q20_3">
+                                <label for="q20_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q20" value="4" id="q20_4">
+                                <label for="q20_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q20" value="5" id="q20_5">
+                                <label for="q20_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DIMENSION 6 : CONNEXION CORPS-ÉMOTIONS -->
+                <div class="dimension-section">
+                    <div class="dimension-title">🧘 Dimension 6 : Connexion corps-émotions</div>
+                    <div class="dimension-description">
+                        <strong>Cette dimension évalue</strong> ta capacité à ressentir les émotions dans ton corps.
+                    </div>
+                    
+                    <!-- Question 21 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 21/32</div>
+                        <div class="question-text">Je ressens mes émotions dans mon corps (ventre serré, cœur qui bat, etc.)</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q21" value="1" id="q21_1">
+                                <label for="q21_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q21" value="2" id="q21_2">
+                                <label for="q21_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q21" value="3" id="q21_3">
+                                <label for="q21_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q21" value="4" id="q21_4">
+                                <label for="q21_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q21" value="5" id="q21_5">
+                                <label for="q21_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 22 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 22/32</div>
+                        <div class="question-text">Je suis attentif(ve) aux signaux physiques de mes émotions</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q22" value="1" id="q22_1">
+                                <label for="q22_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q22" value="2" id="q22_2">
+                                <label for="q22_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q22" value="3" id="q22_3">
+                                <label for="q22_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q22" value="4" id="q22_4">
+                                <label for="q22_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q22" value="5" id="q22_5">
+                                <label for="q22_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+<!-- Question 23 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 23/32</div>
+                        <div class="question-text">J'écoute mon corps pour comprendre ce dont j'ai besoin</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q23" value="1" id="q23_1">
+                                <label for="q23_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q23" value="2" id="q23_2">
+                                <label for="q23_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q23" value="3" id="q23_3">
+                                <label for="q23_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q23" value="4" id="q23_4">
+                                <label for="q23_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q23" value="5" id="q23_5">
+                                <label for="q23_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 24 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 24/32</div>
+                        <div class="question-text">Je prends soin de mon corps pour réguler mes émotions</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q24" value="1" id="q24_1">
+                                <label for="q24_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q24" value="2" id="q24_2">
+                                <label for="q24_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q24" value="3" id="q24_3">
+                                <label for="q24_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q24" value="4" id="q24_4">
+                                <label for="q24_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q24" value="5" id="q24_5">
+                                <label for="q24_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DIMENSION 7 : EMPATHIE ÉMOTIONNELLE -->
+                <div class="dimension-section">
+                    <div class="dimension-title">❤️ Dimension 7 : Empathie émotionnelle</div>
+                    <div class="dimension-description">
+                        <strong>Cette dimension évalue</strong> ta capacité à reconnaître les émotions et besoins des autres.
+                    </div>
+                    
+                    <!-- Question 25 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 25/32</div>
+                        <div class="question-text">Je reconnais facilement les émotions des autres</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q25" value="1" id="q25_1">
+                                <label for="q25_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q25" value="2" id="q25_2">
+                                <label for="q25_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q25" value="3" id="q25_3">
+                                <label for="q25_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q25" value="4" id="q25_4">
+                                <label for="q25_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q25" value="5" id="q25_5">
+                                <label for="q25_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 26 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 26/32</div>
+                        <div class="question-text">Je comprends les besoins des autres même s'ils ne les expriment pas clairement</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q26" value="1" id="q26_1">
+                                <label for="q26_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q26" value="2" id="q26_2">
+                                <label for="q26_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q26" value="3" id="q26_3">
+                                <label for="q26_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q26" value="4" id="q26_4">
+                                <label for="q26_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q26" value="5" id="q26_5">
+                                <label for="q26_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 27 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 27/32</div>
+                        <div class="question-text">Je suis sensible aux émotions de mon entourage</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q27" value="1" id="q27_1">
+                                <label for="q27_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q27" value="2" id="q27_2">
+                                <label for="q27_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q27" value="3" id="q27_3">
+                                <label for="q27_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q27" value="4" id="q27_4">
+                                <label for="q27_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q27" value="5" id="q27_5">
+                                <label for="q27_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 28 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 28/32</div>
+                        <div class="question-text">J'aide les autres à identifier leurs émotions et besoins</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q28" value="1" id="q28_1">
+                                <label for="q28_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q28" value="2" id="q28_2">
+                                <label for="q28_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q28" value="3" id="q28_3">
+                                <label for="q28_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q28" value="4" id="q28_4">
+                                <label for="q28_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q28" value="5" id="q28_5">
+                                <label for="q28_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DIMENSION 8 : ACCEPTATION ÉMOTIONNELLE -->
+                <div class="dimension-section">
+                    <div class="dimension-title">🌈 Dimension 8 : Acceptation émotionnelle</div>
+                    <div class="dimension-description">
+                        <strong>Cette dimension évalue</strong> ta capacité à accepter toutes tes émotions sans jugement.
+                    </div>
+                    
+                    <!-- Question 29 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 29/32</div>
+                        <div class="question-text">J'accepte toutes mes émotions, même les désagréables</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q29" value="1" id="q29_1">
+                                <label for="q29_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q29" value="2" id="q29_2">
+                                <label for="q29_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q29" value="3" id="q29_3">
+                                <label for="q29_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q29" value="4" id="q29_4">
+                                <label for="q29_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q29" value="5" id="q29_5">
+                                <label for="q29_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 30 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 30/32</div>
+                        <div class="question-text">Je ne me juge pas pour ce que je ressens</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q30" value="1" id="q30_1">
+                                <label for="q30_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q30" value="2" id="q30_2">
+                                <label for="q30_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q30" value="3" id="q30_3">
+                                <label for="q30_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q30" value="4" id="q30_4">
+                                <label for="q30_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q30" value="5" id="q30_5">
+                                <label for="q30_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 31 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 31/32</div>
+                        <div class="question-text">Je considère mes émotions comme des informations utiles</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q31" value="1" id="q31_1">
+                                <label for="q31_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q31" value="2" id="q31_2">
+                                <label for="q31_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q31" value="3" id="q31_3">
+                                <label for="q31_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q31" value="4" id="q31_4">
+                                <label for="q31_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q31" value="5" id="q31_5">
+                                <label for="q31_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 32 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 32/32</div>
+                        <div class="question-text">Je suis bienveillant(e) envers moi-même quand je ressens des émotions difficiles</div>
+                        <div class="answer-options">
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q32" value="1" id="q32_1">
+                                <label for="q32_1">Jamais ou presque jamais</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q32" value="2" id="q32_2">
+                                <label for="q32_2">Rarement</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q32" value="3" id="q32_3">
+                                <label for="q32_3">Parfois</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q32" value="4" id="q32_4">
+                                <label for="q32_4">Souvent</label>
+                            </div>
+                            <div class="answer-option" onclick="selectAnswer(this)">
+                                <input type="radio" name="q32" value="5" id="q32_5">
+                                <label for="q32_5">Toujours ou presque toujours</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>Découvrir mes résultats 🎁</button>
+            </form>
+
+            <!-- MODAL CHOIX DE FORMULE -->
+            <div id="choiceModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>🎉 Test terminé !</h2>
+                        <p>Choisissez votre formule pour découvrir vos résultats</p>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <div class="formula-choice">
+                            <!-- FORMULE GRATUITE -->
+                            <div class="formula-card" onclick="selectFormula('free')">
+                                <input type="radio" name="formula" value="free" id="formula_free">
+                                <div class="formula-title">🎁 GRATUIT</div>
+                                <div class="formula-price">0€</div>
+                                <ul class="formula-features">
+                                    <li>Score global</li>
+                                    <li>3 conseils pratiques</li>
+                                    <li>Email requis</li>
+                                </ul>
+                                <button class="formula-btn" onclick="chooseFree(event)">Obtenir mon score gratuit</button>
+                            </div>
+                            
+                            <!-- FORMULE PAYANTE 9€ -->
+                            <div class="formula-card" onclick="selectFormula('premium')">
+                                <input type="radio" name="formula" value="premium" id="formula_premium">
+                                <div class="formula-title">⚡ ANALYSE COMPLÈTE</div>
+                                <div class="formula-price">9€</div>
+                                <ul class="formula-features">
+                                    <li>Tout du gratuit +</li>
+                                    <li>Profil détaillé 8 dimensions</li>
+                                    <li>Graphique radar interactif</li>
+                                    <li>Analyses neuro + psycho</li>
+                                    <li>Plan d'action 10 étapes</li>
+                                    <li>Document PDF téléchargeable</li>
+                                </ul>
+                                <button class="formula-btn" onclick="choosePremium(event)">Payer 9€ et débloquer</button>
+                            </div>
+                            
+                            <!-- FORMULE RDV 60€ -->
+                            <div class="formula-card" onclick="selectFormula('rdv')">
+                                <input type="radio" name="formula" value="rdv" id="formula_rdv">
+                                <div class="formula-title">🎓 COACHING PERSONNALISÉ</div>
+                                <div class="formula-price">60€</div>
+                                <ul class="formula-features">
+                                    <li>Tout de l'analyse complète +</li>
+                                    <li>RDV visio ou cabinet (1h)</li>
+                                    <li>Stratégie sur-mesure</li>
+                                    <li>Suivi par email 1 mois</li>
+                                </ul>
+                                <button class="formula-btn" onclick="chooseRDV(event)">Prendre rendez-vous</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL EMAIL GRATUIT -->
+            <div id="freeEmailModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>📧 Dernière étape</h2>
+                        <p>Entre ton email pour recevoir ton score</p>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <form id="freeEmailForm" onsubmit="submitFreeEmail(event)">
+                            <div class="form-group">
+                                <label for="freeName">Prénom *</label>
+                                <input type="text" id="freeName" name="freeName" required placeholder="Ton prénom">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="freeEmail">Email *</label>
+                                <input type="email" id="freeEmail" name="freeEmail" required placeholder="ton.email@exemple.com">
+                            </div>
+                            
+                            <button type="submit" class="formula-btn" id="freeEmailBtn">
+                                Voir mon score gratuit
+                            </button>
+                            
+                            <div class="privacy-note">
+                                🔒 Tes données ne seront jamais partagées
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL RDV -->
+            <div id="rdvModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>📅 Demande de rendez-vous</h2>
+                        <p>Je te recontacterai sous 24h</p>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <div id="rdvForm">
+                            <form id="rdvFormElement" onsubmit="submitRDV(event)">
+                                <div class="form-group">
+                                    <label for="rdvName">Prénom et Nom *</label>
+                                    <input type="text" id="rdvName" name="rdvName" required placeholder="Ton nom complet">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="rdvEmail">Email *</label>
+                                    <input type="email" id="rdvEmail" name="rdvEmail" required placeholder="ton.email@exemple.com">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="rdvPhone">Téléphone *</label>
+                                    <input type="tel" id="rdvPhone" name="rdvPhone" required placeholder="06 XX XX XX XX">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="rdvMessage">Message / Disponibilités</label>
+                                    <textarea id="rdvMessage" name="rdvMessage" rows="4" placeholder="Décris brièvement ta situation et tes disponibilités..."></textarea>
+                                </div>
+                                
+                                <button type="submit" class="formula-btn" id="rdvSubmitBtn">
+                                    📩 Envoyer ma demande
+                                </button>
+                                
+                                <button type="button" onclick="closeRDVModal()" style="width: 100%; margin-top: 10px; padding: 12px; background: #f0f0f0; color: #666; border: none; border-radius: 10px; cursor: pointer; font-size: 1em;">
+                                    Annuler
+                                </button>
+                                
+                                <div class="privacy-note">
+                                    🔒 Je te recontacterai sous 24h pour fixer le RDV
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div id="rdvSuccess" class="success-message">
+                            <div class="icon">✅</div>
+                            <h3>Demande envoyée !</h3>
+                            <p>Merci ! Je te recontacterai sous 24h par email ou téléphone. 📞</p>
+                            <button onclick="closeRDVModal()" style="margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, #FF6B4A 0%, #FF8C69 100%); color: white; border: none; border-radius: 30px; cursor: pointer; font-weight: bold;">
+                                Fermer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION RÉSULTATS -->
+            <div id="results">
+<div style="text-align: center; margin-bottom: 40px;">
+                    <h2 style="color: #FF6B4A; font-size: 2em; margin-bottom: 10px;">📊 Tes résultats</h2>
+                    <p style="color: #666; font-size: 1.1em;" id="resultsSubtitle">Découvre ton profil émotionnel</p>
+                </div>
+                
+                <!-- Boutons d'action -->
+                <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;">
+                    <button onclick="window.print()" class="submit-btn" style="padding: 12px 30px; font-size: 1em; width: auto;">
+                        🖨️ Imprimer
+                    </button>
+                </div>
+                
+                <!-- Score global -->
+                <div style="background: white; padding: 40px; border-radius: 15px; margin-bottom: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                    <div style="font-size: 1.3em; color: #666; margin-bottom: 15px;">Ton score Émotions & Besoins</div>
+                    <div style="font-size: 4em; font-weight: bold; color: #FF6B4A; margin-bottom: 10px;" id="globalScore">0%</div>
+                    <div style="font-size: 1.2em; color: #666; font-weight: 600;" id="interpretation"></div>
+                </div>
+                
+                <!-- Contenu détaillé (seulement pour premium) -->
+                <div id="premiumContent" style="display: none;">
+                    <!-- Graphique radar -->
+                    <div style="background: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <h3 style="color: #FF6B4A; text-align: center; margin-bottom: 25px;">📈 Ton profil par dimension</h3>
+                        <canvas id="dimensionsChart" width="400" height="400"></canvas>
+                    </div>
+                    
+                    <!-- Scores par dimension -->
+                    <div style="background: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <h3 style="color: #FF6B4A; margin-bottom: 25px;">🎯 Détail de tes dimensions</h3>
+                        <div id="dimensionScores"></div>
+                    </div>
+                    
+                    <!-- Analyse neurosciences -->
+                    <div style="background: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <h3 style="color: #FF6B4A; margin-bottom: 20px;">🧠 Analyse neuro-praticien</h3>
+                        <div id="neuroAnalysis"></div>
+                    </div>
+                    
+                    <!-- Analyse psychopraticien -->
+                    <div style="background: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <h3 style="color: #FF6B4A; margin-bottom: 20px;">💡 Analyse psychopraticien</h3>
+                        <div id="psychoAnalysis"></div>
+                    </div>
+                    
+                    <!-- Plan d'action -->
+                    <div style="background: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <h3 style="color: #FF6B4A; margin-bottom: 20px;">🚀 Ton plan d'action personnalisé</h3>
+                        <div id="actionPlan"></div>
+                    </div>
+                    
+                    <!-- Message du coach -->
+                    <div style="background: linear-gradient(135deg, #FFF8F0 0%, #FFE8DC 100%); padding: 30px; border-radius: 15px; border: 2px solid #FF6B4A; margin-bottom: 30px;">
+                        <h3 style="color: #FF6B4A; margin-bottom: 20px;">💬 Message de ton coach</h3>
+                        <div id="coachMessage" style="color: #333; line-height: 1.8; font-size: 1.05em;"></div>
+                    </div>
+                </div>
+                
+                <!-- CTA Upgrade (seulement pour gratuit) -->
+                <div id="upgradeSection" style="display: none;">
+                    <div style="background: linear-gradient(135deg, #FF6B4A 0%, #FF8C69 100%); padding: 40px; border-radius: 15px; text-align: center; color: white; margin-bottom: 30px;">
+                        <h3 style="font-size: 1.8em; margin-bottom: 15px;">🎁 Envie d'aller plus loin ?</h3>
+                        <p style="font-size: 1.1em; margin-bottom: 25px; line-height: 1.7;">
+                            Débloquez votre analyse complète pour seulement 9€ :<br>
+                            <strong>✓ Profil détaillé 8 dimensions</strong><br>
+                            <strong>✓ Graphique interactif</strong><br>
+                            <strong>✓ Analyses neuro + psycho complètes</strong><br>
+                            <strong>✓ Plan d'action personnalisé (10 étapes)</strong><br>
+                            <strong>✓ Document PDF téléchargeable</strong>
+                        </p>
+                        <button onclick="upgradeToPremium()" style="display: inline-block; background: white; color: #FF6B4A; padding: 15px 40px; border: none; border-radius: 30px; font-weight: bold; font-size: 1.1em; cursor: pointer; transition: all 0.3s;">
+                            ⚡ Débloquer pour 9€
+                        </button>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 15px; text-align: center; color: white; margin-bottom: 30px;">
+                        <h3 style="font-size: 1.8em; margin-bottom: 15px;">🎓 Besoin d'un accompagnement ?</h3>
+                        <p style="font-size: 1.1em; margin-bottom: 25px; line-height: 1.7;">
+                            RDV personnalisé (1h) - Stratégie sur-mesure - Suivi 1 mois<br>
+                            <strong>60€</strong>
+                        </p>
+                        <button onclick="openRDVFromResults()" style="display: inline-block; background: white; color: #667eea; padding: 15px 40px; border: none; border-radius: 30px; font-weight: bold; font-size: 1.1em; cursor: pointer; transition: all 0.3s;">
+                            📅 Prendre rendez-vous
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- CTA Final (pour premium et rdv) -->
+                <div id="finalCTA" style="display: none;">
+                    <div style="background: linear-gradient(135deg, #FF6B4A 0%, #FF8C69 100%); padding: 40px; border-radius: 15px; text-align: center; color: white; margin-bottom: 30px;">
+                        <h3 style="font-size: 1.8em; margin-bottom: 15px;">🎯 Prêt(e) à aller plus loin ?</h3>
+                        <p style="font-size: 1.1em; margin-bottom: 25px; line-height: 1.7;">
+                            Développe ta connexion émotions-besoins avec un accompagnement personnalisé.<br>
+                            <strong>Séance découverte offerte !</strong>
+                        </p>
+                        <a href="mailto:pascalt633@gmail.com" style="display: inline-block; background: white; color: #FF6B4A; padding: 15px 40px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 1.1em; transition: all 0.3s;">
+                            📧 Prendre rendez-vous
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-brand">PASCAL TAMIN</div>
+            <p style="margin: 10px 0;">Coach scolaire · Motivation · Orientation</p>
+            <p style="font-size: 0.9em; opacity: 0.8;">Ancien personnel de direction Éducation nationale<br>Certifié neuro-praticien · Psychopraticien · Coach de vie</p>
+            <p style="margin-top: 20px; font-size: 0.85em;">📧 Contact : pascalt633@gmail.com</p>
+        </div>
+    </div>
+
+    <script>
+        // ========== CONFIGURATION STRIPE ==========
+        const stripe = Stripe('pk_test_51SL33tFjXJPlsRgPEYRVsx1uFoEJZWlY5p3ZrHQlsl1qU5VfjXpDorzpEWPKFyUhPNQc6oS9vZtewE3OTqAkyzyh005UxDZAe7');
+        const PRICE_ID = 'price_1SL36JFjXJPlsRgP6Ylx8FBN';
+        const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_8x28wP1vb1N82S1fo8cbC00';
+        
+        // ========== VARIABLES GLOBALES ==========
+        let calculatedScores = null;
+        let selectedFormula = null;
+        let dimensionsChart = null;
+        const totalQuestions = 32;
+        
+        // ========== SÉLECTION DE RÉPONSE ==========
+        function selectAnswer(element) {
+            const parent = element.closest('.question-block');
+            const options = parent.querySelectorAll('.answer-option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            const radio = element.querySelector('input[type="radio"]');
+            radio.checked = true;
+            
+            updateProgress();
+        }
+        
+        // ========== MISE À JOUR PROGRESSION ==========
+        function updateProgress() {
+            const form = document.getElementById('emotionsForm');
+            const answered = form.querySelectorAll('input[type="radio"]:checked').length;
+            const percentage = (answered / totalQuestions) * 100;
+            
+            document.getElementById('progressText').textContent = `${answered}/${totalQuestions}`;
+            document.getElementById('progressFill').style.width = `${percentage}%`;
+            document.getElementById('progressFill').textContent = `${Math.round(percentage)}%`;
+            
+            document.getElementById('submitBtn').disabled = answered < totalQuestions;
+        }
+        
+        // ========== SOUMISSION DU FORMULAIRE ==========
+        document.getElementById('emotionsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateScores();
+            document.getElementById('choiceModal').style.display = 'block';
+        });
+        
+        // ========== CALCUL DES SCORES ==========
+        function calculateScores() {
+            const formData = new FormData(document.getElementById('emotionsForm'));
+            
+            const dimensions = {
+                reconnaissance: { name: '🎭 Reconnaissance émotions', score: 0, max: 20, questions: ['q1', 'q2', 'q3', 'q4'] },
+                identification: { name: '💎 Identification besoins', score: 0, max: 20, questions: ['q5', 'q6', 'q7', 'q8'] },
+                expression: { name: '💬 Expression émotions', score: 0, max: 20, questions: ['q9', 'q10', 'q11', 'q12'] },
+                satisfaction: { name: '✨ Satisfaction besoins', score: 0, max: 20, questions: ['q13', 'q14', 'q15', 'q16'] },
+                regulation: { name: '🎯 Régulation émotionnelle', score: 0, max: 20, questions: ['q17', 'q18', 'q19', 'q20'] },
+                connexion: { name: '🧘 Connexion corps-émotions', score: 0, max: 20, questions: ['q21', 'q22', 'q23', 'q24'] },
+                empathie: { name: '❤️ Empathie émotionnelle', score: 0, max: 20, questions: ['q25', 'q26', 'q27', 'q28'] },
+                acceptation: { name: '🌈 Acceptation émotionnelle', score: 0, max: 20, questions: ['q29', 'q30', 'q31', 'q32'] }
+            };
+            
+            for (const [key, dim] of Object.entries(dimensions)) {
+                dim.questions.forEach(q => {
+                    const value = parseInt(formData.get(q) || 0);
+                    dim.score += value;
+                });
+                dim.percentage = Math.round((dim.score / dim.max) * 100);
+            }
+            
+            const totalScore = Object.values(dimensions).reduce((sum, dim) => sum + dim.score, 0);
+            const totalMax = Object.values(dimensions).reduce((sum, dim) => sum + dim.max, 0);
+            const globalPercentage = Math.round((totalScore / totalMax) * 100);
+            
+            calculatedScores = {
+                global: totalScore,
+                percentage: globalPercentage,
+                dimensions: dimensions,
+                date: new Date().toLocaleDateString('fr-FR'),
+                timestamp: new Date().toISOString()
+            };
+        }
+        
+        // ========== SÉLECTION FORMULE ==========
+        function selectFormula(type) {
+            document.querySelectorAll('.formula-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            document.getElementById(`formula_${type}`).checked = true;
+            selectedFormula = type;
+        }
+        
+        // ========== CHOIX GRATUIT ==========
+        function chooseFree(event) {
+            event.stopPropagation();
+            selectedFormula = 'free';
+            document.getElementById('choiceModal').style.display = 'none';
+            document.getElementById('freeEmailModal').style.display = 'block';
+        }
+        
+        // ========== SOUMISSION EMAIL GRATUIT ==========
+        function submitFreeEmail(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('freeName').value.trim();
+            const email = document.getElementById('freeEmail').value.trim();
+            
+            if (!name || !email) {
+                alert('Merci de remplir tous les champs');
+                return;
+            }
+            
+            saveUserData(name, email, 'free');
+            document.getElementById('freeEmailModal').style.display = 'none';
+            displayResults('free', name);
+        }
+        
+        // ========== CHOIX PREMIUM (PAIEMENT STRIPE) ==========
+        function choosePremium(event) {
+            event.stopPropagation();
+            selectedFormula = 'premium';
+            
+            // Sauvegarder les scores avant de partir vers Stripe
+            localStorage.setItem('pendingScores', JSON.stringify(calculatedScores));
+            
+            // Redirection vers le Payment Link Stripe
+            window.location.href = STRIPE_PAYMENT_LINK;
+        }
+        
+        // ========== CHOIX RDV ==========
+        function chooseRDV(event) {
+            event.stopPropagation();
+            selectedFormula = 'rdv';
+            document.getElementById('choiceModal').style.display = 'none';
+            document.getElementById('rdvModal').style.display = 'block';
+        }
+        
+        // ========== SOUMISSION RDV ==========
+        function submitRDV(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('rdvName').value.trim();
+            const email = document.getElementById('rdvEmail').value.trim();
+            const phone = document.getElementById('rdvPhone').value.trim();
+            const message = document.getElementById('rdvMessage').value.trim();
+            
+            if (!name || !email || !phone) {
+                alert('Merci de remplir tous les champs obligatoires');
+                return;
+            }
+            
+            saveRDVRequest(name, email, phone, message);
+            document.getElementById('rdvForm').style.display = 'none';
+            document.getElementById('rdvSuccess').style.display = 'block';
+        }
+        
+        // ========== FERMER MODAL RDV ==========
+        function closeRDVModal() {
+            document.getElementById('rdvModal').style.display = 'none';
+            document.getElementById('rdvForm').style.display = 'block';
+            document.getElementById('rdvSuccess').style.display = 'none';
+        }
+        
+        // ========== OUVRIR RDV DEPUIS RÉSULTATS ==========
+        function openRDVFromResults() {
+            document.getElementById('rdvModal').style.display = 'block';
+        }
+        
+        // ========== UPGRADE VERS PREMIUM ==========
+        function upgradeToPremium() {
+            localStorage.setItem('pendingScores', JSON.stringify(calculatedScores));
+            window.location.href = STRIPE_PAYMENT_LINK;
+        }
+// ========== SAUVEGARDE DONNÉES UTILISATEUR ==========
+        function saveUserData(name, email, formula) {
+            const userData = {
+                name: name,
+                email: email,
+                formula: formula,
+                score: calculatedScores.percentage,
+                date: calculatedScores.date,
+                timestamp: calculatedScores.timestamp,
+                dimensions: calculatedScores.dimensions
+            };
+            
+            let users = JSON.parse(localStorage.getItem('emotionsUsers') || '[]');
+            users.push(userData);
+            localStorage.setItem('emotionsUsers', JSON.stringify(users));
+        }
+        
+        // ========== SAUVEGARDE DEMANDE RDV ==========
+        function saveRDVRequest(name, email, phone, message) {
+            const rdvData = {
+                name: name,
+                email: email,
+                phone: phone,
+                message: message,
+                score: calculatedScores.percentage,
+                date: calculatedScores.date,
+                timestamp: calculatedScores.timestamp
+            };
+            
+            let rdvs = JSON.parse(localStorage.getItem('emotionsRDV') || '[]');
+            rdvs.push(rdvData);
+            localStorage.setItem('emotionsRDV', JSON.stringify(rdvs));
+        }
+        
+        // ========== AFFICHAGE DES RÉSULTATS ==========
+        function displayResults(formula, userName = '') {
+            document.getElementById('emotionsForm').style.display = 'none';
+            document.querySelector('.progress-container').style.display = 'none';
+            document.querySelector('.instruction-box').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            if (userName) {
+                document.getElementById('resultsSubtitle').innerHTML = `Découvre ton profil, ${userName} !`;
+            }
+            
+            document.getElementById('globalScore').textContent = calculatedScores.percentage + '%';
+            
+            let interpretation = '';
+            if (calculatedScores.percentage >= 80) interpretation = '🌟 Excellent ! Connexion émotions-besoins très développée';
+            else if (calculatedScores.percentage >= 70) interpretation = '✨ Très bien ! Tu as une bonne connexion émotions-besoins';
+            else if (calculatedScores.percentage >= 60) interpretation = '👍 Bien ! Ta connexion émotions-besoins est en développement';
+            else if (calculatedScores.percentage >= 50) interpretation = '🌱 En développement ! Tu es sur la bonne voie';
+            else interpretation = '🌟 Fort potentiel ! Place à l\'apprentissage';
+            
+            document.getElementById('interpretation').textContent = interpretation;
+            
+            if (formula === 'premium') {
+                document.getElementById('premiumContent').style.display = 'block';
+                document.getElementById('upgradeSection').style.display = 'none';
+                document.getElementById('finalCTA').style.display = 'block';
+                
+                displayDimensionScores(calculatedScores.dimensions);
+                createRadarChart(calculatedScores.dimensions);
+                generateNeuroAnalysis(calculatedScores);
+                generatePsychoAnalysis(calculatedScores);
+                generateActionPlan(calculatedScores);
+                generateCoachMessage(calculatedScores);
+            } else {
+                document.getElementById('premiumContent').style.display = 'none';
+                document.getElementById('upgradeSection').style.display = 'block';
+                document.getElementById('finalCTA').style.display = 'none';
+                
+                generateFreeAdvice(calculatedScores);
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // ========== CONSEILS GRATUITS ==========
+        function generateFreeAdvice(scores) {
+            const advice = document.createElement('div');
+            advice.style.cssText = 'background: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);';
+            
+            advice.innerHTML = `
+                <h3 style="color: #FF6B4A; margin-bottom: 20px;">💡 3 conseils pratiques pour toi</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #FF6B4A;">1. Journal émotionnel quotidien</strong>
+                    <p style="margin-top: 10px; line-height: 1.7;">Chaque soir, note : quelle émotion j'ai le plus ressentie ? Quel besoin était derrière ? Cette pratique développe ta conscience émotionnelle en 3 semaines.</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #FF6B4A;">2. Écoute de ton corps</strong>
+                    <p style="margin-top: 10px; line-height: 1.7;">3 fois par jour, fais une pause et demande-toi : "Qu'est-ce que mon corps me dit en ce moment ?" Tes émotions parlent à travers lui.</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                    <strong style="color: #FF6B4A;">3. Technique du BESOIN caché</strong>
+                    <p style="margin-top: 10px; line-height: 1.7;">Quand une émotion désagréable arrive, demande-toi : "Quel besoin n'est pas satisfait en ce moment ?" Sécurité ? Reconnaissance ? Appartenance ? Identifier le besoin, c'est 50% de la solution.</p>
+                </div>
+            `;
+            
+            document.getElementById('results').insertBefore(advice, document.getElementById('upgradeSection'));
+        }
+        
+        // ========== AFFICHAGE SCORES PAR DIMENSION ==========
+        function displayDimensionScores(dimensions) {
+            const container = document.getElementById('dimensionScores');
+            let html = '';
+            
+            for (const dim of Object.values(dimensions)) {
+                let color = '#4CAF50';
+                if (dim.percentage < 50) color = '#f44336';
+                else if (dim.percentage < 70) color = '#FF9800';
+                
+                html += `
+                    <div style="margin-bottom: 25px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="font-weight: 600; color: #333;">${dim.name}</span>
+                            <span style="font-weight: bold; color: ${color};">${dim.percentage}%</span>
+                        </div>
+                        <div style="background: #f0f0f0; height: 25px; border-radius: 12px; overflow: hidden;">
+                            <div style="background: ${color}; height: 100%; width: ${dim.percentage}%; transition: width 0.5s ease;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        // ========== GRAPHIQUE RADAR ==========
+        function createRadarChart(dimensions) {
+            const ctx = document.getElementById('dimensionsChart').getContext('2d');
+            
+            if (dimensionsChart) {
+                dimensionsChart.destroy();
+            }
+            
+            const labels = [];
+            const data = [];
+            
+            for (const dim of Object.values(dimensions)) {
+                labels.push(dim.name);
+                data.push(dim.percentage);
+            }
+            
+            dimensionsChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ton profil',
+                        data: data,
+                        backgroundColor: 'rgba(255, 107, 74, 0.2)',
+                        borderColor: 'rgba(255, 107, 74, 1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(255, 107, 74, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(255, 107, 74, 1)',
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20,
+                                font: { size: 12 }
+                            },
+                            pointLabels: {
+                                font: { size: 11, weight: 'bold' }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { size: 14 } }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // ========== ANALYSE NEUROSCIENCES ==========
+        function generateNeuroAnalysis(scores) {
+            const analysis = document.getElementById('neuroAnalysis');
+            let html = '<div style="background: #f8f9fa; padding: 20px; border-radius: 10px; line-height: 1.8;">';
+            
+            if (scores.percentage >= 70) {
+                html += 'Ton cerveau émotionnel fonctionne de manière harmonieuse. Ton <strong>système limbique</strong> (centre émotionnel) et ton <strong>cortex préfrontal</strong> (zone de régulation) communiquent efficacement. ';
+                html += 'Cette connexion te permet de <strong>ressentir tes émotions, identifier tes besoins et agir</strong> avec cohérence.';
+            } else if (scores.percentage >= 50) {
+                html += 'Ta connexion émotions-besoins est en bon développement. L\'interaction entre ton <strong>amygdale</strong> (détecteur d\'émotions) et ton <strong>cortex préfrontal</strong> (zone de réflexion) est fonctionnelle mais peut gagner en fluidité. ';
+                html += 'Les exercices proposés vont renforcer ces connexions neuronales. <strong>La neuroplasticité</strong> est ton alliée !';
+            } else {
+                html += 'Ton cerveau émotionnel a un <strong>fort potentiel de développement</strong>. Actuellement, il est possible que ton amygdale (réaction émotionnelle) soit parfois déconnectée de ton cortex insulaire (zone des besoins corporels). ';
+                html += 'La bonne nouvelle : avec de la pratique quotidienne, ces zones peuvent se reconnecter en 21 jours. <strong>C\'est physiologique</strong> !';
+            }
+            
+            html += '</div>';
+            analysis.innerHTML = html;
+        }
+        
+        // ========== ANALYSE PSYCHOPRATICIEN ==========
+        function generatePsychoAnalysis(scores) {
+            const analysis = document.getElementById('psychoAnalysis');
+            let html = '<div style="background: #f8f9fa; padding: 20px; border-radius: 10px; line-height: 1.8;">';
+            
+            if (scores.percentage >= 70) {
+                html += 'Tu possèdes une <strong>intelligence émotionnelle développée</strong>. Tu as conscience que chaque émotion porte un message sur un besoin. ';
+                html += 'Cette compétence te permet de <strong>naviguer dans ta vie avec cohérence</strong> : tu écoutes tes émotions comme des boussoles vers tes vrais besoins.';
+            } else if (scores.percentage >= 50) {
+                html += 'Tu es <strong>en bon développement</strong> dans ta connexion émotions-besoins. Tu commences à reconnaître que tes émotions sont des messagers, pas des ennemis. ';
+                html += 'Continue à <strong>cultiver cette écoute</strong> : elle deviendra naturelle avec la pratique.';
+            } else {
+                html += 'Tu es au <strong>début de ton apprentissage</strong> émotions-besoins, et c\'est parfait ! Beaucoup de gens passent leur vie sans faire ce lien. ';
+                html += 'Chaque émotion porte un message sur un besoin non satisfait. <strong>Apprendre à les décoder</strong> va transformer ta relation à toi-même.';
+            }
+            
+            html += '</div>';
+            analysis.innerHTML = html;
+        }
+        
+        // ========== PLAN D'ACTION ==========
+        function generateActionPlan(scores) {
+            const actionPlan = document.getElementById('actionPlan');
+            
+            const weakest = Object.entries(scores.dimensions).sort((a, b) => a[1].percentage - b[1].percentage).slice(0, 2);
+            
+            let html = '<p style="margin-bottom: 25px; color: #666;">Voici <strong>2 actions prioritaires</strong> basées sur tes axes de développement.</p>';
+            
+            const actions = {
+                reconnaissance: {
+                    title: '🎭 Roue des émotions',
+                    description: '<strong>Action :</strong> Imprime une "roue des émotions" et accroche-la. 3 fois par jour, pointe l\'émotion que tu ressens. En 2 semaines, tu doubleras ton vocabulaire émotionnel.<br><br><strong>Pourquoi ça marche :</strong> Nommer précisément une émotion active ton cortex préfrontal et diminue son intensité de 30%.'
+                },
+                identification: {
+                    title: '💎 Carte des 9 besoins',
+                    description: '<strong>Action :</strong> Liste tes 9 besoins fondamentaux (sécurité, appartenance, reconnaissance, autonomie, affection, accomplissement, créativité, sérénité, sens). Chaque soir, identifie quel besoin était le plus présent aujourd\'hui.<br><br><strong>Pourquoi ça marche :</strong> Identifier le besoin, c\'est déjà 50% de la solution. Ton cerveau va naturellement chercher à le satisfaire.'
+                },
+                expression: {
+                    title: '💬 Formule CNV (Communication Non Violente)',
+                    description: '<strong>Action :</strong> Utilise cette formule : "Quand [situation], je ressens [émotion] parce que j\'ai besoin de [besoin]". Pratique 1 fois par jour.<br><br><strong>Pourquoi ça marche :</strong> Cette structure permet d\'exprimer sans accuser. Elle crée de la connexion au lieu du conflit.'
+                },
+                satisfaction: {
+                    title: '✨ Plan d\'action besoins',
+                    description: '<strong>Action :</strong> Chaque dimanche, identifie 1 besoin non satisfait cette semaine et planifie 1 action concrète pour y répondre la semaine suivante.<br><br><strong>Pourquoi ça marche :</strong> Passer de la conscience à l\'action transforme ta vie. Un besoin identifié et satisfait = une émotion apaisée.'
+                },
+                regulation: {
+                    title: '🎯 Technique STOP',
+                    description: '<strong>Action :</strong> Quand une émotion forte arrive : <strong>S</strong>uspends / <strong>T</strong>ake a breath (3 respirations) / <strong>O</strong>bserve l\'émotion et le besoin / <strong>P</strong>roceed (agis en conscience).<br><br><strong>Pourquoi ça marche :</strong> 3 respirations profondes activent ton nerf vague et calment ton amygdale en 30 secondes.'
+                },
+                connexion: {
+                    title: '🧘 Body Scan émotionnel',
+                    description: '<strong>Action :</strong> Chaque soir, allonge-toi et scanne ton corps de la tête aux pieds. Où sont les tensions ? Chaque tension porte une émotion non exprimée et un besoin non écouté.<br><br><strong>Pourquoi ça marche :</strong> 80% de tes émotions se manifestent d\'abord dans ton corps. L\'écouter, c\'est les comprendre.'
+                },
+                empathie: {
+                    title: '❤️ Miroir émotionnel',
+                    description: '<strong>Action :</strong> 1 fois par jour, observe une personne et demande-toi : "Quelle émotion ressent-elle ? Quel besoin cherche-t-elle à satisfaire ?" Puis vérifie en posant une question ouverte.<br><br><strong>Pourquoi ça marche :</strong> Cet exercice active tes neurones miroirs et développe ton empathie émotionnelle.'
+                },
+                acceptation: {
+                    title: '🌈 Accueil émotionnel',
+                    description: '<strong>Action :</strong> Quand une émotion désagréable arrive, dis-lui : "Bienvenue [nom de l\'émotion]. Merci de me montrer que j\'ai besoin de [nom du besoin]." Puis respire.<br><br><strong>Pourquoi ça marche :</strong> Accueillir une émotion au lieu de la rejeter diminue son intensité de 50% et libère de l\'énergie pour agir.'
+                }
+            };
+            
+            weakest.forEach(([key, dim], index) => {
+                const action = actions[key];
+                const bgColor = index === 0 ? '#fff3e0' : '#e8f5e9';
+                const borderColor = index === 0 ? '#FF9800' : '#4CAF50';
+                const priorityLabel = index === 0 ? '🔥 ACTION PRIORITAIRE' : '⚡ Important';
+                
+                html += `
+                    <div style="background: ${bgColor}; padding: 25px; border-radius: 12px; margin-bottom: 20px; border-left: 5px solid ${borderColor};">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #333; margin-bottom: 10px;">
+                            Action ${index + 1} : ${action.title}
+                            <span style="display: inline-block; padding: 6px 15px; border-radius: 15px; font-size: 0.75em; margin-left: 10px; background: ${borderColor}; color: white;">${priorityLabel}</span>
+                        </div>
+                        <div style="color: #555; line-height: 1.7;">${action.description}</div>
+                    </div>
+                `;
+            });
+            
+            actionPlan.innerHTML = html;
+        }
+        
+        // ========== MESSAGE DU COACH ==========
+        function generateCoachMessage(scores) {
+            const message = document.getElementById('coachMessage');
+            let html = '';
+            
+            if (scores.percentage >= 75) {
+                html = 'Bravo pour cet excellent score ! Tu as développé une <strong>connexion émotions-besoins remarquable</strong>. Continue à cultiver cette compétence précieuse.<br><br>';
+                html += 'Mon conseil : <strong>Partage cette connaissance</strong> autour de toi. Aide les autres à faire le lien entre leurs émotions et leurs besoins. C\'est en transmettant qu\'on renforce sa propre maîtrise.';
+            } else if (scores.percentage >= 55) {
+                html = 'Ton score montre que tu es <strong>sur le bon chemin</strong>. Tu commences à comprendre que tes émotions sont des messagères de tes besoins.<br><br>';
+                html += 'Mon conseil : <strong>Concentre-toi sur les 2 actions prioritaires</strong> ci-dessus. Pratique-les quotidiennement pendant 3 semaines. Tu verras une transformation significative.';
+            } else {
+                html = 'Merci d\'avoir fait ce test avec honnêteté. Ton score révèle un <strong>grand potentiel de développement</strong>.<br><br>';
+                html += 'Mon conseil : <strong>Commence petit</strong>. Choisis l\'action prioritaire n°1. Juste celle-là. Pratique-la 5 minutes par jour pendant 21 jours. Ton cerveau va créer de nouvelles connexions neuronales. <strong>C\'est physiologique</strong>, pas magique.<br><br>';
+                html += 'Je suis là pour t\'accompagner dans ce développement. Ensemble, nous allons construire ta connexion émotions-besoins, pas à pas.';
+            }
+            
+            html += '<br><br><em style="color: #FF6B4A;">— Pascal Tamin, ton coach</em>';
+            message.innerHTML = html;
+        }
+        
+        // ========== VÉRIFICATION PAIEMENT STRIPE ==========
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Stripe redirige avec ?success=true après paiement
+            if (urlParams.get('success') === 'true' || window.location.hash === '#success') {
+                const savedScores = localStorage.getItem('pendingScores');
+                if (savedScores) {
+                    calculatedScores = JSON.parse(savedScores);
+                    localStorage.removeItem('pendingScores');
+                    
+                    // Sauvegarder dans les users payants
+                    saveUserData('Client', 'premium@paid.com', 'premium-9€');
+                    
+                    displayResults('premium', 'Champion');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
