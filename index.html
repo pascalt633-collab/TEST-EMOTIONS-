@@ -1953,129 +1953,747 @@
             });
         }
         
-        // ========== ANALYSE NEUROSCIENCES ==========
-        function generateNeuroAnalysis(scores) {
-            const analysis = document.getElementById('neuroAnalysis');
-            let html = '<div style="background: #f8f9fa; padding: 20px; border-radius: 10px; line-height: 1.8;">';
-            
-            if (scores.percentage >= 70) {
-                html += 'Ton cerveau émotionnel fonctionne de manière harmonieuse. Ton <strong>système limbique</strong> (centre émotionnel) et ton <strong>cortex préfrontal</strong> (zone de régulation) communiquent efficacement. ';
-                html += 'Cette connexion te permet de <strong>ressentir tes émotions, identifier tes besoins et agir</strong> avec cohérence.';
-            } else if (scores.percentage >= 50) {
-                html += 'Ta connexion émotions-besoins est en bon développement. L\'interaction entre ton <strong>amygdale</strong> (détecteur d\'émotions) et ton <strong>cortex préfrontal</strong> (zone de réflexion) est fonctionnelle mais peut gagner en fluidité. ';
-                html += 'Les exercices proposés vont renforcer ces connexions neuronales. <strong>La neuroplasticité</strong> est ton alliée !';
-            } else {
-                html += 'Ton cerveau émotionnel a un <strong>fort potentiel de développement</strong>. Actuellement, il est possible que ton amygdale (réaction émotionnelle) soit parfois déconnectée de ton cortex insulaire (zone des besoins corporels). ';
-                html += 'La bonne nouvelle : avec de la pratique quotidienne, ces zones peuvent se reconnecter en 21 jours. <strong>C\'est physiologique</strong> !';
-            }
-            
-            html += '</div>';
-            analysis.innerHTML = html;
-        }
+       // ========== ANALYSE NEUROSCIENCES ==========
+function generateNeuroAnalysis(scores) {
+    const analysis = document.getElementById('neuroAnalysis');
+    let html = '<div style="background: #f8f9fa; padding: 30px; border-radius: 10px; line-height: 1.9; font-size: 1.05em;">';
+    
+    if (scores.percentage >= 70) {
+        html += '<h4 style="color: #FF6B4A; margin-bottom: 15px;">🧠 Ton cerveau émotionnel fonctionne en mode expert</h4>';
+        html += '<p>Félicitations ! Les connexions entre ton <strong>système limbique</strong> (siège des émotions) et ton <strong>cortex préfrontal</strong> (centre de décision) sont solides et rapides. Ce dialogue permanent te permet de :</p>';
+        html += '<ul style="margin: 15px 0; padding-left: 25px;">';
+        html += '<li><strong>Identifier une émotion en moins de 200 millisecondes</strong> - avant même qu\'elle ne devienne incontrôlable</li>';
+        html += '<li><strong>Traduire cette émotion en besoin</strong> grâce à ton cortex insulaire qui lit les messages de ton corps</li>';
+        html += '<li><strong>Agir avec cohérence</strong> car ton cortex préfrontal peut moduler l\'intensité émotionnelle</li>';
+        html += '</ul>';
+        
+        html += '<p style="margin-top: 20px;"><strong>Ce qui se passe concrètement dans ton cerveau :</strong></p>';
+        html += '<p>Ton <strong>amygdale</strong> (détecteur d\'émotions) envoie un signal à ton <strong>hippocampe</strong> (mémoire contextuelle), qui active ton <strong>cortex préfrontal</strong> (réflexion). Cette boucle te prend 0,2 seconde. Tu as créé des <strong>autoroutes neuronales myélinisées</strong> - c\'est du béton neurologique !</p>';
+        
+        html += '<p style="margin-top: 20px; padding: 20px; background: white; border-left: 4px solid #4CAF50; border-radius: 8px;">';
+        html += '💡 <strong>Le conseil du neuro-praticien :</strong> Maintiens cette connexion par la <strong>variabilité</strong>. Expose-toi à de nouvelles situations émotionnelles pour que ton cerveau reste plastique. L\'expertise ne se maintient que dans le mouvement.';
+        html += '</p>';
+        
+    } else if (scores.percentage >= 50) {
+        html += '<h4 style="color: #FF6B4A; margin-bottom: 15px;">🧠 Tes connexions neuronales sont en développement actif</h4>';
+        html += '<p>Ton cerveau émotionnel est sur la bonne voie ! L\'interaction entre ton <strong>amygdale</strong> (détecteur d\'émotions) et ton <strong>cortex préfrontal</strong> (zone de régulation) existe, mais elle ressemble encore à un <strong>chemin de terre</strong> plutôt qu\'à une autoroute.</p>';
+        
+        html += '<p style="margin-top: 15px;"><strong>Voici ce qui se passe actuellement :</strong></p>';
+        html += '<ul style="margin: 15px 0; padding-left: 25px;">';
+        html += '<li>Ton amygdale détecte l\'émotion rapidement (c\'est inné)</li>';
+        html += '<li>Mais le message met parfois 2-3 secondes à arriver à ton cortex préfrontal</li>';
+        html += '<li>Pendant ce délai, l\'émotion peut "déborder" avant que tu la comprennes</li>';
+        html += '</ul>';
+        
+        html += '<p style="margin-top: 20px;"><strong>La bonne nouvelle : la neuroplasticité</strong></p>';
+        html += '<p>Ton cerveau est <strong>plastique jusqu\'à 80 ans</strong>. Chaque fois que tu pratiques la connexion émotions-besoins, tu renforces la <strong>gaine de myéline</strong> autour de tes neurones. C\'est comme passer d\'une connexion ADSL à la fibre optique !</p>';
+        
+        html += '<div style="margin-top: 20px; padding: 20px; background: #fff3e0; border-radius: 8px;">';
+        html += '<strong>⏱️ Timeline neuroscientifique prouvée :</strong><br>';
+        html += '• <strong>7 jours</strong> de pratique quotidienne → Premières connexions neuronales<br>';
+        html += '• <strong>21 jours</strong> → Myélinisation significative (chemin de terre → route)<br>';
+        html += '• <strong>66 jours</strong> → Automatisation complète (route → autoroute)<br>';
+        html += '</div>';
+        
+        html += '<p style="margin-top: 20px; padding: 20px; background: white; border-left: 4px solid #FF9800; border-radius: 8px;">';
+        html += '💡 <strong>Le conseil du neuro-praticien :</strong> Pratique <strong>l\'exercice des 3 respirations</strong> 5 fois par jour pendant 21 jours. Ce simple exercice active ton <strong>nerf vague</strong>, calme ton amygdale et renforce la connexion avec ton cortex préfrontal. C\'est physiologique, pas magique.';
+        html += '</p>';
+        
+    } else {
+        html += '<h4 style="color: #FF6B4A; margin-bottom: 15px;">🧠 Ton cerveau émotionnel a un potentiel énorme à déverrouiller</h4>';
+        html += '<p>Actuellement, il y a un <strong>déséquilibre</strong> entre ton système limbique (qui ressent) et ton cortex préfrontal (qui comprend). Voici ce qui se passe :</p>';
+        
+        html += '<ul style="margin: 15px 0; padding-left: 25px;">';
+        html += '<li>Ton <strong>amygdale</strong> fonctionne parfaitement - tu ressens des émotions</li>';
+        html += '<li>Mais les messages n\'arrivent pas clairement à ton <strong>cortex préfrontal</strong></li>';
+        html += '<li>Résultat : tu vis l\'émotion sans comprendre le besoin derrière</li>';
+        html += '</ul>';
+        
+        html += '<p style="margin-top: 20px;"><strong>Pourquoi ce décalage ?</strong></p>';
+        html += '<p>Ce n\'est <strong>pas un défaut</strong>, c\'est un <strong>manque d\'entraînement neuronal</strong>. Imagine un muscle qu\'on n\'a jamais fait travailler : il existe, mais il est endormi. Tes connexions émotions-besoins existent dans ton cerveau, mais elles ne sont pas encore myélinisées (renforcées).</p>';
+        
+        html += '<div style="margin-top: 20px; padding: 25px; background: #ffebee; border-radius: 8px; border-left: 4px solid #f44336;">';
+        html += '<strong>🔬 Ce que montre l\'IRM fonctionnelle :</strong><br><br>';
+        html += 'Chez une personne avec un faible score émotions-besoins, l\'IRM montre :<br>';
+        html += '• <strong>Amygdale très active</strong> (émotions fortes) ✅<br>';
+        html += '• <strong>Cortex préfrontal peu activé</strong> (compréhension faible) ⚠️<br>';
+        html += '• <strong>Cortex insulaire déconnecté</strong> (lecture du corps absente) ⚠️<br><br>';
+        html += 'Après 8 semaines de pratique quotidienne, ces 3 zones se reconnectent et s\'équilibrent. <strong>C\'est scientifiquement prouvé</strong> (études de Richard Davidson, neuroscientifique).';
+        html += '</div>';
+        
+        html += '<p style="margin-top: 20px;"><strong>Le plan d\'entraînement neuronal :</strong></p>';
+        html += '<p>Tu vas littéralement <strong>construire de nouvelles autoroutes</strong> dans ton cerveau. Voici comment :</p>';
+        html += '<ol style="margin: 15px 0; padding-left: 25px;">';
+        html += '<li><strong>Semaine 1-3 :</strong> Exercice du journal émotionnel (5 min/jour) → Création des premières connexions</li>';
+        html += '<li><strong>Semaine 4-6 :</strong> Ajout de la technique STOP → Myélinisation des connexions</li>';
+        html += '<li><strong>Semaine 7-8 :</strong> Body scan émotionnel → Activation du cortex insulaire</li>';
+        html += '</ol>';
+        
+        html += '<p style="margin-top: 20px; padding: 20px; background: white; border-left: 4px solid #4CAF50; border-radius: 8px;">';
+        html += '💡 <strong>Le conseil du neuro-praticien :</strong> Ne te décourage pas si les 3 premiers jours sont difficiles. Ton cerveau <strong>résiste au changement</strong> pendant 72 heures (c\'est neurologique). Après ce cap, les nouvelles connexions commencent à se former. Accroche-toi aux 3 premiers jours, ensuite ça devient plus fluide.';
+        html += '</p>';
+    }
+    
+    html += '</div>';
+    analysis.innerHTML = html;
+}
         
         // ========== ANALYSE PSYCHOPRATICIEN ==========
-        function generatePsychoAnalysis(scores) {
-            const analysis = document.getElementById('psychoAnalysis');
-            let html = '<div style="background: #f8f9fa; padding: 20px; border-radius: 10px; line-height: 1.8;">';
-            
-            if (scores.percentage >= 70) {
-                html += 'Tu possèdes une <strong>intelligence émotionnelle développée</strong>. Tu as conscience que chaque émotion porte un message sur un besoin. ';
-                html += 'Cette compétence te permet de <strong>naviguer dans ta vie avec cohérence</strong> : tu écoutes tes émotions comme des boussoles vers tes vrais besoins.';
-            } else if (scores.percentage >= 50) {
-                html += 'Tu es <strong>en bon développement</strong> dans ta connexion émotions-besoins. Tu commences à reconnaître que tes émotions sont des messagers, pas des ennemis. ';
-                html += 'Continue à <strong>cultiver cette écoute</strong> : elle deviendra naturelle avec la pratique.';
-            } else {
-                html += 'Tu es au <strong>début de ton apprentissage</strong> émotions-besoins, et c\'est parfait ! Beaucoup de gens passent leur vie sans faire ce lien. ';
-                html += 'Chaque émotion porte un message sur un besoin non satisfait. <strong>Apprendre à les décoder</strong> va transformer ta relation à toi-même.';
-            }
-            
-            html += '</div>';
-            analysis.innerHTML = html;
-        }
+function generatePsychoAnalysis(scores) {
+    const analysis = document.getElementById('psychoAnalysis');
+    let html = '<div style="background: #f8f9fa; padding: 30px; border-radius: 10px; line-height: 1.9; font-size: 1.05em;">';
+    
+    if (scores.percentage >= 70) {
+        html += '<h4 style="color: #FF6B4A; margin-bottom: 15px;">💡 Tu maîtrises les 5 piliers de l\'intelligence émotionnelle (Goleman)</h4>';
+        
+        html += '<p>Daniel Goleman, psychologue et référence mondiale, a identifié <strong>5 composantes de l\'intelligence émotionnelle</strong>. Ton score montre que tu les maîtrises :</p>';
+        
+        html += '<div style="margin: 20px 0;">';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong>1️⃣ Conscience de soi</strong> → Tu reconnais tes émotions en temps réel ✅';
+        html += '</div>';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong>2️⃣ Maîtrise de soi</strong> → Tu régules tes émotions sans les réprimer ✅';
+        html += '</div>';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong>3️⃣ Motivation intrinsèque</strong> → Tu relies tes émotions à tes besoins profonds ✅';
+        html += '</div>';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong>4️⃣ Empathie</strong> → Tu perçois les émotions des autres ✅';
+        html += '</div>';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px;">';
+        html += '<strong>5️⃣ Compétences sociales</strong> → Tu exprimes tes besoins clairement ✅';
+        html += '</div>';
+        html += '</div>';
+        
+        html += '<p style="margin-top: 20px;"><strong>Ce que cela change concrètement dans ta vie :</strong></p>';
+        html += '<p>Tu ne <strong>subis plus</strong> tes émotions, tu les <strong>utilises</strong>. Chaque émotion devient une boussole qui te guide vers tes besoins authentiques. C\'est ce que j\'appelle <strong>"vivre en cohérence"</strong> : tes émotions, tes besoins et tes actions sont alignés.</p>';
+        
+        html += '<div style="margin-top: 25px; padding: 25px; background: #e8f5e9; border-radius: 8px;">';
+        html += '<strong>🎯 Exemple concret de ton fonctionnement :</strong><br><br>';
+        html += '<strong>Situation :</strong> Ton manager te fait une remarque en réunion.<br>';
+        html += '<strong>Ta séquence (en 3 secondes) :</strong><br>';
+        html += '1. Émotion identifiée → "Je ressens de la colère" 🎭<br>';
+        html += '2. Besoin identifié → "Mon besoin de reconnaissance n\'est pas satisfait" 💎<br>';
+        html += '3. Action choisie → "Je vais demander un point en privé pour exprimer mon besoin" ✨<br><br>';
+        html += '<strong>Résultat :</strong> Tu transforms un conflit potentiel en dialogue constructif.';
+        html += '</div>';
+        
+        html += '<p style="margin-top: 25px; padding: 20px; background: white; border-left: 4px solid #4CAF50; border-radius: 8px;">';
+        html += '💬 <strong>Mon conseil de coach :</strong> Ton intelligence émotionnelle est une <strong>compétence rare</strong>. Utilise-la pour guider les autres. Deviens un <strong>modèle</strong> dans ton entourage. L\'intelligence émotionnelle se transmet par l\'exemple, pas par les discours.';
+        html += '</p>';
+        
+    } else if (scores.percentage >= 50) {
+        html += '<h4 style="color: #FF6B4A; margin-bottom: 15px;">💡 Tu développes ton intelligence émotionnelle (modèle Goleman)</h4>';
+        
+        html += '<p>Tu es en plein dans ce que Goleman appelle <strong>"l\'apprentissage émotionnel"</strong>. Tu as compris que tes émotions sont des <strong>messagères</strong>, pas des ennemies. Maintenant, tu construis les 5 piliers :</p>';
+        
+        html += '<div style="margin: 20px 0;">';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong>1️⃣ Conscience de soi</strong> → En développement. Tu reconnais certaines émotions 🟡';
+        html += '</div>';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong>2️⃣ Maîtrise de soi</strong> → En cours. Tu arrives parfois à te réguler 🟡';
+        html += '</div>';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong>3️⃣ Motivation intrinsèque</strong> → Tu commences à voir le lien émotions-besoins 🟡';
+        html += '</div>';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong>4️⃣ Empathie</strong> → Tu es sensible aux autres 🟢';
+        html += '</div>';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px;">';
+        html += '<strong>5️⃣ Compétences sociales</strong> → Tu progresses dans l\'expression 🟡';
+        html += '</div>';
+        html += '</div>';
+        
+        html += '<p style="margin-top: 20px;"><strong>Où tu en es dans ton développement :</strong></p>';
+        html += '<p>Tu es à l\'étape que j\'appelle <strong>"l\'éveil émotionnel"</strong>. Tu as dépassé le mode automatique ("je réagis") pour entrer dans le mode conscient ("je choisis"). C\'est un <strong>tournant majeur</strong> dans ta vie.</p>';
+        
+        html += '<div style="margin-top: 25px; padding: 25px; background: #fff3e0; border-radius: 8px;">';
+        html += '<strong>🎯 Exemple concret de ta progression :</strong><br><br>';
+        html += '<strong>Avant :</strong> Remarque du manager → Réaction immédiate de colère → Conflit<br><br>';
+        html += '<strong>Maintenant :</strong> Remarque → Tu sens la colère monter → Tu prends 10 secondes → Tu identifies ton besoin → Tu exprimes calmement<br><br>';
+        html += '<strong>Bientôt :</strong> Remarque → Identification instantanée → Expression fluide → Résolution constructive';
+        html += '</div>';
+        
+        html += '<p style="margin-top: 20px;"><strong>Les 3 comportements à ancrer maintenant :</strong></p>';
+        html += '<ol style="margin: 15px 0; padding-left: 25px;">';
+        html += '<li><strong>Le STOP quotidien</strong> : 3 fois par jour, pause de 30 secondes pour scanner tes émotions</li>';
+        html += '<li><strong>La verbalisation</strong> : Nomme tes émotions à voix haute ("Je ressens de la frustration")</li>';
+        html += '<li><strong>Le lien systématique</strong> : Après chaque émotion, demande-toi "Quel besoin ?"</li>';
+        html += '</ol>';
+        
+        html += '<p style="margin-top: 25px; padding: 20px; background: white; border-left: 4px solid #FF9800; border-radius: 8px;">';
+        html += '💬 <strong>Mon conseil de coach :</strong> Tu es sur le <strong>bon chemin</strong>. Ne cherche pas la perfection, cherche la <strong>régularité</strong>. L\'intelligence émotionnelle se construit par la pratique quotidienne, pas par les grandes résolutions. 5 minutes par jour valent mieux que 2 heures une fois par mois.';
+        html += '</p>';
+        
+    } else {
+        html += '<h4 style="color: #FF6B4A; margin-bottom: 15px;">💡 Tu es au début d\'un apprentissage qui va transformer ta vie</h4>';
+        
+        html += '<p>Soyons honnêtes : <strong>personne ne t\'a appris</strong> à connecter tes émotions et tes besoins. Ni à l\'école, ni souvent en famille. C\'est normal d\'en être là. La bonne nouvelle ? Daniel Goleman a prouvé que <strong>l\'intelligence émotionnelle s\'apprend</strong> à tout âge.</p>';
+        
+        html += '<p style="margin-top: 20px;"><strong>Les 5 piliers que tu vas construire (modèle Goleman) :</strong></p>';
+        
+        html += '<div style="margin: 20px 0;">';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong>1️⃣ Conscience de soi</strong> → Apprendre à reconnaître tes émotions 🔴';
+        html += '</div>';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong>2️⃣ Maîtrise de soi</strong> → Réguler tes émotions sans les refouler 🔴';
+        html += '</div>';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong>3️⃣ Motivation intrinsèque</strong> → Comprendre tes vrais besoins 🔴';
+        html += '</div>';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong>4️⃣ Empathie</strong> → Percevoir les émotions des autres 🟡';
+        html += '</div>';
+        html += '<div style="padding: 15px; background: white; border-radius: 8px;">';
+        html += '<strong>5️⃣ Compétences sociales</strong> → Exprimer tes besoins clairement 🔴';
+        html += '</div>';
+        html += '</div>';
+        
+        html += '<p style="margin-top: 20px;"><strong>Ce qui se passe actuellement pour toi :</strong></p>';
+        html += '<p>Tu vis souvent ce que j\'appelle <strong>"l\'écart émotionnel"</strong> : un décalage entre ce que tu ressens et ce que tu comprends. Tu vis l\'émotion, mais tu ne sais pas toujours <strong>pourquoi</strong> ni <strong>quoi faire</strong> avec.</p>';
+        
+        html += '<div style="margin-top: 25px; padding: 25px; background: #ffebee; border-radius: 8px;">';
+        html += '<strong>🎯 Exemple concret de ton mode actuel :</strong><br><br>';
+        html += '<strong>Situation :</strong> Ton manager te fait une remarque en réunion.<br><br>';
+        html += '<strong>Ta séquence actuelle :</strong><br>';
+        html += '😤 Tu ressens une émotion forte (colère ? frustration ? honte ?)<br>';
+        html += '❓ Tu ne sais pas exactement ce que c\'est<br>';
+        html += '🌀 Tu réagis : tu te fermes OU tu exploses<br>';
+        html += '😔 Après coup, tu regrettes ta réaction<br><br>';
+        html += '<strong>Ce qui manque :</strong> Le lien entre l\'émotion ressentie et le besoin non satisfait (reconnaissance ? respect ? autonomie ?).';
+        html += '</div>';
+        
+        html += '<p style="margin-top: 25px;"><strong>Le plan de développement que je te propose :</strong></p>';
+        
+        html += '<div style="margin-top: 15px; padding: 20px; background: white; border-radius: 8px;">';
+        html += '<strong>📅 Phase 1 : Semaines 1-3 (Conscience de soi)</strong><br>';
+        html += 'Objectif : Apprendre à <strong>nommer</strong> tes émotions<br>';
+        html += 'Outil : Roue des émotions + journal quotidien 5 min<br>';
+        html += 'Résultat attendu : Tu passes de 3-4 émotions identifiées à 15-20';
+        html += '</div>';
+        
+        html += '<div style="margin-top: 15px; padding: 20px; background: white; border-radius: 8px;">';
+        html += '<strong>📅 Phase 2 : Semaines 4-6 (Lien émotions-besoins)</strong><br>';
+        html += 'Objectif : Faire le <strong>pont</strong> entre émotion et besoin<br>';
+        html += 'Outil : Liste des 9 besoins fondamentaux + exercice quotidien<br>';
+        html += 'Résultat attendu : Tu identifies le besoin derrière l\'émotion en moins de 2 minutes';
+        html += '</div>';
+        
+        html += '<div style="margin-top: 15px; padding: 20px; background: white; border-radius: 8px;">';
+        html += '<strong>📅 Phase 3 : Semaines 7-8 (Expression et action)</strong><br>';
+        html += 'Objectif : <strong>Exprimer</strong> ton besoin et <strong>agir</strong> pour le satisfaire<br>';
+        html += 'Outil : Formule CNV (Communication Non Violente)<br>';
+        html += 'Résultat attendu : Tu transformes tes émotions en actions constructives';
+        html += '</div>';
+        
+        html += '<p style="margin-top: 25px; padding: 20px; background: white; border-left: 4px solid #4CAF50; border-radius: 8px;">';
+        html += '💬 <strong>Mon message personnel :</strong> Je sais que ce score peut sembler décourageant. Mais en 20 ans de coaching, j\'ai vu des centaines de personnes partir de là et <strong>transformer complètement leur vie</strong>. L\'intelligence émotionnelle n\'est pas innée, elle s\'apprend. Et tu viens de faire le premier pas : <strong>prendre conscience</strong>. C\'est déjà énorme. Je suis là pour t\'accompagner si tu veux aller plus loin.';
+        html += '</p>';
+    }
+    
+    html += '</div>';
+    analysis.innerHTML = html;
+}
         
         // ========== PLAN D'ACTION ==========
-        function generateActionPlan(scores) {
-            const actionPlan = document.getElementById('actionPlan');
-            
-            const weakest = Object.entries(scores.dimensions).sort((a, b) => a[1].percentage - b[1].percentage).slice(0, 2);
-            
-            let html = '<p style="margin-bottom: 25px; color: #666;">Voici <strong>2 actions prioritaires</strong> basées sur tes axes de développement.</p>';
-            
-            const actions = {
-                reconnaissance: {
-                    title: '🎭 Roue des émotions',
-                    description: '<strong>Action :</strong> Imprime une "roue des émotions" et accroche-la. 3 fois par jour, pointe l\'émotion que tu ressens. En 2 semaines, tu doubleras ton vocabulaire émotionnel.<br><br><strong>Pourquoi ça marche :</strong> Nommer précisément une émotion active ton cortex préfrontal et diminue son intensité de 30%.'
-                },
-                identification: {
-                    title: '💎 Carte des 9 besoins',
-                    description: '<strong>Action :</strong> Liste tes 9 besoins fondamentaux (sécurité, appartenance, reconnaissance, autonomie, affection, accomplissement, créativité, sérénité, sens). Chaque soir, identifie quel besoin était le plus présent aujourd\'hui.<br><br><strong>Pourquoi ça marche :</strong> Identifier le besoin, c\'est déjà 50% de la solution. Ton cerveau va naturellement chercher à le satisfaire.'
-                },
-                expression: {
-                    title: '💬 Formule CNV (Communication Non Violente)',
-                    description: '<strong>Action :</strong> Utilise cette formule : "Quand [situation], je ressens [émotion] parce que j\'ai besoin de [besoin]". Pratique 1 fois par jour.<br><br><strong>Pourquoi ça marche :</strong> Cette structure permet d\'exprimer sans accuser. Elle crée de la connexion au lieu du conflit.'
-                },
-                satisfaction: {
-                    title: '✨ Plan d\'action besoins',
-                    description: '<strong>Action :</strong> Chaque dimanche, identifie 1 besoin non satisfait cette semaine et planifie 1 action concrète pour y répondre la semaine suivante.<br><br><strong>Pourquoi ça marche :</strong> Passer de la conscience à l\'action transforme ta vie. Un besoin identifié et satisfait = une émotion apaisée.'
-},
-                regulation: {
-                    title: '🎯 Technique STOP',
-                    description: '<strong>Action :</strong> Quand une émotion forte arrive : <strong>S</strong>uspends / <strong>T</strong>ake a breath (3 respirations) / <strong>O</strong>bserve l\'émotion et le besoin / <strong>P</strong>roceed (agis en conscience).<br><br><strong>Pourquoi ça marche :</strong> 3 respirations profondes activent ton nerf vague et calment ton amygdale en 30 secondes.'
-                },
-                connexion: {
-                    title: '🧘 Body Scan émotionnel',
-                    description: '<strong>Action :</strong> Chaque soir, allonge-toi et scanne ton corps de la tête aux pieds. Où sont les tensions ? Chaque tension porte une émotion non exprimée et un besoin non écouté.<br><br><strong>Pourquoi ça marche :</strong> 80% de tes émotions se manifestent d\'abord dans ton corps. L\'écouter, c\'est les comprendre.'
-                },
-                empathie: {
-                    title: '❤️ Miroir émotionnel',
-                    description: '<strong>Action :</strong> 1 fois par jour, observe une personne et demande-toi : "Quelle émotion ressent-elle ? Quel besoin cherche-t-elle à satisfaire ?" Puis vérifie en posant une question ouverte.<br><br><strong>Pourquoi ça marche :</strong> Cet exercice active tes neurones miroirs et développe ton empathie émotionnelle.'
-                },
-                acceptation: {
-                    title: '🌈 Accueil émotionnel',
-                    description: '<strong>Action :</strong> Quand une émotion désagréable arrive, dis-lui : "Bienvenue [nom de l\'émotion]. Merci de me montrer que j\'ai besoin de [nom du besoin]." Puis respire.<br><br><strong>Pourquoi ça marche :</strong> Accueillir une émotion au lieu de la rejeter diminue son intensité de 50% et libère de l\'énergie pour agir.'
-                }
-            };
-            
-            weakest.forEach(([key, dim], index) => {
-                const action = actions[key];
-                const bgColor = index === 0 ? '#fff3e0' : '#e8f5e9';
-                const borderColor = index === 0 ? '#FF9800' : '#4CAF50';
-                const priorityLabel = index === 0 ? '🔥 ACTION PRIORITAIRE' : '⚡ Important';
+function generateActionPlan(scores) {
+    const actionPlan = document.getElementById('actionPlan');
+    
+    const weakest = Object.entries(scores.dimensions).sort((a, b) => a[1].percentage - b[1].percentage).slice(0, 3);
+    
+    let html = '<div style="background: #fff8f0; padding: 25px; border-radius: 10px; margin-bottom: 25px; border-left: 5px solid #FF6B4A;">';
+    html += '<p style="font-size: 1.1em; line-height: 1.8; margin: 0;"><strong>🎯 Philosophie de l\'action :</strong> Je ne crois pas aux grands changements du jour au lendemain. Je crois à la <strong>micro-action quotidienne</strong>. 5 minutes par jour pendant 21 jours créent plus de transformation qu\'un stage de 3 jours. Voici tes <strong>3 actions prioritaires</strong>, classées par ordre d\'impact.</p>';
+    html += '</div>';
+    
+    const actions = {
+        reconnaissance: {
+            title: '🎭 Roue des émotions - Développer ton vocabulaire émotionnel',
+            duree: '5 minutes/jour pendant 21 jours',
+            materiel: 'Roue des émotions imprimée (Google: "roue des émotions Plutchik")',
+            protocole: `
+                <strong>📋 Protocole précis :</strong>
+                <ol style="margin: 15px 0; padding-left: 25px; line-height: 1.8;">
+                    <li><strong>Matin (réveil) :</strong> Regarde la roue. Pointe l'émotion dominante. Nomme-la à voix haute.</li>
+                    <li><strong>Midi (pause déjeuner) :</strong> Même exercice. Compare avec le matin. Qu'est-ce qui a changé ?</li>
+                    <li><strong>Soir (avant de dormir) :</strong> Identifie l'émotion la plus forte de ta journée. Note-la.</li>
+                </ol>
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <strong>🎯 Objectif mesurable :</strong><br>
+                    • Semaine 1 : Identifier 5 émotions différentes<br>
+                    • Semaine 2 : Identifier 10 émotions différentes<br>
+                    • Semaine 3 : Identifier 15+ émotions avec nuances (colère vs frustration vs irritation)
+                </div>
+            `,
+            science: '<strong>🔬 Pourquoi ça marche :</strong> Nommer une émotion active ton <strong>cortex préfrontal</strong> et diminue l\'activité de l\'amygdale (centre de la peur) de 30% en 3 secondes. C\'est prouvé par IRM fonctionnelle (étude UCLA 2007). Plus ton vocabulaire émotionnel est riche, plus tu régules vite.',
+            pieges: '<strong>⚠️ Pièges à éviter :</strong> Ne pas juger tes émotions ("je devrais pas être triste"). Toutes les émotions sont légitimes. Observe, ne juge pas.'
+        },
+        identification: {
+            title: '💎 Carte des 9 besoins - Décoder le message émotionnel',
+            duree: '10 minutes/jour pendant 21 jours',
+            materiel: 'Liste des 9 besoins fondamentaux (fournie ci-dessous)',
+            protocole: `
+                <strong>📋 Les 9 besoins humains universels :</strong>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+                    <div style="background: white; padding: 15px; border-radius: 8px;">1. <strong>Sécurité</strong> (physique/émotionnelle)</div>
+                    <div style="background: white; padding: 15px; border-radius: 8px;">2. <strong>Appartenance</strong> (connexion/groupe)</div>
+                    <div style="background: white; padding: 15px; border-radius: 8px;">3. <strong>Reconnaissance</strong> (être vu/valorisé)</div>
+                    <div style="background: white; padding: 15px; border-radius: 8px;">4. <strong>Autonomie</strong> (liberté/choix)</div>
+                    <div style="background: white; padding: 15px; border-radius: 8px;">5. <strong>Affection</strong> (amour/tendresse)</div>
+                    <div style="background: white; padding: 15px; border-radius: 8px;">6. <strong>Accomplissement</strong> (réussite/progression)</div>
+                    <div style="background: white; padding: 15px; border-radius: 8px;">7. <strong>Créativité</strong> (expression/nouveauté)</div>
+                    <div style="background: white; padding: 15px; border-radius: 8px;">8. <strong>Sérénité</strong> (calme/paix intérieure)</div>
+                    <div style="background: white; padding: 15px; border-radius: 8px;">9. <strong>Sens</strong> (cohérence/contribution)</div>
+                </div>
+                <strong>📋 Exercice quotidien :</strong>
+                <ol style="margin: 15px 0; padding-left: 25px; line-height: 1.8;">
+                    <li><strong>Chaque soir :</strong> Repense à une situation émotionnelle de ta journée</li>
+                    <li><strong>Note :</strong> Quelle émotion j'ai ressenti ? (joie, colère, tristesse, peur...)</li>
+                    <li><strong>Demande-toi :</strong> Quel besoin était satisfait (émotion agréable) ou insatisfait (émotion désagréable) ?</li>
+                    <li><strong>Coche :</strong> Un des 9 besoins ci-dessus</li>
+                </ol>
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <strong>🎯 Objectif mesurable :</strong><br>
+                    • Semaine 1 : Faire le lien 1 fois sur 2<br>
+                    • Semaine 2 : Faire le lien 7 fois sur 10<br>
+                    • Semaine 3 : Identification automatique en moins de 30 secondes
+                </div>
+            `,
+            science: '<strong>🔬 Pourquoi ça marche :</strong> Identifier le besoin, c\'est déjà <strong>50% de la solution</strong>. Ton cerveau va naturellement chercher à le satisfaire (étude de Maslow sur la hiérarchie des besoins). C\'est comme allumer une lumière dans le noir : tout devient plus clair.',
+            pieges: '<strong>⚠️ Pièges à éviter :</strong> Confondre besoin et stratégie. "J\'ai besoin de chocolat" = Non. "J\'ai besoin de réconfort" (le chocolat est une stratégie parmi d\'autres).'
+        },
+        expression: {
+            title: '💬 Formule CNV - Exprimer sans accuser',
+            duree: '1 situation par jour pendant 21 jours',
+            materiel: 'La formule magique en 4 étapes (ci-dessous)',
+            protocole: `
+                <strong>📋 La formule CNV (Communication Non Violente) :</strong>
+                <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #4CAF50;">
+                    <strong>"Quand [OBSERVATION], je ressens [ÉMOTION] parce que j'ai besoin de [BESOIN]. Serais-tu d'accord pour [DEMANDE] ?"</strong>
+                </div>
                 
-                html += `
-                    <div style="background: ${bgColor}; padding: 25px; border-radius: 12px; margin-bottom: 20px; border-left: 5px solid ${borderColor};">
-                        <div style="font-size: 1.2em; font-weight: bold; color: #333; margin-bottom: 10px;">
-                            Action ${index + 1} : ${action.title}
-                            <span style="display: inline-block; padding: 6px 15px; border-radius: 15px; font-size: 0.75em; margin-left: 10px; background: ${borderColor}; color: white;">${priorityLabel}</span>
-                        </div>
-                        <div style="color: #555; line-height: 1.7;">${action.description}</div>
+                <strong>📋 Exemple concret :</strong>
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                    ❌ <strong>Version accusatrice :</strong><br>
+                    "Tu ne m'écoutes jamais ! Tu es toujours sur ton téléphone !"<br><br>
+                    
+                    ✅ <strong>Version CNV :</strong><br>
+                    "Quand je te parle et que tu regardes ton téléphone, je ressens de la frustration parce que j'ai besoin d'attention et de connexion. Serais-tu d'accord pour poser ton téléphone quand on se parle ?"
+                </div>
+                
+                <strong>📋 Protocole d'entraînement :</strong>
+                <ol style="margin: 15px 0; padding-left: 25px; line-height: 1.8;">
+                    <li><strong>Jours 1-7 :</strong> Écris la formule sur papier pour des situations passées (entraînement sans risque)</li>
+                    <li><strong>Jours 8-14 :</strong> Utilise la formule dans des situations à faible enjeu (collègue, ami)</li>
+                    <li><strong>Jours 15-21 :</strong> Utilise la formule dans des situations à fort enjeu (manager, conjoint, parent)</li>
+                </ol>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <strong>🎯 Objectif mesurable :</strong><br>
+                    • Semaine 1 : Formuler par écrit 5 fois<br>
+                    • Semaine 2 : Utiliser à l'oral 3 fois<br>
+                    • Semaine 3 : Utiliser spontanément sans préparation
+                </div>
+            `,
+            science: '<strong>🔬 Pourquoi ça marche :</strong> La CNV évite la <strong>réaction défensive</strong> de l\'autre. Quand tu accuses ("Tu fais jamais..."), l\'amygdale de l\'autre s\'active (mode survie). Avec la CNV, tu désactives cette réaction et tu crées de la <strong>connexion</strong> (étude Marshall Rosenberg, créateur de la CNV).',
+            pieges: '<strong>⚠️ Pièges à éviter :</strong> Utiliser "je me sens" + jugement. "Je me sens manipulé" = NON (c\'est un jugement). "Je ressens de la colère" = OUI (c\'est une émotion).'
+        },
+        satisfaction: {
+            title: '✨ Plan d\'action besoins - Passer de la conscience à l\'action',
+            duree: '30 minutes le dimanche pendant 8 semaines',
+            materiel: 'Carnet + Liste des 9 besoins',
+            protocole: `
+                <strong>📋 Rituel du dimanche (30 minutes) :</strong>
+                <ol style="margin: 15px 0; padding-left: 25px; line-height: 1.8;">
+                    <li><strong>Bilan de la semaine (10 min) :</strong><br>
+                    Quel besoin a été le MOINS satisfait cette semaine ? (relis les 9 besoins)<br>
+                    Note : Besoin n°_____ → Score /10 : _____</li>
+                    
+                    <li><strong>Brainstorming (10 min) :</strong><br>
+                    Liste 5 actions concrètes pour satisfaire ce besoin<br>
+                    Exemple : Si "Reconnaissance" = faible<br>
+                    → Partager une réussite avec un ami<br>
+                    → Demander un feedback à mon manager<br>
+                    → Célébrer une petite victoire personnelle<br>
+                    → Etc.</li>
+                    
+                    <li><strong>Engagement (10 min) :</strong><br>
+                    Choisis 1 action. Une seule.<br>
+                    Planifie : QUAND (jour + heure) et COMMENT<br>
+                    Exemple : "Mardi 10h, j'envoie un mail à mon manager pour demander un point"</li>
+                </ol>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <strong>🎯 Objectif mesurable :</strong><br>
+                    • Semaines 1-2 : Identifier 1 besoin insatisfait + 1 action<br>
+                    • Semaines 3-4 : Réaliser l'action + mesurer l'impact<br>
+                    • Semaines 5-8 : Automatisation du processus (devient un réflexe)
+                </div>
+            `,
+            science: '<strong>🔬 Pourquoi ça marche :</strong> Un besoin identifié mais non agi reste une <strong>source de frustration</strong>. L\'action libère de la dopamine (hormone de la récompense) et crée un <strong>cercle vertueux</strong>. Ton cerveau associe "besoin identifié" = "action" = "satisfaction" (étude de Teresa Amabile sur le progrès quotidien).',
+            pieges: '<strong>⚠️ Pièges à éviter :</strong> Vouloir satisfaire 5 besoins en même temps. Concentre-toi sur UN seul. La dispersion tue l\'action.'
+        },
+        regulation: {
+            title: '🎯 Technique STOP - Réguler en 30 secondes',
+            duree: '3 fois par jour pendant 21 jours',
+            materiel: 'Rien. Juste toi et ta respiration.',
+            protocole: `
+                <strong>📋 L'acronyme STOP :</strong>
+                <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                    <strong>S</strong> = <strong>Suspends</strong> → Arrête-toi. Stop physique.<br>
+                    <strong>T</strong> = <strong>Take a breath</strong> → 3 respirations profondes (ventre)<br>
+                    <strong>O</strong> = <strong>Observe</strong> → "Quelle émotion ? Quel besoin ?"<br>
+                    <strong>P</strong> = <strong>Proceed</strong> → Agis en conscience (pas en réaction)
+                </div>
+                
+                <strong>📋 Protocole d'entraînement :</strong>
+                <ol style="margin: 15px 0; padding-left: 25px; line-height: 1.8;">
+                    <li><strong>Semaine 1 :</strong> Pratique STOP 3 fois par jour, <strong>sans émotion forte</strong> (entraînement à vide)<br>
+                    → Matin, midi, soir : 30 secondes de STOP<br>
+                    → Objectif : Créer le réflexe neuronal</li>
+                    
+                    <li><strong>Semaine 2 :</strong> Utilise STOP dans des situations <strong>à faible tension</strong><br>
+                    → Petite contrariété, légère frustration<br>
+                    → Objectif : Tester en conditions réelles douces</li>
+                    
+                    <li><strong>Semaine 3 :</strong> Utilise STOP dans des situations <strong>à forte tension</strong><br>
+                    → Conflit, colère intense, stress aigu<br>
+                    → Objectif : Maîtriser la technique en condition extrême</li>
+                </ol>
+                
+                <div style="background: #fff3e0; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <strong>⚡ ASTUCE PRO :</strong> Les 3 respirations sont CRUCIALES. Inspire 4 secondes, expire 6 secondes. L'expiration longue active ton <strong>nerf vague</strong> (système parasympathique) qui calme ton amygdale. C'est physiologique.
+                </div>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <strong>🎯 Objectif mesurable :</strong><br>
+                    • Semaine 1 : 21 STOP réussis (3/jour x 7 jours)<br>
+                    • Semaine 2 : 5 STOP en situation réelle<br>
+                    • Semaine 3 : STOP devient un réflexe automatique
+                </div>
+            `,
+            science: '<strong>🔬 Pourquoi ça marche :</strong> 3 respirations profondes activent ton <strong>nerf vague</strong> qui envoie un signal "sécurité" à ton amygdale. Résultat : diminution de 40% de l\'intensité émotionnelle en 30 secondes (étude de l\'Institute of HeartMath). Le STOP crée un <strong>espace de choix</strong> entre stimulus et réponse.',
+            pieges: '<strong>⚠️ Pièges à éviter :</strong> Respirer avec le thorax. Respire avec le VENTRE (main sur le ventre, il doit se gonfler). La respiration thoracique active le stress, la respiration ventrale le calme.'
+        },
+        connexion: {
+            title: '🧘 Body Scan émotionnel - Écouter les messages du corps',
+            duree: '10 minutes avant de dormir pendant 21 jours',
+            materiel: 'Un lit, le silence, et ton attention.',
+            protocole: `
+                <strong>📋 Le protocole Body Scan (10 minutes) :</strong>
+                <ol style="margin: 15px 0; padding-left: 25px; line-height: 1.8;">
+                    <li><strong>Installation (1 min) :</strong><br>
+                    Allonge-toi. Ferme les yeux. 3 respirations profondes.</li>
+                    
+                    <li><strong>Scan descendant (7 min) :</strong><br>
+                    Commence par le sommet du crâne, descends lentement :<br>
+                    → Front → Yeux → Mâchoire → Nuque<br>
+                    → Épaules → Bras → Mains<br>
+                    → Poitrine → Ventre<br>
+                    → Bassin → Jambes → Pieds<br><br>
+                    <strong>À chaque zone, demande-toi :</strong><br>
+                    "Y a-t-il une tension ? Une sensation particulière ?"</li>
+                    
+                    <li><strong>Connexion émotionnelle (2 min) :</strong><br>
+                    Sur les zones tendues, pose cette question :<br>
+                    <strong>"Quelle émotion non exprimée portes-tu ?"</strong><br>
+                    Laisse venir la réponse. Ne force rien.<br>
+                    Souvent : gorge serrée = tristesse non pleurée<br>
+                    Ventre noué = peur non exprimée<br>
+                    Épaules lourdes = colère non dite</li>
+                </ol>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <strong>🎯 Objectif mesurable :</strong><br>
+                    • Semaine 1 : Identifier 2-3 zones de tension récurrentes<br>
+                    • Semaine 2 : Faire le lien tension → émotion sur 5 scans<br>
+                    • Semaine 3 : Relâcher physiquement 1 tension par scan
+                </div>
+            `,
+            science: '<strong>🔬 Pourquoi ça marche :</strong> 80% des émotions se manifestent d\'abord dans ton <strong>corps</strong>, pas dans ta tête. Ton cortex insulaire (zone du cerveau) lit ces signaux corporels. En scannant ton corps, tu actives cette zone et tu renforces la connexion corps-émotions (étude de Antonio Damasio, neuroscientifique, sur les "marqueurs somatiques").',
+            pieges: '<strong>⚠️ Pièges à éviter :</strong> Vouloir "éliminer" les tensions. Le but n\'est pas de les faire partir, mais de les <strong>écouter</strong>. Elles portent un message. Écoute-le.'
+        },
+        empathie: {
+            title: '❤️ Miroir émotionnel - Développer l\'empathie émotionnelle',
+            duree: '1 observation par jour pendant 21 jours',
+            materiel: 'Ton regard et ta curiosité.',
+            protocole: `
+                <strong>📋 L'exercice du Miroir (5 minutes/jour) :</strong>
+                <ol style="margin: 15px 0; padding-left: 25px; line-height: 1.8;">
+                    <li><strong>Choisis une personne (1 min) :</strong><br>
+                    Un collègue, un ami, un membre de ta famille<br>
+                    Quelqu'un que tu vas voir aujourd'hui</li>
+                    
+                    <li><strong>Observe sans parler (2 min) :</strong><br>
+                    Regarde son <strong>langage non-verbal</strong> :<br>
+                    → Posture (fermée ? ouverte ?)<br>
+                    → Visage (tendu ? détendu ?)<br>
+                    → Voix (ton montant ? descendant ?)<br>
+                    → Gestes (rapides ? lents ?)</li>
+                    
+                    <li><strong>Devine l'émotion (1 min) :</strong><br>
+                    Demande-toi : "Quelle émotion ressent-elle en ce moment ?"<br>
+                    Puis : "Quel besoin cherche-t-elle à satisfaire ?"<br>
+                    Ne dis rien encore. Juste observe.</li>
+                    
+                    <li><strong>Vérifie avec empathie (1 min) :</strong><br>
+                    Pose une question ouverte :<br>
+                    "Comment tu te sens aujourd'hui ?"<br>
+                    OU "On dirait que quelque chose te préoccupe ?"<br>
+                    Compare sa réponse avec ta déduction.</li>
+                </ol>
+                
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <strong>💡 BONUS :</strong> Plus tu pratiques sur les autres, plus tu développes ta propre conscience émotionnelle. C'est le paradoxe de l'empathie : en comprenant les autres, tu te comprends mieux.
+                </div>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <strong>🎯 Objectif mesurable :</strong><br>
+                    • Semaine 1 : 7 observations (1/jour), précision 30%<br>
+                    • Semaine 2 : 7 observations, précision 50%<br>
+                    • Semaine 3 : 7 observations, précision 70%+
+                </div>
+            `,
+            science: '<strong>🔬 Pourquoi ça marche :</strong> Cet exercice active tes <strong>neurones miroirs</strong>, découverts par Giacomo Rizzolatti. Ces neurones "simulent" l\'émotion de l\'autre dans ton propre cerveau. Plus tu les actives, plus ton empathie émotionnelle se développe. C\'est un muscle neuronal qui se renforce.',
+            pieges: '<strong>⚠️ Pièges à éviter :</strong> Projeter TES émotions sur l\'autre. "Il doit être en colère car MOI je serais en colère" = NON. Observe sans interpréter à travers ton filtre.'
+        },
+        acceptation: {
+            title: '🌈 Accueil émotionnel - Accepter plutôt que refouler',
+            duree: 'À chaque émotion désagréable pendant 21 jours',
+            materiel: 'Ta voix intérieure bienveillante.',
+            protocole: `
+                <strong>📋 Le protocole d'accueil (30 secondes) :</strong>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                    <strong>Quand une émotion désagréable arrive, dis (à voix haute ou intérieurement) :</strong><br><br>
+                    
+                    <div style="font-size: 1.2em; color: #FF6B4A; padding: 20px; background: #fff8f0; border-radius: 8px; border-left: 4px solid #FF6B4A;">
+                        "Bienvenue <strong>[nom de l'émotion]</strong>.<br>
+                        Je te vois.<br>
+                        Merci de me montrer que j'ai besoin de <strong>[nom du besoin]</strong>.<br>
+                        Je t'écoute."
                     </div>
-                `;
-            });
-            
-            actionPlan.innerHTML = html;
+                    
+                    <div style="margin-top: 20px;">
+                        <strong>Puis :</strong> 3 respirations profondes. Laisse l'émotion être là.
+                    </div>
+                </div>
+                
+                <strong>📋 Exemples concrets :</strong>
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                    <strong>Situation 1 :</strong> Tu ressens de la tristesse<br>
+                    <em>"Bienvenue tristesse. Je te vois. Merci de me montrer que j'ai besoin de connexion et de réconfort. Je t'écoute."</em><br><br>
+                    
+                    <strong>Situation 2 :</strong> Tu ressens de la colère<br>
+                    <em>"Bienvenue colère. Je te vois. Merci de me montrer que j'ai besoin de respect et de reconnaissance. Je t'écoute."</em><br><br>
+                    
+                    <strong>Situation 3 :</strong> Tu ressens de l'anxiété<br>
+                    <em>"Bienvenue anxiété. Je te vois. Merci de me montrer que j'ai besoin de sécurité et de clarté. Je t'écoute."</em>
+                </div>
+                
+                <strong>📋 Les 3 phases de progression :</strong>
+                <ol style="margin: 15px 0; padding-left: 25px; line-height: 1.8;">
+                    <li><strong>Jours 1-7 :</strong> Pratique avec des émotions faibles<br>
+                    → Légère irritation, petite déception<br>
+                    → Objectif : Installer le réflexe</li>
+                    
+                    <li><strong>Jours 8-14 :</strong> Pratique avec des émotions moyennes<br>
+                    → Frustration, tristesse modérée<br>
+                    → Objectif : Renforcer la technique</li>
+                    
+                    <li><strong>Jours 15-21 :</strong> Pratique avec toutes tes émotions<br>
+                    → Y compris les plus intenses<br>
+                    → Objectif : Maîtrise complète</li>
+                </ol>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <strong>🎯 Objectif mesurable :</strong><br>
+                    • Semaine 1 : Accueillir 5 émotions désagréables<br>
+                    • Semaine 2 : Diminution de 30% de l'intensité émotionnelle<br>
+                    • Semaine 3 : Accueil devient un réflexe automatique
+                </div>
+            `,
+            science: '<strong>🔬 Pourquoi ça marche :</strong> Refouler une émotion demande de l\'<strong>énergie cognitive</strong> et augmente son intensité de 60% (étude de Daniel Wegner, Harvard). Accueillir l\'émotion la <strong>diminue de 50%</strong> instantanément. C\'est le paradoxe de l\'acceptation : plus tu acceptes, plus ça diminue. Plus tu refuses, plus ça grossit.',
+            pieges: '<strong>⚠️ Pièges à éviter :</strong> Dire "Bienvenue colère" avec un ton agressif. L\'accueil doit être <strong>bienveillant</strong>. Parle à ton émotion comme à un enfant qui a peur. Avec douceur.'
         }
+    };
+    
+    weakest.forEach(([key, dim], index) => {
+        const action = actions[key];
+        const bgColor = index === 0 ? '#fff3e0' : (index === 1 ? '#e8f5e9' : '#e3f2fd');
+        const borderColor = index === 0 ? '#FF9800' : (index === 1 ? '#4CAF50' : '#2196F3');
+        const priorityLabel = index === 0 ? '🔥 PRIORITÉ 1 - ACTION IMMÉDIATE' : (index === 1 ? '⚡ PRIORITÉ 2 - IMPORTANT' : '💡 PRIORITÉ 3 - COMPLÉMENTAIRE');
+        
+        html += `
+            <div style="background: ${bgColor}; padding: 30px; border-radius: 15px; margin-bottom: 30px; border-left: 6px solid ${borderColor}; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                <div style="display: inline-block; padding: 8px 20px; border-radius: 20px; font-size: 0.85em; font-weight: bold; margin-bottom: 20px; background: ${borderColor}; color: white;">
+                    ${priorityLabel}
+                </div>
+                
+                <h3 style="font-size: 1.4em; color: #333; margin-bottom: 20px;">${action.title}</h3>
+                
+                <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong>⏱️ Durée :</strong> ${action.duree}
+                </div>
+                
+                <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong>🎒 Matériel :</strong> ${action.materiel}
+                </div>
+                
+                <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 15px;">
+                    ${action.protocole}
+                </div>
+                
+                <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; line-height: 1.8;">
+                    ${action.science}
+                </div>
+                
+                <div style="background: #fff8f0; padding: 20px; border-radius: 10px; border-left: 4px solid #FF9800; line-height: 1.8;">
+                    ${action.pieges}
+                </div>
+            </div>
+        `;
+    });
+    
+    actionPlan.innerHTML = html;
+}
         
         // ========== MESSAGE DU COACH ==========
-        function generateCoachMessage(scores) {
-            const message = document.getElementById('coachMessage');
-            let html = '';
-            
-            if (scores.percentage >= 75) {
-                html = 'Bravo pour cet excellent score ! Tu as développé une <strong>connexion émotions-besoins remarquable</strong>. Continue à cultiver cette compétence précieuse.<br><br>';
-                html += 'Mon conseil : <strong>Partage cette connaissance</strong> autour de toi. Aide les autres à faire le lien entre leurs émotions et leurs besoins. C\'est en transmettant qu\'on renforce sa propre maîtrise.';
-            } else if (scores.percentage >= 55) {
-                html = 'Ton score montre que tu es <strong>sur le bon chemin</strong>. Tu commences à comprendre que tes émotions sont des messagères de tes besoins.<br><br>';
-                html += 'Mon conseil : <strong>Concentre-toi sur les 2 actions prioritaires</strong> ci-dessus. Pratique-les quotidiennement pendant 3 semaines. Tu verras une transformation significative.';
-            } else {
-                html = 'Merci d\'avoir fait ce test avec honnêteté. Ton score révèle un <strong>grand potentiel de développement</strong>.<br><br>';
-                html += 'Mon conseil : <strong>Commence petit</strong>. Choisis l\'action prioritaire n°1. Juste celle-là. Pratique-la 5 minutes par jour pendant 21 jours. Ton cerveau va créer de nouvelles connexions neuronales. <strong>C\'est physiologique</strong>, pas magique.<br><br>';
-                html += 'Je suis là pour t\'accompagner dans ce développement. Ensemble, nous allons construire ta connexion émotions-besoins, pas à pas.';
-            }
-            
-            html += '<br><br><em style="color: #FF6B4A;">— Pascal Tamin, ton coach</em>';
-            message.innerHTML = html;
-        }
+function generateCoachMessage(scores) {
+    const message = document.getElementById('coachMessage');
+    let html = '<div style="background: white; padding: 30px; border-radius: 15px; line-height: 1.9; font-size: 1.05em;">';
+    
+    html += '<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 15px; color: white; margin-bottom: 30px; text-align: center;">';
+    html += '<div style="font-size: 4em; margin-bottom: 15px;">✉️</div>';
+    html += '<h3 style="font-size: 1.8em; margin-bottom: 10px;">Message personnel de Pascal</h3>';
+    html += '<p style="opacity: 0.95;">Coach scolaire · Neuro-praticien · Psychopraticien</p>';
+    html += '</div>';
+    
+    if (scores.percentage >= 75) {
+        html += '<p style="font-size: 1.15em; line-height: 1.9;">Bravo pour cet excellent score ! 🎉</p>';
+        
+        html += '<p style="margin-top: 20px;">En 20 ans d\'accompagnement de collégiens, lycéens et étudiants, je rencontre rarement un profil comme le tien. Tu as développé une <strong>connexion émotions-besoins remarquable</strong>.</p>';
+        
+        html += '<p style="margin-top: 20px;">Ce que je vois dans ton profil :</p>';
+        html += '<ul style="margin: 15px 0; padding-left: 25px; line-height: 2;">';
+        html += '<li>Tu <strong>nommes</strong> tes émotions avec précision</li>';
+        html += '<li>Tu <strong>identifies</strong> rapidement le besoin derrière</li>';
+        html += '<li>Tu <strong>agis</strong> en cohérence avec tes valeurs</li>';
+        html += '</ul>';
+        
+        html += '<p style="margin-top: 20px;">Mon conseil : <strong>Transmets cette compétence</strong>. Autour de toi, beaucoup de gens n\'ont jamais appris à faire ce lien. Tu peux être un <strong>modèle inspirant</strong>.</p>';
+        
+        html += '<div style="margin-top: 30px; padding: 25px; background: #f8f9fa; border-radius: 10px; border-left: 5px solid #4CAF50;">';
+        html += '<strong>💡 Et si tu veux aller encore plus loin...</strong><br><br>';
+        html += 'Avec un score comme le tien, on pourrait travailler ensemble sur des <strong>objectifs avancés</strong> :<br>';
+        html += '• Transmettre ton intelligence émotionnelle à d\'autres (parents, collègues)<br>';
+        html += '• Affiner ta communication en situations de stress intense<br>';
+        html += '• Développer ton leadership émotionnel<br><br>';
+        html += 'Si ça t\'intéresse, on peut en discuter lors d\'une séance découverte.';
+        html += '</div>';
+        
+    } else if (scores.percentage >= 55) {
+        html += '<p style="font-size: 1.15em; line-height: 1.9;">Ton score me parle. 👍</p>';
+        
+        html += '<p style="margin-top: 20px;">Il montre que tu es <strong>sur le bon chemin</strong>. Tu as compris quelque chose d\'essentiel : tes émotions ne sont pas des ennemies, ce sont des <strong>messagères</strong> qui t\'indiquent tes besoins.</p>';
+        
+        html += '<p style="margin-top: 20px;">Ce que je vois dans ton profil :</p>';
+        html += '<ul style="margin: 15px 0; padding-left: 25px; line-height: 2;">';
+        html += '<li>Tu commences à <strong>identifier</strong> certaines émotions</li>';
+        html += '<li>Tu fais parfois le lien avec tes besoins</li>';
+        html += '<li>Tu cherches à <strong>agir</strong>, mais ce n\'est pas toujours fluide</li>';
+        html += '</ul>';
+        
+        html += '<p style="margin-top: 20px;"><strong>Mon observation après 20 ans de coaching</strong> : Les personnes à ton niveau de score sont à un <strong>tournant décisif</strong>. Soit elles continuent la pratique quotidienne et font un bond en avant, soit elles stagnent. La différence ? La <strong>régularité</strong>.</p>';
+        
+        html += '<div style="margin-top: 30px; padding: 25px; background: #fff3e0; border-radius: 10px; border-left: 5px solid #FF9800;">';
+        html += '<strong>🎯 Mon conseil personnalisé pour toi :</strong><br><br>';
+        html += 'Concentre-toi sur les <strong>2 actions prioritaires</strong> ci-dessus. Juste ces deux-là. Pratique-les <strong>5 minutes par jour pendant 3 semaines</strong>.<br><br>';
+        html += 'Pourquoi 3 semaines ? C\'est le temps neurologique minimal pour créer une nouvelle connexion neuronale solide. Après 21 jours, ça devient plus fluide.<br><br>';
+        html += '<strong>Je te fais une promesse</strong> : Si tu fais vraiment ces 2 actions pendant 21 jours, ton score passera de ' + scores.percentage + '% à 70%+. C\'est mathématique.';
+        html += '</div>';
+        
+        html += '<div style="margin-top: 25px; padding: 25px; background: #e3f2fd; border-radius: 10px;">';
+        html += '<strong>💬 Tu veux un coup de pouce ?</strong><br><br>';
+        html += 'J\'accompagne souvent des profils comme le tien. En 3-4 séances, on peut :<br>';
+        html += '• Identifier précisément tes blocages émotionnels<br>';
+        html += '• Créer ton plan d\'action ultra-personnalisé<br>';
+        html += '• Te donner des outils concrets pour ta situation<br><br>';
+        html += 'Si ça te parle, on peut se voir en visio ou à mon cabinet (Clermont-Ferrand).';
+        html += '</div>';
+        
+    } else {
+        html += '<p style="font-size: 1.15em; line-height: 1.9;">Merci d\'avoir fait ce test avec honnêteté. 🙏</p>';
+        
+        html += '<p style="margin-top: 20px;">Ton score révèle quelque chose que je vois <strong>tous les jours</strong> dans mon cabinet : un <strong>grand potentiel émotionnel non révélé</strong>.</p>';
+        
+        html += '<p style="margin-top: 20px;"><strong>Laisse-moi te dire quelque chose d\'important</strong> : Ce score ne dit RIEN sur ta valeur. Il dit juste que <strong>personne ne t\'a appris</strong> à connecter tes émotions et tes besoins. Ni à l\'école, ni peut-être en famille. C\'est normal.</p>';
+        
+        html += '<p style="margin-top: 20px;">En 20 ans de coaching, j\'ai accompagné des centaines de jeunes (et moins jeunes) qui partaient de là. Beaucoup sont aujourd\'hui <strong>méconnaissables</strong>. Ils ont développé une intelligence émotionnelle qui change tout dans leur vie.</p>';
+        
+        html += '<div style="margin-top: 30px; padding: 25px; background: #ffebee; border-radius: 10px; border-left: 5px solid #f44336;">';
+        html += '<strong>🔥 Ce que je vois dans ton profil (et c\'est une bonne nouvelle) :</strong><br><br>';
+        html += '• Tu <strong>ressens</strong> des émotions (ton amygdale fonctionne parfaitement)<br>';
+        html += '• Mais tu ne sais pas toujours <strong>les nommer</strong> ni <strong>les comprendre</strong><br>';
+        html += '• Résultat : tu les <strong>subis</strong> au lieu de les utiliser<br><br>';
+        html += 'La bonne nouvelle ? Cette connexion <strong>s\'apprend</strong>. Et plus vite que tu ne le crois.';
+        html += '</div>';
+        
+        html += '<p style="margin-top: 25px;"><strong>Mon conseil : Commence PETIT.</strong></p>';
+        
+        html += '<p style="margin-top: 15px;">Ne te lance pas dans les 3 actions. Choisis <strong>l\'action prioritaire n°1</strong>. Juste celle-là. Pratique-la <strong>5 minutes par jour pendant 21 jours</strong>.</p>';
+        
+        html += '<div style="margin-top: 25px; padding: 25px; background: #f0f0f0; border-radius: 10px;">';
+        html += '<strong>📅 Ta feuille de route (simple et réaliste) :</strong><br><br>';
+        html += '<strong>Semaines 1-3 :</strong> Action prioritaire n°1 (5 min/jour)<br>';
+        html += '→ Ton cerveau crée les premières connexions neuronales<br><br>';
+        html += '<strong>Semaines 4-6 :</strong> Tu ajoutes l\'action n°2 (10 min/jour total)<br>';
+        html += '→ Les connexions se renforcent (myélinisation)<br><br>';
+        html += '<strong>Semaines 7-8 :</strong> Tu ajoutes l\'action n°3 si tu veux<br>';
+        html += '→ Tu as créé un nouveau circuit neuronal<br><br>';
+        html += '<strong>Résultat après 8 semaines</strong> : Ton score passe de ' + scores.percentage + '% à 55-65%. Ta vie change.';
+        html += '</div>';
+        
+        html += '<div style="margin-top: 30px; padding: 30px; background: linear-gradient(135deg, #FFF8F0 0%, #FFE8DC 100%); border-radius: 15px; border: 3px solid #FF6B4A;">';
+        html += '<h4 style="color: #FF6B4A; margin-bottom: 15px; font-size: 1.3em;">💬 Je peux t\'accompagner personnellement</h4>';
+        html += '<p style="line-height: 1.8; margin-bottom: 20px;">Si tu veux un <strong>accompagnement sur-mesure</strong>, voici comment je travaille :</p>';
+        html += '<div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px;">';
+        html += '<strong>Séance 1 :</strong> On fait ton bilan émotionnel complet<br>';
+        html += '→ Quelles émotions tu vis le plus ? Quels besoins sont insatisfaits ?';
+        html += '</div>';
+        html += '<div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px;">';
+        html += '<strong>Séances 2-3 :</strong> On construit ton plan d\'action hyper-personnalisé<br>';
+        html += '→ Des outils adaptés à TON profil, pas des recettes génériques';
+        html += '</div>';
+        html += '<div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">';
+        html += '<strong>Séance 4 :</strong> On ajuste et on ancre les pratiques<br>';
+        html += '→ Pour que ça devienne des réflexes automatiques';
+        html += '</div>';
+        html += '<p style="font-size: 1.1em;"><strong>Résultat</strong> : En 4 séances, tu passes de "je subis mes émotions" à "je les comprends et j\'agis".</p>';
+        html += '</div>';
+    }
+    
+    html += '<div style="margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; text-align: center; color: white;">';
+    html += '<h4 style="font-size: 1.5em; margin-bottom: 15px;">🎯 Envie d\'aller plus loin ensemble ?</h4>';
+    html += '<p style="font-size: 1.1em; margin-bottom: 25px; line-height: 1.8; opacity: 0.95;">Séance découverte en visio ou à mon cabinet (Clermont-Ferrand)<br>On fait le point sur ton profil et je te donne des premiers outils concrets</p>';
+    html += '<button onclick="openRDVFromResults()" style="background: white; color: #667eea; border: none; padding: 18px 40px; font-size: 1.2em; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s;" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">📧 Prendre rendez-vous avec Pascal</button>';
+    html += '</div>';
+    
+    html += '<div style="margin-top: 30px; text-align: center; padding: 25px; background: #f8f9fa; border-radius: 10px;">';
+    html += '<p style="font-size: 0.95em; color: #666; line-height: 1.7;">📧 Contact : <a href="mailto:pascalt633@gmail.com" style="color: #FF6B4A; font-weight: bold;">pascalt633@gmail.com</a><br>';
+    html += '📍 Cabinet : Clermont-Ferrand · Visio disponible</p>';
+    html += '<p style="font-size: 0.9em; color: #999; margin-top: 15px;">Ancien personnel de direction Éducation nationale<br>Certifié neuro-praticien · Psychopraticien · Coach de vie</p>';
+    html += '</div>';
+    
+    html += '<div style="margin-top: 30px; text-align: center; font-style: italic; color: #FF6B4A; font-size: 1.1em;">';
+    html += '— Pascal Tamin, ton coach';
+    html += '</div>';
+    
+    html += '</div>';
+    message.innerHTML = html;
+}
         
         // ========== VÉRIFICATION PAIEMENT STRIPE ==========
         window.addEventListener('load', function() {
@@ -2097,4 +2715,5 @@
         });
     </script>
 </body>
+
 </html>
