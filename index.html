@@ -433,11 +433,49 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🧠 Test Émotions & Besoins</h1>
-            <p>Découvre ta connexion entre émotions et besoins fondamentaux</p>
+    <div class="hero">
+    <h1>🧠 Test Émotions & Besoins</h1>
+    <p class="subtitle">Découvre en 8 minutes ton profil émotionnel et tes axes de progression</p>
+    
+    <!-- VALEUR AJOUTÉE -->
+    <div style="background: rgba(255,255,255,0.95); padding: 30px; border-radius: 20px; margin: 30px auto; max-width: 600px; box-shadow: 0 8px 30px rgba(0,0,0,0.12);">
+        <div style="display: grid; gap: 15px; text-align: left; font-size: 1.1em;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 1.5em;">✅</span>
+                <span><strong>Analyse gratuite</strong> immédiate</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 1.5em;">🎓</span>
+                <span>Basé sur <strong>30 ans d'expérience</strong> Éducation Nationale</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 1.5em;">🌟</span>
+                <span><strong>+500 jeunes</strong> accompagnés depuis 2005</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 1.5em;">🧠</span>
+                <span>Approche <strong>neurosciences + psychologie</strong></span>
+            </div>
         </div>
+    </div>
+    
+    <!-- MINI-BIO -->
+    <div style="background: rgba(255,255,255,0.9); padding: 25px; border-radius: 15px; margin: 20px auto 30px; max-width: 650px; text-align: left; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+            <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 2.5em; color: white; flex-shrink: 0;">
+                👨‍🏫
+            </div>
+            <div style="flex: 1; min-width: 250px;">
+                <p style="margin: 0; font-size: 1.05em; line-height: 1.7; color: #333;">
+                    <strong style="color: #FF6B4A;">Je suis Pascal Tamin</strong>, ancien personnel de direction Éducation Nationale, neuro-praticien et psychopraticien certifié. J'aide les jeunes à <strong>comprendre leurs émotions</strong> pour mieux gérer leur scolarité et leur vie.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <button onclick="startTest()" class="start-btn">Commencer le test gratuit →</button>
+    <p style="margin-top: 15px; font-size: 0.95em; opacity: 0.9;">⏱️ 8 minutes • 32 questions • Résultats immédiats</p>
+</div>
         
         <div class="content">
             <div class="instruction-box">
@@ -1651,13 +1689,37 @@
             </div>
         </div>
         
-        <div class="footer">
-            <div class="footer-brand">PASCAL TAMIN</div>
-            <p style="margin: 10px 0;">Coach scolaire · Motivation · Orientation</p>
-            <p style="font-size: 0.9em; opacity: 0.8;">Ancien personnel de direction Éducation nationale<br>Certifié neuro-praticien · Psychopraticien · Coach de vie</p>
-            <p style="margin-top: 20px; font-size: 0.85em;">📧 Contact : pascalt633@gmail.com</p>
+       <div class="footer">
+    <!-- BADGES RÉASSURANCE -->
+    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.2);">
+        <div style="text-align: center;">
+            <div style="font-size: 2em; margin-bottom: 5px;">🔒</div>
+            <div style="font-size: 0.9em; opacity: 0.95;">Paiement 100% sécurisé</div>
+            <div style="font-size: 0.85em; opacity: 0.8;">Stripe</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 2em; margin-bottom: 5px;">🎓</div>
+            <div style="font-size: 0.9em; opacity: 0.95;">Triple certification</div>
+            <div style="font-size: 0.85em; opacity: 0.8;">Neuro · Psycho · Coach</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 2em; margin-bottom: 5px;">⭐</div>
+            <div style="font-size: 0.9em; opacity: 0.95;">+500 jeunes accompagnés</div>
+            <div style="font-size: 0.85em; opacity: 0.8;">Depuis 2005</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 2em; margin-bottom: 5px;">📍</div>
+            <div style="font-size: 0.9em; opacity: 0.95;">Clermont-Ferrand</div>
+            <div style="font-size: 0.85em; opacity: 0.8;">Visio disponible</div>
         </div>
     </div>
+    
+    <!-- INFO PRINCIPALE -->
+    <div class="footer-brand">PASCAL TAMIN</div>
+    <p style="margin: 10px 0;">Coach scolaire · Motivation · Orientation</p>
+    <p style="font-size: 0.9em; opacity: 0.8;">Ancien personnel de direction Éducation nationale<br>Certifié neuro-praticien · Psychopraticien · Coach de vie</p>
+    <p style="margin-top: 20px; font-size: 0.85em;">📧 Contact : pascalt633@gmail.com</p>
+</div>
 
     <script>
         // ========== CONFIGURATION STRIPE ==========
@@ -2931,5 +2993,6 @@ function generateCoachMessage(scores) {
 </body>
 
 </html>
+
 
 
