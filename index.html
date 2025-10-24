@@ -1502,6 +1502,62 @@
                     </div>
                 </div>
             </div>
+            <!-- MODAL RDV -->
+<div id="rdvModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📅 Réserver une séance avec Pascal</h2>
+            <p>Remplissez ce formulaire, je vous recontacte sous 24h</p>
+        </div>
+        
+        <div class="modal-body">
+            <div id="rdvForm">
+                <form onsubmit="submitRDV(event)">
+                    <div class="form-group">
+                        <label for="rdvName">Prénom *</label>
+                        <input type="text" id="rdvName" required placeholder="Ton prénom">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rdvEmail">Email *</label>
+                        <input type="email" id="rdvEmail" required placeholder="ton@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rdvPhone">Téléphone *</label>
+                        <input type="tel" id="rdvPhone" required placeholder="06 12 34 56 78">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rdvMessage">Dis-moi en quelques mots ce qui t'amène</label>
+                        <textarea id="rdvMessage" rows="4" placeholder="Exemple : Je veux mieux gérer mon stress avant les examens..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="formula-btn">Envoyer ma demande 📧</button>
+                    
+                    <div class="privacy-note">
+                        Je te recontacte sous 24h pour fixer le RDV<br>
+                        📍 Visio ou cabinet (Clermont-Ferrand)
+                    </div>
+                </form>
+            </div>
+            
+            <div id="rdvSuccess" style="display: none; text-align: center; padding: 40px;">
+                <div style="font-size: 4em; margin-bottom: 20px;">✅</div>
+                <h3 style="color: #4CAF50; margin-bottom: 20px;">Demande envoyée !</h3>
+                <p style="font-size: 1.1em; line-height: 1.8; color: #666;">
+                    Merci ! Je vais regarder ta demande et te recontacter sous 24h<br>
+                    pour fixer notre séance découverte.<br><br>
+                    À très bientôt ! 🎯<br>
+                    — Pascal
+                </p>
+                <button onclick="closeRDVModal()" style="margin-top: 30px; background: #667eea; color: white; border: none; padding: 15px 30px; border-radius: 30px; cursor: pointer; font-size: 1.1em;">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- ZONE RÉSULTATS -->
             <div id="results">
                 <div style="text-align: center; padding: 50px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 20px; margin-bottom: 40px;">
@@ -2717,3 +2773,4 @@ function generateCoachMessage(scores) {
 </body>
 
 </html>
+
