@@ -1521,23 +1521,23 @@
                     </div>
                     
                     <div class="modal-body">
-                        <form id="freeEmailForm" onsubmit="submitFreeEmail(event)">
-                            <div class="form-group">
-                                <label for="freeName">Prénom *</label>
-                                <input type="text" id="freeName" name="freeName" required placeholder="Ton prénom">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="freeEmail">Email *</label>
-                                <input type="email" id="freeEmail" name="freeEmail" required placeholder="ton@email.com">
-                            </div>
-                            
-                            <button type="submit" class="formula-btn">Voir mon score 🎉</button>
-                            
-                            <div class="privacy-note">
-                                🔒 Tes données restent confidentielles
-                            </div>
-                        </form>
+                        <form onsubmit="submitFreeEmail(event)">
+    <div class="form-group">
+        <label for="freeName">Prénom *</label>
+        <input type="text" id="freeName" required placeholder="Ton prénom">
+    </div>
+    
+    <div class="form-group">
+        <label for="freeEmail">Email *</label>
+        <input type="email" id="freeEmail" required placeholder="ton@email.com">
+    </div>
+    
+    <button type="submit" class="formula-btn">Voir mon score 🎉</button>
+    
+    <div class="privacy-note">
+        🔒 Tes données restent confidentielles
+    </div>
+</form>
                     </div>
                 </div>
             </div>
@@ -1552,33 +1552,33 @@
         <div class="modal-body">
             <div id="rdvForm">
                 <form onsubmit="submitRDV(event)">
-                    <div class="form-group">
-                        <label for="rdvName">Prénom *</label>
-                        <input type="text" id="rdvName" required placeholder="Ton prénom">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="rdvEmail">Email *</label>
-                        <input type="email" id="rdvEmail" required placeholder="ton@email.com">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="rdvPhone">Téléphone *</label>
-                        <input type="tel" id="rdvPhone" required placeholder="06 12 34 56 78">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="rdvMessage">Dis-moi en quelques mots ce qui t'amène</label>
-                        <textarea id="rdvMessage" rows="4" placeholder="Exemple : Je veux mieux gérer mon stress avant les examens..."></textarea>
-                    </div>
-                    
-                    <button type="submit" class="formula-btn">Envoyer ma demande 📧</button>
-                    
-                    <div class="privacy-note">
-                        Je te recontacte sous 24h pour fixer le RDV<br>
-                        📍 Visio ou cabinet (Clermont-Ferrand)
-                    </div>
-                </form>
+    <div class="form-group">
+        <label for="rdvName">Prénom *</label>
+        <input type="text" id="rdvName" required placeholder="Ton prénom">
+    </div>
+    
+    <div class="form-group">
+        <label for="rdvEmail">Email *</label>
+        <input type="email" id="rdvEmail" required placeholder="ton@email.com">
+    </div>
+    
+    <div class="form-group">
+        <label for="rdvPhone">Téléphone *</label>
+        <input type="tel" id="rdvPhone" required placeholder="06 12 34 56 78">
+    </div>
+    
+    <div class="form-group">
+        <label for="rdvMessage">Dis-moi en quelques mots ce qui t'amène</label>
+        <textarea id="rdvMessage" rows="4" placeholder="Exemple : Je veux mieux gérer mon stress avant les examens..."></textarea>
+    </div>
+    
+    <button type="submit" class="formula-btn">Envoyer ma demande 📧</button>
+    
+    <div class="privacy-note">
+        Je te recontacte sous 24h pour fixer le RDV<br>
+        📍 Visio ou cabinet (Clermont-Ferrand)
+    </div>
+</form>
             </div>
             
             <div id="rdvSuccess" style="display: none; text-align: center; padding: 40px;">
@@ -1822,20 +1822,40 @@
         
         // ========== SOUMISSION EMAIL GRATUIT ==========
         function submitFreeEmail(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('freeName').value.trim();
-            const email = document.getElementById('freeEmail').value.trim();
-            
-            if (!name || !email) {
-                alert('Merci de remplir tous les champs');
-                return;
-            }
-            
-            saveUserData(name, email, 'free');
-            document.getElementById('freeEmailModal').style.display = 'none';
-            displayResults('free', name);
-        }
+    event.preventDefault();
+    
+    const name = document.getElementById('freeName').value.trim();
+    const email = document.getElementById('freeEmail').value.trim();
+    
+    if (!name || !email) {
+        alert('Merci de remplir tous les champs');
+        return;
+    }
+    
+    // 1. Envoyer à FormSubmit (vous recevez l'email)
+    fetch('https://formsubmit.co/pascalt633@gmail.com', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            prenom: name,
+            email: email,
+            score: calculatedScores.percentage + '%',
+            _subject: '🎯 Nouveau test gratuit - Émotions & Besoins',
+            _captcha: 'false',
+            _template: 'table'
+        })
+    });
+    
+    // 2. Sauvegarder localement
+    saveUserData(name, email, 'free');
+    
+    // 3. Fermer modal et afficher résultats
+    document.getElementById('freeEmailModal').style.display = 'none';
+    displayResults('free', name);
+}
         
         // ========== CHOIX PREMIUM (PAIEMENT STRIPE) ==========
         function choosePremium(event) {
@@ -1859,22 +1879,44 @@
         
         // ========== SOUMISSION RDV ==========
         function submitRDV(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('rdvName').value.trim();
-            const email = document.getElementById('rdvEmail').value.trim();
-            const phone = document.getElementById('rdvPhone').value.trim();
-            const message = document.getElementById('rdvMessage').value.trim();
-            
-            if (!name || !email || !phone) {
-                alert('Merci de remplir tous les champs obligatoires');
-                return;
-            }
-            
-            saveRDVRequest(name, email, phone, message);
-            document.getElementById('rdvForm').style.display = 'none';
-            document.getElementById('rdvSuccess').style.display = 'block';
-        }
+    event.preventDefault();
+    
+    const name = document.getElementById('rdvName').value.trim();
+    const email = document.getElementById('rdvEmail').value.trim();
+    const phone = document.getElementById('rdvPhone').value.trim();
+    const message = document.getElementById('rdvMessage').value.trim();
+    
+    if (!name || !email || !phone) {
+        alert('Merci de remplir tous les champs obligatoires');
+        return;
+    }
+    
+    // 1. Envoyer à FormSubmit (vous recevez l'email)
+    fetch('https://formsubmit.co/pascalt633@gmail.com', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            prenom: name,
+            email: email,
+            telephone: phone,
+            message: message,
+            score: calculatedScores.percentage + '%',
+            _subject: '📅 Nouvelle demande RDV - Pascal Tamin',
+            _captcha: 'false',
+            _template: 'table'
+        })
+    });
+    
+    // 2. Sauvegarder localement
+    saveRDVRequest(name, email, phone, message);
+    
+    // 3. Afficher message de confirmation
+    document.getElementById('rdvForm').style.display = 'none';
+    document.getElementById('rdvSuccess').style.display = 'block';
+}
         
         // ========== FERMER MODAL RDV ==========
         function closeRDVModal() {
@@ -2993,6 +3035,7 @@ function generateCoachMessage(scores) {
 </body>
 
 </html>
+
 
 
 
