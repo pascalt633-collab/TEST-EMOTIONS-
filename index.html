@@ -6,6 +6,7 @@
     <title>Test Émotions & Besoins | Pascal Tamin - Coach Scolaire</title>
     <script src="https://js.stripe.com/v3/"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -1629,7 +1630,13 @@
                         <div id="coachMessage"></div>
                     </div>
                 </div>
-                
+                <!-- BOUTON TÉLÉCHARGER PDF -->
+<div style="text-align: center; margin: 40px 0;">
+    <button onclick="downloadPDF()" style="background: linear-gradient(135deg, #FF6B4A 0%, #FF8C69 100%); color: white; border: none; padding: 20px 50px; font-size: 1.3em; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 107, 74, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+        📄 Télécharger mon analyse en PDF
+    </button>
+    <p style="margin-top: 15px; color: #666; font-size: 0.95em;">Garde ton analyse pour la relire quand tu veux</p>
+</div>
                 <!-- CTA FINAL -->
                 <div id="finalCTA" style="display: none; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 50px 30px; border-radius: 20px; text-align: center; color: white; margin-top: 50px;">
                     <h3 style="font-size: 2em; margin-bottom: 20px;">🎓 Envie d'aller plus loin ?</h3>
@@ -2769,8 +2776,160 @@ function generateCoachMessage(scores) {
                 }
             }
         });
+        // ========== GÉNÉRATION PDF ==========
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Configuration
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const margin = 20;
+            const maxWidth = pageWidth - (margin * 2);
+            let yPos = 20;
+            
+            // En-tête
+            doc.setFillColor(255, 107, 74);
+            doc.rect(0, 0, pageWidth, 40, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(24);
+            doc.text('Test Émotions & Besoins', pageWidth / 2, 20, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text('Analyse personnalisée - Pascal Tamin', pageWidth / 2, 30, { align: 'center' });
+            
+            yPos = 55;
+            doc.setTextColor(0, 0, 0);
+            
+            // Score global
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.text('Ton score global', margin, yPos);
+            yPos += 10;
+            
+            doc.setFontSize(36);
+            doc.setTextColor(255, 107, 74);
+            doc.text(calculatedScores.percentage + '%', pageWidth / 2, yPos, { align: 'center' });
+            yPos += 15;
+            
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            let interpretation = '';
+            if (calculatedScores.percentage >= 80) interpretation = 'Excellent ! Connexion émotions-besoins très développée';
+            else if (calculatedScores.percentage >= 70) interpretation = 'Très bien ! Tu as une bonne connexion émotions-besoins';
+            else if (calculatedScores.percentage >= 60) interpretation = 'Bien ! Ta connexion émotions-besoins est en développement';
+            else if (calculatedScores.percentage >= 50) interpretation = 'En développement ! Tu es sur la bonne voie';
+            else interpretation = 'Fort potentiel ! Place à l\'apprentissage';
+            
+            const interpLines = doc.splitTextToSize(interpretation, maxWidth);
+            doc.text(interpLines, pageWidth / 2, yPos, { align: 'center' });
+            yPos += (interpLines.length * 7) + 15;
+            
+            // Scores par dimension
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(14);
+            doc.text('Tes scores par dimension', margin, yPos);
+            yPos += 10;
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(10);
+            
+            for (const dim of Object.values(calculatedScores.dimensions)) {
+                if (yPos > 250) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                
+                // Nom de la dimension
+                doc.text(dim.name, margin, yPos);
+                
+                // Barre de progression
+                const barWidth = 100;
+                const barHeight = 6;
+                const barX = pageWidth - margin - barWidth;
+                
+                // Fond gris
+                doc.setFillColor(240, 240, 240);
+                doc.rect(barX, yPos - 4, barWidth, barHeight, 'F');
+                
+                // Barre colorée
+                let color = [76, 175, 80]; // Vert
+                if (dim.percentage < 50) color = [244, 67, 54]; // Rouge
+                else if (dim.percentage < 70) color = [255, 152, 0]; // Orange
+                
+                doc.setFillColor(color[0], color[1], color[2]);
+                doc.rect(barX, yPos - 4, (barWidth * dim.percentage / 100), barHeight, 'F');
+                
+                // Pourcentage
+                doc.setFont(undefined, 'bold');
+                doc.text(dim.percentage + '%', pageWidth - margin, yPos, { align: 'right' });
+                doc.setFont(undefined, 'normal');
+                
+                yPos += 12;
+            }
+            
+            yPos += 10;
+            
+            // Résumé de l'analyse
+            if (yPos > 220) {
+                doc.addPage();
+                yPos = 20;
+            }
+            
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(14);
+            doc.text('Résumé de ton analyse', margin, yPos);
+            yPos += 10;
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(10);
+            
+            let summary = '';
+            if (calculatedScores.percentage >= 70) {
+                summary = 'Ton cerveau émotionnel fonctionne de manière harmonieuse. La connexion entre ton système limbique (centre émotionnel) et ton cortex préfrontal (zone de régulation) est efficace. Continue à cultiver cette compétence précieuse.';
+            } else if (calculatedScores.percentage >= 50) {
+                summary = 'Ta connexion émotions-besoins est en bon développement. L\'interaction entre ton amygdale (détecteur d\'émotions) et ton cortex préfrontal fonctionne mais peut gagner en fluidité. La pratique quotidienne va renforcer ces connexions neuronales.';
+            } else {
+                summary = 'Ton cerveau émotionnel a un fort potentiel de développement. Avec de la pratique quotidienne, les connexions entre ton amygdale et ton cortex préfrontal peuvent se renforcer en 21 jours. C\'est physiologique, pas magique !';
+            }
+            
+            const summaryLines = doc.splitTextToSize(summary, maxWidth);
+            doc.text(summaryLines, margin, yPos);
+            yPos += (summaryLines.length * 7) + 15;
+            
+            // Pied de page
+            doc.addPage();
+            yPos = 20;
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Pour aller plus loin', margin, yPos);
+            yPos += 10;
+            
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            const footer = 'Cette analyse est un premier pas. Pour un accompagnement personnalisé et développer concrètement ta connexion émotions-besoins, je suis là pour t\'accompagner.';
+            const footerLines = doc.splitTextToSize(footer, maxWidth);
+            doc.text(footerLines, margin, yPos);
+            yPos += (footerLines.length * 7) + 15;
+            
+            doc.setFont(undefined, 'bold');
+            doc.text('Pascal Tamin', margin, yPos);
+            yPos += 7;
+            doc.setFont(undefined, 'normal');
+            doc.text('Coach scolaire - Neuro-praticien - Psychopraticien', margin, yPos);
+            yPos += 7;
+            doc.text('Email : pascalt633@gmail.com', margin, yPos);
+            yPos += 7;
+            doc.text('Cabinet : Clermont-Ferrand - Visio disponible', margin, yPos);
+            
+            // Pied de page final
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.text('Document généré le ' + calculatedScores.date, pageWidth / 2, 280, { align: 'center' });
+            
+            // Téléchargement
+            doc.save('Analyse-Emotions-Besoins-' + calculatedScores.date + '.pdf');
+        }
     </script>
 </body>
 
 </html>
+
 
