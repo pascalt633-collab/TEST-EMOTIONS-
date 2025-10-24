@@ -2014,29 +2014,95 @@
         }
         
         // ========== CONSEILS GRATUITS ==========
-        function generateFreeAdvice(scores) {
-            const advice = document.createElement('div');
-            advice.style.cssText = 'background: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);';
-            
-            advice.innerHTML = `
-                <h3 style="color: #FF6B4A; margin-bottom: 20px;">💡 3 conseils pratiques pour toi</h3>
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
-                    <strong style="color: #FF6B4A;">1. Journal émotionnel quotidien</strong>
-                    <p style="margin-top: 10px; line-height: 1.7;">Chaque soir, note : quelle émotion j'ai le plus ressentie ? Quel besoin était derrière ? Cette pratique développe ta conscience émotionnelle en 3 semaines.</p>
-                </div>
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
-                    <strong style="color: #FF6B4A;">2. Technique des 3 respirations</strong>
-                    <p style="margin-top: 10px; line-height: 1.7;">Quand une émotion forte arrive : STOP. 3 respirations profondes. Pose-toi : "Quelle émotion ?" puis "Quel besoin ?". C'est le circuit court émotions-besoins !</p>
-                </div>
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                    <strong style="color: #FF6B4A;">3. Liste des besoins universels</strong>
-                    <p style="margin-top: 10px; line-height: 1.7;">Mémorise les 9 besoins de base : Sécurité, Appartenance, Reconnaissance, Autonomie, Affection, Accomplissement, Créativité, Sérénité, Sens. Un besoin identifié = 50% de résolu !</p>
-                </div>
-            `;
-            
-            document.getElementById('freeContent').appendChild(advice);
-        }
-        
+        // ========== CONSEILS GRATUITS ==========
+function generateFreeAdvice(scores) {
+    const freeContent = document.getElementById('freeContent');
+    
+    // Trouver les 3 meilleures et 3 pires dimensions
+    const sortedDimensions = Object.entries(scores.dimensions).sort((a, b) => b[1].percentage - a[1].percentage);
+    const topStrengths = sortedDimensions.slice(0, 3);
+    const topChallenges = sortedDimensions.slice(-3).reverse();
+    
+    let html = '';
+    
+    // ==== PAGE 1 : TON PROFIL ====
+    html += '<div style="background: white; padding: 35px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">';
+    html += '<h3 style="color: #FF6B4A; margin-bottom: 25px; font-size: 1.6em; text-align: center;">📊 Ton profil émotionnel</h3>';
+    
+    // Tes 3 forces
+    html += '<div style="background: #e8f5e9; padding: 25px; border-radius: 12px; margin-bottom: 20px; border-left: 5px solid #4CAF50;">';
+    html += '<h4 style="color: #4CAF50; margin-bottom: 15px; font-size: 1.2em;">💪 Tes 3 forces principales</h4>';
+    topStrengths.forEach((dim, index) => {
+        html += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; ${index < 2 ? 'border-bottom: 1px solid #c8e6c9;' : ''}">`;
+        html += `<span style="font-weight: 600; color: #333;">${index + 1}. ${dim[1].name}</span>`;
+        html += `<span style="font-weight: bold; color: #4CAF50; font-size: 1.1em;">${dim[1].percentage}%</span>`;
+        html += '</div>';
+    });
+    html += '</div>';
+    
+    // Tes 3 axes de progression
+    html += '<div style="background: #fff3e0; padding: 25px; border-radius: 12px; border-left: 5px solid #FF9800;">';
+    html += '<h4 style="color: #FF9800; margin-bottom: 15px; font-size: 1.2em;">🎯 Tes 3 axes de progression</h4>';
+    topChallenges.forEach((dim, index) => {
+        html += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; ${index < 2 ? 'border-bottom: 1px solid #ffe0b2;' : ''}">`;
+        html += `<span style="font-weight: 600; color: #333;">${index + 1}. ${dim[1].name}</span>`;
+        html += `<span style="font-weight: bold; color: #FF9800; font-size: 1.1em;">${dim[1].percentage}%</span>`;
+        html += '</div>';
+    });
+    html += '</div>';
+    
+    html += '</div>';
+    
+    // ==== PAGE 2 : 5 CONSEILS ====
+    html += '<div style="background: white; padding: 35px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">';
+    html += '<h3 style="color: #FF6B4A; margin-bottom: 25px; font-size: 1.6em; text-align: center;">💡 5 conseils pour progresser</h3>';
+    
+    html += '<div style="background: #f8f9fa; padding: 22px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #667eea;">';
+    html += '<strong style="color: #667eea; font-size: 1.1em;">1. Journal émotionnel (5 min/jour)</strong>';
+    html += '<p style="margin-top: 12px; line-height: 1.7; color: #555;">Chaque soir, note : quelle émotion j\'ai le plus ressentie ? Quel besoin était derrière ? En 3 semaines, tu doubleras ta conscience émotionnelle.</p>';
+    html += '</div>';
+    
+    html += '<div style="background: #f8f9fa; padding: 22px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #4CAF50;">';
+    html += '<strong style="color: #4CAF50; font-size: 1.1em;">2. Technique des 3 respirations</strong>';
+    html += '<p style="margin-top: 12px; line-height: 1.7; color: #555;">Émotion forte ? STOP. 3 respirations profondes. Demande-toi : "Quelle émotion ?" puis "Quel besoin ?". Ça calme l\'amygdale en 30 secondes.</p>';
+    html += '</div>';
+    
+    html += '<div style="background: #f8f9fa; padding: 22px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #FF9800;">';
+    html += '<strong style="color: #FF9800; font-size: 1.1em;">3. Les 9 besoins fondamentaux</strong>';
+    html += '<p style="margin-top: 12px; line-height: 1.7; color: #555;">Mémorise-les : Sécurité, Appartenance, Reconnaissance, Autonomie, Affection, Accomplissement, Créativité, Sérénité, Sens. Un besoin identifié = 50% de résolu !</p>';
+    html += '</div>';
+    
+    html += '<div style="background: #f8f9fa; padding: 22px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #9C27B0;">';
+    html += '<strong style="color: #9C27B0; font-size: 1.1em;">4. Formule CNV (Communication Non Violente)</strong>';
+    html += '<p style="margin-top: 12px; line-height: 1.7; color: #555;">"Quand [situation], je ressens [émotion] parce que j\'ai besoin de [besoin]". Pratique 1 fois par jour. Ça transforme les conflits en dialogues.</p>';
+    html += '</div>';
+    
+    html += '<div style="background: #f8f9fa; padding: 22px; border-radius: 10px; border-left: 4px solid #FF6B4A;">';
+    html += '<strong style="color: #FF6B4A; font-size: 1.1em;">5. Accueil émotionnel</strong>';
+    html += '<p style="margin-top: 12px; line-height: 1.7; color: #555;">Quand une émotion désagréable arrive, dis : "Bienvenue [émotion]. Merci de me montrer mon besoin de [besoin]". Accueillir diminue l\'intensité de 50% !</p>';
+    html += '</div>';
+    
+    html += '</div>';
+    
+    // ==== CTA VERS PREMIUM ====
+    html += '<div style="background: linear-gradient(135deg, #FFF8F0 0%, #FFE8DC 100%); padding: 40px; border-radius: 20px; margin-top: 30px; text-align: center; border: 3px solid #FF6B4A; box-shadow: 0 6px 20px rgba(255, 107, 74, 0.15);">';
+    html += '<h3 style="color: #FF6B4A; font-size: 1.8em; margin-bottom: 20px;">🚀 Veux-tu aller plus loin ?</h3>';
+    html += '<p style="font-size: 1.15em; margin-bottom: 25px; line-height: 1.8; color: #333;">';
+    html += 'L\'<strong>analyse complète (9€)</strong> te donne :<br>';
+    html += '✅ Profil détaillé <strong>8 dimensions</strong> (avec %) + Graphique radar<br>';
+    html += '✅ Analyses <strong>neurosciences + psychologie</strong> (approche Goleman)<br>';
+    html += '✅ <strong>Plan d\'action personnalisé</strong> avec protocoles précis<br>';
+    html += '✅ Message personnel du coach<br>';
+    html += '✅ <strong>PDF téléchargeable</strong> (pour le relire quand tu veux)<br>';
+    html += '</p>';
+    html += '<button onclick="upgradeToPremium()" style="background: linear-gradient(135deg, #FF6B4A 0%, #FF8C69 100%); color: white; border: none; padding: 20px 50px; font-size: 1.3em; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 107, 74, 0.4); transition: all 0.3s;" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">';
+    html += 'Débloquer l\'analyse complète pour 9€ 🔓';
+    html += '</button>';
+    html += '<p style="margin-top: 20px; font-size: 0.95em; color: #666;">💳 Paiement sécurisé • 📧 Résultats immédiats</p>';
+    html += '</div>';
+    
+    freeContent.innerHTML = html;
+}
         // ========== SCORES PAR DIMENSION ==========
         function displayDimensionScores(dimensions) {
             const container = document.getElementById('dimensionScores');
@@ -3035,6 +3101,7 @@ function generateCoachMessage(scores) {
 </body>
 
 </html>
+
 
 
 
