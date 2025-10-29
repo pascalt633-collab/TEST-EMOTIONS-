@@ -1489,18 +1489,9 @@
         }
 
         // ========== DÉTECTION RETOUR STRIPE ==========
-        window.addEventListener('load', function() {
-    // Vérifier si on revient de Stripe avec le hash
-    if (window.location.hash === '#payment-success') {
-        // L'utilisateur revient après un paiement réussi
-        document.getElementById('test').style.display = 'none';
-        document.querySelector('.intro-section').style.display = 'none';
-        document.querySelector('.coach-bio').style.display = 'none';
-
-https://testemotion.vercel.app/#payment-success
-                // L'utilisateur revient après un paiement réussi
-                // On va recalculer les scores (normalement ils sont dans localStorage mais on peut aussi les recalculer)
-                // Pour l'instant, on affiche un message
+       window.addEventListener('load', function() {
+            // Vérifier si on est sur /success (retour Stripe)
+            if (window.location.pathname === '/success' || window.location.search.includes('payment=success')) {
                 document.getElementById('test').style.display = 'none';
                 document.querySelector('.intro-section').style.display = 'none';
                 document.querySelector('.coach-bio').style.display = 'none';
@@ -1508,7 +1499,6 @@ https://testemotion.vercel.app/#payment-success
                 displayPremiumResults();
             }
         });
-
         // ========== AFFICHAGE RÉSULTATS PREMIUM + GÉNÉRATION PDF ==========
         function displayPremiumResults() {
             const resultsDiv = document.getElementById('results');
@@ -2011,6 +2001,7 @@ https://testemotion.vercel.app/#payment-success
     </script>
 </body>
 </html>
+
 
 
 
