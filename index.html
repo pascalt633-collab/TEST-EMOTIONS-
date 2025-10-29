@@ -1385,13 +1385,19 @@
             const resultsDiv = document.getElementById('results');
             resultsDiv.style.display = 'block';
             
-            // Interprétation du score
+            // Interprétation personnalisée selon le score
             let interpretation = '';
-            if (calculatedScores.percentage >= 80) interpretation = 'Excellent ! Connexion émotions-besoins très développée';
-            else if (calculatedScores.percentage >= 70) interpretation = 'Très bien ! Tu as une bonne connexion émotions-besoins';
-            else if (calculatedScores.percentage >= 60) interpretation = 'Bien ! Ta connexion émotions-besoins est en développement';
-            else if (calculatedScores.percentage >= 50) interpretation = 'En développement ! Tu es sur la bonne voie';
-            else interpretation = 'Fort potentiel ! Place à l\'apprentissage';
+            if (calculatedScores.percentage >= 81) {
+                interpretation = 'Excellent ! Maitrise remarquable de la connexion emotions-besoins';
+            } else if (calculatedScores.percentage >= 61) {
+                interpretation = 'Tres bien ! Connexion solide emotions-besoins';
+            } else if (calculatedScores.percentage >= 41) {
+                interpretation = 'En developpement ! Tu progresses bien';
+            } else if (calculatedScores.percentage >= 21) {
+                interpretation = 'En eveil ! Tu commences a comprendre le lien emotions-besoins';
+            } else {
+                interpretation = 'Brut de decoffrage ! Tout est a construire, c\'est excitant !';
+            }
             
             // Identifier les 3 forces et 3 axes
             const dimensionsArray = Object.entries(calculatedScores.dimensions)
@@ -1401,9 +1407,73 @@
             const strengths = dimensionsArray.slice(0, 3);
             const weaknesses = dimensionsArray.slice(-3).reverse();
             
-            resultsDiv.innerHTML = `
+            // Identifier les 2 dimensions les plus faibles pour conseils personnalisés
+            const weakest2 = dimensionsArray.slice(-2);
+            
+            // Mapping des conseils par dimension
+            const adviceMap = {
+                reconnaissance: {
+                    title: 'Developpe ton vocabulaire emotionnel',
+                    text: 'Telecharge une roue des emotions et entraine-toi 5 min/jour a nommer precisement ce que tu ressens.',
+                    link: 'https://outils-psy.com/roue-des-emotions-32-emotions/'
+                },
+                identification: {
+                    title: 'Apprends les 9 besoins fondamentaux',
+                    text: 'Securite, Appartenance, Reconnaissance, Autonomie, Affection, Accomplissement, Creativite, Serenite, Sens. Chaque emotion pointe vers un de ces besoins.',
+                    link: null
+                },
+                expression: {
+                    title: 'Utilise la formule CNV',
+                    text: 'Quand [situation], je ressens [emotion] parce que j\'ai besoin de [besoin]. Pourrais-tu [demande] ? Cette formule evite les conflits.',
+                    link: null
+                },
+                satisfaction: {
+                    title: 'Passe de la conscience a l\'action',
+                    text: 'Identifie 1 besoin insatisfait cette semaine. Liste 3 actions concretes pour le satisfaire. Choisis-en 1 et fais-la !',
+                    link: null
+                },
+                regulation: {
+                    title: 'Pratique la technique STOP',
+                    text: 'Suspends-toi, Take a breath (3 respirations), Observe (emotion + besoin), Proceed (agis). 30 secondes pour retrouver ton calme.',
+                    link: null
+                },
+                connexion: {
+                    title: 'Fais un body scan quotidien',
+                    text: 'Avant de dormir, scanne ton corps de la tete aux pieds. Ou sont les tensions ? Quelle emotion non exprimee portes-tu ?',
+                    link: null
+                },
+                empathie: {
+                    title: 'Observe les emotions des autres',
+                    text: 'Chaque jour, choisis 1 personne. Observe sa posture, son visage, sa voix. Devine : quelle emotion ? Quel besoin ? Puis verifie avec empathie.',
+                    link: null
+                },
+                acceptation: {
+                    title: 'Accueille tes emotions',
+                    text: 'Quand une emotion desagreable arrive, dis : "Bienvenue [emotion]. Merci de me montrer mon besoin de [besoin]." Puis 3 respirations.',
+                    link: null
+                }
+            };
+            
+            // Construction du HTML des conseils personnalisés
+            let adviceHTML = '';
+            adviceHTML += '<li style="margin-bottom: 20px;"><strong>' + adviceMap[weakest2[0].key].title + ' :</strong> ' + adviceMap[weakest2[0].key].text;
+            if (adviceMap[weakest2[0].key].link) {
+                adviceHTML += ' <a href="' + adviceMap[weakest2[0].key].link + '" target="_blank" style="color: #FFF8F0; text-decoration: underline;">Telecharge la roue ici</a>';
+            }
+            adviceHTML += '</li>';
+            
+            adviceHTML += '<li style="margin-bottom: 20px;"><strong>' + adviceMap[weakest2[1].key].title + ' :</strong> ' + adviceMap[weakest2[1].key].text;
+            if (adviceMap[weakest2[1].key].link) {
+                adviceHTML += ' <a href="' + adviceMap[weakest2[1].key].link + '" target="_blank" style="color: #FFF8F0; text-decoration: underline;">Telecharge la roue ici</a>';
+            }
+            adviceHTML += '</li>';
+            
+            adviceHTML += '<li style="margin-bottom: 20px;"><strong>Tiens un journal emotionnel (5 min/jour) :</strong> Chaque soir, note une emotion vecue + le besoin derriere.</li>';
+            adviceHTML += '<li style="margin-bottom: 20px;"><strong>Pratique la coherence cardiaque :</strong> 3 fois par jour, respire : 5 sec inspire, 5 sec expire, pendant 5 minutes. Ton cerveau emotionnel se calme.</li>';
+            adviceHTML += '<li style="margin-bottom: 20px;"><strong>Partage tes progres :</strong> Parle de ce test a un proche. Explique-lui une chose que tu as apprise. Verbaliser = ancrer.</li>';
+        resultsDiv.innerHTML = `
                 <div class="score-display">
-                    <h2 style="color: #667eea; font-size: 2em;">Ton Score Global</h2>
+                    <h2 style="color: #FF6B4A; font-size: 2em;">Ton Score Global</h2>
                     <div class="score-number">${calculatedScores.percentage}%</div>
                     <div class="score-interpretation">${interpretation}</div>
                 </div>
@@ -1438,19 +1508,17 @@
                     `).join('')}
                 </div>
                 
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 15px; margin: 30px 0;">
-                    <h3 style="font-size: 1.8em; margin-bottom: 20px;">💡 5 Conseils Pratiques pour Progresser</h3>
+                <div style="background: linear-gradient(135deg, #FF6B4A 0%, #FF8C69 100%); color: white; padding: 40px; border-radius: 15px; margin: 30px 0;">
+                    <h3 style="font-size: 1.8em; margin-bottom: 20px;">💡 Tes 5 Actions Prioritaires</h3>
+                    <p style="font-size: 1.1em; margin-bottom: 25px;">Basees sur tes 2 axes de developpement principaux :</p>
                     <ol style="font-size: 1.1em; line-height: 1.8; padding-left: 25px;">
-                        <li style="margin-bottom: 15px;"><strong>Tiens un journal émotionnel (5 min/jour) :</strong> Chaque soir, note une émotion vécue + le besoin derrière.</li>
-                        <li style="margin-bottom: 15px;"><strong>Utilise la roue des émotions :</strong> Télécharge une roue des émotions et entraîne-toi à nommer précisément ce que tu ressens.</li>
-                        <li style="margin-bottom: 15px;"><strong>Pratique la technique STOP :</strong> Quand une émotion t'envahit, Suspends-toi, Take a breath (respire 3 fois), Observe (quelle émotion ? quel besoin ?), Proceed (agis en conscience).</li>
-                        <li style="margin-bottom: 15px;"><strong>Connecte-toi à ton corps :</strong> 2 minutes de body scan quotidien = scanner ton corps de la tête aux pieds pour détecter les tensions.</li>
-                        <li style="margin-bottom: 15px;"><strong>Exprime tes besoins avec la CNV :</strong> "Quand [situation], je ressens [émotion] parce que j'ai besoin de [besoin]. Pourrais-tu [demande] ?"</li>
+                        ${adviceHTML}
                     </ol>
                 </div>
                 
-                <!-- CTA FINAL -->
                 <div style="text-align: center; background: white; padding: 50px 30px; border-radius: 15px; margin-top: 40px;">
+                    <h3 style="color: #FF6B4A; font-size: 2.2em; margin-bottom: 20px;">🚀 P
+                    <div style="text-align: center; background: white; padding: 50px 30px; border-radius: 15px; margin-top: 40px;">
                     <h3 style="color: #FF6B4A; font-size: 2.2em; margin-bottom: 20px;">🚀 Prêt(e) à aller plus loin ?</h3>
                     <p style="font-size: 1.2em; color: #555; margin-bottom: 30px; line-height: 1.6;">
                         Ce test t'a donné un <strong>aperçu gratuit</strong> de ton profil.<br>
@@ -1469,6 +1537,7 @@
                         </ul>
                     </div>
                     
+                    <button class="cta-button" onclick="window.location.href='https://buy.stripe.com/b
                     <button class="cta-button" onclick="window.location.href='https://buy.stripe.com/bJecN53Gi1Hn0ASgDz1B601'" 
                             style="font-size: 1.4em; padding: 22px 60px;">
                         🔓 Débloquer l'analyse complète pour 9€
@@ -1486,9 +1555,8 @@
                     bar.style.width = bar.style.width;
                 });
             }, 100);
-        }
-
-        // ========== DÉTECTION RETOUR STRIPE ==========
+        }    
+            // ========== DÉTECTION RETOUR STRIPE ==========
        window.addEventListener('load', function() {
             // Vérifier si on est sur /success (retour Stripe)
             if (window.location.pathname === '/success' || window.location.search.includes('payment=success')) {
@@ -2001,6 +2069,7 @@
     </script>
 </body>
 </html>
+
 
 
 
