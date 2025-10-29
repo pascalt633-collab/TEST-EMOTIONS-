@@ -2940,7 +2940,7 @@ function generateCoachMessage(scores) {
             }
         });
         // ========== GÉNÉRATION PDF ==========
-        // ========== GÉNÉRATION PDF COMPLÈTE ==========
+// ========== GÉNÉRATION PDF COMPLÈTE CORRIGÉE ==========
 function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -2958,10 +2958,10 @@ function downloadPDF() {
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(28);
     doc.setFont(undefined, 'bold');
-    doc.text('Test Émotions & Besoins', pageWidth / 2, 25, { align: 'center' });
+    doc.text('Test Emotions & Besoins', pageWidth / 2, 25, { align: 'center' });
     doc.setFontSize(12);
     doc.setFont(undefined, 'normal');
-    doc.text('Analyse personnalisée - Pascal Tamin', pageWidth / 2, 38, { align: 'center' });
+    doc.text('Analyse personnalisee - Pascal Tamin', pageWidth / 2, 38, { align: 'center' });
     
     yPos = 65;
     doc.setTextColor(0, 0, 0);
@@ -2980,11 +2980,11 @@ function downloadPDF() {
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
     let interpretation = '';
-    if (calculatedScores.percentage >= 80) interpretation = 'Excellent ! Connexion émotions-besoins très développée';
-    else if (calculatedScores.percentage >= 70) interpretation = 'Très bien ! Tu as une bonne connexion émotions-besoins';
-    else if (calculatedScores.percentage >= 60) interpretation = 'Bien ! Ta connexion émotions-besoins est en développement';
-    else if (calculatedScores.percentage >= 50) interpretation = 'En développement ! Tu es sur la bonne voie';
-    else interpretation = 'Fort potentiel ! Place à l\'apprentissage';
+    if (calculatedScores.percentage >= 80) interpretation = 'Excellent ! Connexion emotions-besoins tres developpee';
+    else if (calculatedScores.percentage >= 70) interpretation = 'Tres bien ! Tu as une bonne connexion emotions-besoins';
+    else if (calculatedScores.percentage >= 60) interpretation = 'Bien ! Ta connexion emotions-besoins est en developpement';
+    else if (calculatedScores.percentage >= 50) interpretation = 'En developpement ! Tu es sur la bonne voie';
+    else interpretation = 'Fort potentiel ! Place a l\'apprentissage';
     
     const interpLines = doc.splitTextToSize(interpretation, maxWidth);
     doc.text(interpLines, pageWidth / 2, yPos, { align: 'center' });
@@ -2993,7 +2993,7 @@ function downloadPDF() {
     // Date
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
-    doc.text('Analyse générée le ' + calculatedScores.date, pageWidth / 2, yPos, { align: 'center' });
+    doc.text('Analyse generee le ' + calculatedScores.date, pageWidth / 2, yPos, { align: 'center' });
     
     // ========== PAGE 2 : SCORES PAR DIMENSION ==========
     doc.addPage();
@@ -3002,10 +3002,22 @@ function downloadPDF() {
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(18);
     doc.setFont(undefined, 'bold');
-    doc.text('Ton profil détaillé (8 dimensions)', margin, yPos);
+    doc.text('Ton profil detaille (8 dimensions)', margin, yPos);
     yPos += 15;
     doc.setFont(undefined, 'normal');
     doc.setFontSize(10);
+    
+    // Noms courts pour les dimensions
+    const dimensionNames = {
+        'Reconnaissance des émotions': 'Reconnaissance emotions',
+        'Identification des besoins': 'Identification besoins',
+        'Expression des émotions': 'Expression emotions',
+        'Satisfaction des besoins': 'Satisfaction besoins',
+        'Régulation émotionnelle': 'Regulation emotionnelle',
+        'Connexion corps-émotions': 'Connexion corps-emotions',
+        'Empathie émotionnelle': 'Empathie emotionnelle',
+        'Acceptation émotionnelle': 'Acceptation emotionnelle'
+    };
     
     for (const dim of Object.values(calculatedScores.dimensions)) {
         if (yPos > 260) {
@@ -3013,13 +3025,14 @@ function downloadPDF() {
             yPos = 20;
         }
         
-        // Nom de la dimension
+        // Nom de la dimension (court)
+        const shortName = dimensionNames[dim.name] || dim.name;
         doc.setFont(undefined, 'bold');
-        doc.text(dim.name, margin, yPos);
+        doc.text(shortName, margin, yPos);
         doc.setFont(undefined, 'normal');
         
         // Barre de progression
-        const barWidth = 120;
+        const barWidth = 100;
         const barHeight = 8;
         const barX = pageWidth - margin - barWidth - 25;
         
@@ -3064,11 +3077,11 @@ function downloadPDF() {
     
     let neuroText = '';
     if (calculatedScores.percentage >= 70) {
-        neuroText = 'Ton cerveau émotionnel fonctionne de manière harmonieuse. Ton système limbique (centre émotionnel) et ton cortex préfrontal (zone de régulation) communiquent efficacement.\n\nCette connexion te permet de ressentir tes émotions, identifier tes besoins et agir avec cohérence. Les connexions neuronales entre ton amygdale (détecteur d\'émotions) et ton cortex préfrontal sont solides.\n\nCe qui se passe concrètement : Ton amygdale envoie un signal à ton hippocampe (mémoire), qui active ton cortex préfrontal (réflexion). Cette boucle te prend 0,2 seconde. Tu as créé des autoroutes neuronales myélinisées.\n\nConseil : Maintiens cette connexion par la variabilité. Expose-toi à de nouvelles situations émotionnelles pour que ton cerveau reste plastique.';
+        neuroText = 'Ton cerveau emotionnel fonctionne de maniere harmonieuse. Ton systeme limbique (centre emotionnel) et ton cortex prefrontal (zone de regulation) communiquent efficacement.\n\nCette connexion te permet de ressentir tes emotions, identifier tes besoins et agir avec coherence. Les connexions neuronales entre ton amygdale (detecteur d\'emotions) et ton cortex prefrontal sont solides.\n\nCe qui se passe concretement : Ton amygdale envoie un signal a ton hippocampe (memoire), qui active ton cortex prefrontal (reflexion). Cette boucle te prend 0,2 seconde. Tu as cree des autoroutes neuronales myelinisees.\n\nConseil : Maintiens cette connexion par la variabilite. Expose-toi a de nouvelles situations emotionnelles pour que ton cerveau reste plastique.';
     } else if (calculatedScores.percentage >= 50) {
-        neuroText = 'Ta connexion émotions-besoins est en bon développement. L\'interaction entre ton amygdale (détecteur d\'émotions) et ton cortex préfrontal (zone de réflexion) est fonctionnelle mais peut gagner en fluidité.\n\nCe qui se passe actuellement : Ton amygdale détecte l\'émotion rapidement, mais le message met parfois 2-3 secondes à arriver à ton cortex préfrontal. Pendant ce délai, l\'émotion peut déborder.\n\nLa bonne nouvelle : la neuroplasticité ! Ton cerveau est plastique jusqu\'à 80 ans. Chaque fois que tu pratiques la connexion émotions-besoins, tu renforces la gaine de myéline autour de tes neurones.\n\nTimeline prouvée : 7 jours de pratique = premières connexions | 21 jours = myélinisation significative | 66 jours = automatisation complète.\n\nConseil : Pratique l\'exercice des 3 respirations 5 fois par jour pendant 21 jours. Ce simple exercice active ton nerf vague et renforce la connexion avec ton cortex préfrontal.';
+        neuroText = 'Ta connexion emotions-besoins est en bon developpement. L\'interaction entre ton amygdale (detecteur d\'emotions) et ton cortex prefrontal (zone de reflexion) est fonctionnelle mais peut gagner en fluidite.\n\nCe qui se passe actuellement : Ton amygdale detecte l\'emotion rapidement, mais le message met parfois 2-3 secondes a arriver a ton cortex prefrontal. Pendant ce delai, l\'emotion peut deborder.\n\nLa bonne nouvelle : la neuroplasticite ! Ton cerveau est plastique jusqu\'a 80 ans. Chaque fois que tu pratiques la connexion emotions-besoins, tu renforces la gaine de myeline autour de tes neurones.\n\nTimeline prouvee : 7 jours de pratique = premieres connexions | 21 jours = myelinisation significative | 66 jours = automatisation complete.\n\nConseil : Pratique l\'exercice des 3 respirations 5 fois par jour pendant 21 jours. Ce simple exercice active ton nerf vague et renforce la connexion avec ton cortex prefrontal.';
     } else {
-        neuroText = 'Ton cerveau émotionnel a un fort potentiel de développement. Il y a actuellement un déséquilibre entre ton système limbique (qui ressent) et ton cortex préfrontal (qui comprend).\n\nCe qui se passe : Ton amygdale fonctionne parfaitement - tu ressens des émotions. Mais les messages n\'arrivent pas clairement à ton cortex préfrontal. Résultat : tu vis l\'émotion sans comprendre le besoin derrière.\n\nPourquoi ? Ce n\'est pas un défaut, c\'est un manque d\'entraînement neuronal. Tes connexions émotions-besoins existent dans ton cerveau, mais elles ne sont pas encore myélinisées (renforcées).\n\nL\'IRM montre : Amygdale très active + Cortex préfrontal peu activé + Cortex insulaire déconnecté. Après 8 semaines de pratique quotidienne, ces 3 zones se reconnectent. C\'est scientifiquement prouvé.\n\nPlan d\'entraînement : Semaines 1-3 = Journal émotionnel (création connexions) | Semaines 4-6 = Technique STOP (myélinisation) | Semaines 7-8 = Body scan (activation cortex insulaire).\n\nConseil : Ne te décourage pas si les 3 premiers jours sont difficiles. Ton cerveau résiste au changement pendant 72h. Après, les nouvelles connexions commencent à se former.';
+        neuroText = 'Ton cerveau emotionnel a un fort potentiel de developpement. Il y a actuellement un desequilibre entre ton systeme limbique (qui ressent) et ton cortex prefrontal (qui comprend).\n\nCe qui se passe : Ton amygdale fonctionne parfaitement - tu ressens des emotions. Mais les messages n\'arrivent pas clairement a ton cortex prefrontal. Resultat : tu vis l\'emotion sans comprendre le besoin derriere.\n\nPourquoi ? Ce n\'est pas un defaut, c\'est un manque d\'entrainement neuronal. Tes connexions emotions-besoins existent dans ton cerveau, mais elles ne sont pas encore myelinisees (renforcees).\n\nL\'IRM montre : Amygdale tres active + Cortex prefrontal peu active + Cortex insulaire deconnecte. Apres 8 semaines de pratique quotidienne, ces 3 zones se reconnectent. C\'est scientifiquement prouve.\n\nPlan d\'entrainement : Semaines 1-3 = Journal emotionnel (creation connexions) | Semaines 4-6 = Technique STOP (myelinisation) | Semaines 7-8 = Body scan (activation cortex insulaire).\n\nConseil : Ne te decourage pas si les 3 premiers jours sont difficiles. Ton cerveau resiste au changement pendant 72h. Apres, les nouvelles connexions commencent a se former.';
     }
     
     const neuroLines = doc.splitTextToSize(neuroText, maxWidth);
@@ -3100,11 +3113,11 @@ function downloadPDF() {
     
     let psychoText = '';
     if (calculatedScores.percentage >= 70) {
-        psychoText = 'Tu maîtrises les 5 piliers de l\'intelligence émotionnelle selon Daniel Goleman :\n\n1. Conscience de soi : Tu reconnais tes émotions en temps réel\n2. Maîtrise de soi : Tu régules tes émotions sans les réprimer\n3. Motivation intrinsèque : Tu relies tes émotions à tes besoins profonds\n4. Empathie : Tu perçois les émotions des autres\n5. Compétences sociales : Tu exprimes tes besoins clairement\n\nCe que cela change concrètement : Tu ne subis plus tes émotions, tu les utilises. Chaque émotion devient une boussole qui te guide vers tes besoins authentiques. C\'est ce qu\'on appelle "vivre en cohérence" : tes émotions, tes besoins et tes actions sont alignés.\n\nExemple de ton fonctionnement : Situation = Remarque du manager en réunion → Tu identifies = "Je ressens de la colère" → Tu identifies le besoin = "Mon besoin de reconnaissance n\'est pas satisfait" → Tu agis = "Je vais demander un point en privé pour exprimer mon besoin".\n\nConseil : Ton intelligence émotionnelle est une compétence rare. Utilise-la pour guider les autres. Deviens un modèle dans ton entourage.';
+        psychoText = 'Tu maitrises les 5 piliers de l\'intelligence emotionnelle selon Daniel Goleman :\n\n1. Conscience de soi : Tu reconnais tes emotions en temps reel\n2. Maitrise de soi : Tu regules tes emotions sans les reprimer\n3. Motivation intrinseque : Tu relies tes emotions a tes besoins profonds\n4. Empathie : Tu percois les emotions des autres\n5. Competences sociales : Tu exprimes tes besoins clairement\n\nCe que cela change concretement : Tu ne subis plus tes emotions, tu les utilises. Chaque emotion devient une boussole qui te guide vers tes besoins authentiques. C\'est ce qu\'on appelle "vivre en coherence" : tes emotions, tes besoins et tes actions sont alignes.\n\nExemple de ton fonctionnement : Situation = Remarque du manager en reunion | Tu identifies = "Je ressens de la colere" | Tu identifies le besoin = "Mon besoin de reconnaissance n\'est pas satisfait" | Tu agis = "Je vais demander un point en prive pour exprimer mon besoin".\n\nConseil : Ton intelligence emotionnelle est une competence rare. Utilise-la pour guider les autres. Deviens un modele dans ton entourage.';
     } else if (calculatedScores.percentage >= 50) {
-        psychoText = 'Tu développes ton intelligence émotionnelle selon le modèle de Goleman. Tu as compris que tes émotions sont des messagères, pas des ennemies. Tu construis actuellement les 5 piliers :\n\n1. Conscience de soi : En développement - tu reconnais certaines émotions\n2. Maîtrise de soi : En cours - tu arrives parfois à te réguler\n3. Motivation intrinsèque : Tu commences à voir le lien émotions-besoins\n4. Empathie : Tu es sensible aux autres\n5. Compétences sociales : Tu progresses dans l\'expression\n\nOù tu en es : Tu es à l\'étape de "l\'éveil émotionnel". Tu as dépassé le mode automatique ("je réagis") pour entrer dans le mode conscient ("je choisis"). C\'est un tournant majeur.\n\nTa progression : Avant = Réaction immédiate | Maintenant = Tu sens l\'émotion, tu prends 10 secondes, tu identifies ton besoin, tu exprimes calmement | Bientôt = Identification instantanée + Expression fluide.\n\n3 comportements à ancrer : 1. Le STOP quotidien (3x par jour, 30 sec pour scanner tes émotions) | 2. La verbalisation (nomme tes émotions à voix haute) | 3. Le lien systématique (après chaque émotion : "Quel besoin ?").\n\nConseil : Tu es sur le bon chemin. Ne cherche pas la perfection, cherche la régularité. 5 minutes par jour valent mieux que 2 heures une fois par mois.';
+        psychoText = 'Tu developpes ton intelligence emotionnelle selon le modele de Goleman. Tu as compris que tes emotions sont des messageres, pas des ennemies. Tu construis actuellement les 5 piliers :\n\n1. Conscience de soi : En developpement - tu reconnais certaines emotions\n2. Maitrise de soi : En cours - tu arrives parfois a te reguler\n3. Motivation intrinseque : Tu commences a voir le lien emotions-besoins\n4. Empathie : Tu es sensible aux autres\n5. Competences sociales : Tu progresses dans l\'expression\n\nOu tu en es : Tu es a l\'etape de "l\'eveil emotionnel". Tu as depasse le mode automatique ("je reagis") pour entrer dans le mode conscient ("je choisis"). C\'est un tournant majeur.\n\nTa progression : Avant = Reaction immediate | Maintenant = Tu sens l\'emotion, tu prends 10 secondes, tu identifies ton besoin, tu exprimes calmement | Bientot = Identification instantanee + Expression fluide.\n\n3 comportements a ancrer : 1. Le STOP quotidien (3x par jour, 30 sec pour scanner tes emotions) | 2. La verbalisation (nomme tes emotions a voix haute) | 3. Le lien systematique (apres chaque emotion : "Quel besoin ?").\n\nConseil : Tu es sur le bon chemin. Ne cherche pas la perfection, cherche la regularite. 5 minutes par jour valent mieux que 2 heures une fois par mois.';
     } else {
-        psychoText = 'Tu es au début d\'un apprentissage qui va transformer ta vie. Soyons honnêtes : personne ne t\'a appris à connecter tes émotions et tes besoins. Daniel Goleman a prouvé que l\'intelligence émotionnelle s\'apprend à tout âge.\n\nLes 5 piliers que tu vas construire :\n1. Conscience de soi : Apprendre à reconnaître tes émotions\n2. Maîtrise de soi : Réguler tes émotions sans les refouler\n3. Motivation intrinsèque : Comprendre tes vrais besoins\n4. Empathie : Percevoir les émotions des autres\n5. Compétences sociales : Exprimer tes besoins clairement\n\nCe qui se passe actuellement : Tu vis "l\'écart émotionnel" - un décalage entre ce que tu ressens et ce que tu comprends. Tu vis l\'émotion, mais tu ne sais pas toujours pourquoi ni quoi faire avec.\n\nExemple de ton mode actuel : Remarque du manager → Émotion forte (colère ? frustration ? honte ?) → Tu ne sais pas exactement → Tu réagis (tu te fermes OU tu explodes) → Après coup, tu regrettes. Ce qui manque : Le lien entre l\'émotion et le besoin.\n\nLe plan : Phase 1 (Semaines 1-3) = Apprendre à nommer tes émotions → Roue des émotions + journal 5 min | Phase 2 (Semaines 4-6) = Faire le pont entre émotion et besoin → Liste des 9 besoins | Phase 3 (Semaines 7-8) = Exprimer et agir → Formule CNV.\n\nMessage personnel : En 20 ans de coaching, j\'ai vu des centaines de personnes partir de là et transformer complètement leur vie. L\'intelligence émotionnelle s\'apprend. Tu viens de faire le premier pas : prendre conscience.';
+        psychoText = 'Tu es au debut d\'un apprentissage qui va transformer ta vie. Soyons honnetes : personne ne t\'a appris a connecter tes emotions et tes besoins. Daniel Goleman a prouve que l\'intelligence emotionnelle s\'apprend a tout age.\n\nLes 5 piliers que tu vas construire :\n1. Conscience de soi : Apprendre a reconnaitre tes emotions\n2. Maitrise de soi : Reguler tes emotions sans les refouler\n3. Motivation intrinseque : Comprendre tes vrais besoins\n4. Empathie : Percevoir les emotions des autres\n5. Competences sociales : Exprimer tes besoins clairement\n\nCe qui se passe actuellement : Tu vis "l\'ecart emotionnel" - un decalage entre ce que tu ressens et ce que tu comprends. Tu vis l\'emotion, mais tu ne sais pas toujours pourquoi ni quoi faire avec.\n\nExemple de ton mode actuel : Remarque du manager | Emotion forte (colere ? frustration ? honte ?) | Tu ne sais pas exactement | Tu reagis (tu te fermes OU tu exploses) | Apres coup, tu regrettes. Ce qui manque : Le lien entre l\'emotion et le besoin.\n\nLe plan : Phase 1 (Semaines 1-3) = Apprendre a nommer tes emotions | Roue des emotions + journal 5 min | Phase 2 (Semaines 4-6) = Faire le pont entre emotion et besoin | Liste des 9 besoins | Phase 3 (Semaines 7-8) = Exprimer et agir | Formule CNV.\n\nMessage personnel : En 20 ans de coaching, j\'ai vu des centaines de personnes partir de la et transformer completement leur vie. L\'intelligence emotionnelle s\'apprend. Tu viens de faire le premier pas : prendre conscience.';
     }
     
     const psychoLines = doc.splitTextToSize(psychoText, maxWidth);
@@ -3124,65 +3137,65 @@ function downloadPDF() {
     doc.setFontSize(18);
     doc.setFont(undefined, 'bold');
     doc.setTextColor(255, 152, 0);
-    doc.text('Ton plan d\'action personnalisé', margin, yPos);
+    doc.text('Ton plan d\'action personnalise', margin, yPos);
     yPos += 10;
     
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
     doc.setFont(undefined, 'normal');
-    doc.text('Basé sur tes axes de développement prioritaires', margin, yPos);
+    doc.text('Base sur tes axes de developpement prioritaires', margin, yPos);
     yPos += 15;
     
     const weakest = Object.entries(calculatedScores.dimensions).sort((a, b) => a[1].percentage - b[1].percentage).slice(0, 2);
     
     const actions = {
         reconnaissance: {
-            title: 'Roue des émotions - Développer ton vocabulaire émotionnel',
+            title: 'Roue des emotions - Developper ton vocabulaire emotionnel',
             duree: '5 minutes/jour pendant 21 jours',
-            protocole: 'Matin (réveil) : Regarde la roue, pointe l\'émotion dominante, nomme-la à voix haute. Midi : Même exercice, compare avec le matin. Soir : Identifie l\'émotion la plus forte de ta journée, note-la.',
-            science: 'Nommer une émotion active ton cortex préfrontal et diminue l\'activité de l\'amygdale de 30% en 3 secondes (étude UCLA 2007).'
+            protocole: 'Matin (reveil) : Regarde la roue, pointe l\'emotion dominante, nomme-la a voix haute. Midi : Meme exercice, compare avec le matin. Soir : Identifie l\'emotion la plus forte de ta journee, note-la.',
+            science: 'Nommer une emotion active ton cortex prefrontal et diminue l\'activite de l\'amygdale de 30% en 3 secondes (etude UCLA 2007).'
         },
         identification: {
-            title: 'Carte des 9 besoins - Décoder le message émotionnel',
+            title: 'Carte des 9 besoins - Decoder le message emotionnel',
             duree: '10 minutes/jour pendant 21 jours',
-            protocole: 'Les 9 besoins : Sécurité, Appartenance, Reconnaissance, Autonomie, Affection, Accomplissement, Créativité, Sérénité, Sens. Chaque soir : repense à une situation émotionnelle, note quelle émotion, demande-toi quel besoin était satisfait ou insatisfait.',
-            science: 'Identifier le besoin = 50% de la solution. Ton cerveau va naturellement chercher à le satisfaire (Maslow).'
+            protocole: 'Les 9 besoins : Securite, Appartenance, Reconnaissance, Autonomie, Affection, Accomplissement, Creativite, Serenite, Sens. Chaque soir : repense a une situation emotionnelle, note quelle emotion, demande-toi quel besoin etait satisfait ou insatisfait.',
+            science: 'Identifier le besoin = 50% de la solution. Ton cerveau va naturellement chercher a le satisfaire (Maslow).'
         },
         expression: {
             title: 'Formule CNV - Exprimer sans accuser',
             duree: '1 situation par jour pendant 21 jours',
-            protocole: 'Formule : "Quand [observation], je ressens [émotion] parce que j\'ai besoin de [besoin]. Serais-tu d\'accord pour [demande] ?" Jours 1-7 : Écris sur papier pour situations passées. Jours 8-14 : Utilise dans situations à faible enjeu. Jours 15-21 : Utilise dans situations à fort enjeu.',
-            science: 'La CNV évite la réaction défensive. Quand tu accuses, l\'amygdale de l\'autre s\'active (mode survie). Avec la CNV, tu désactives cette réaction (Marshall Rosenberg).'
+            protocole: 'Formule : "Quand [observation], je ressens [emotion] parce que j\'ai besoin de [besoin]. Serais-tu d\'accord pour [demande] ?" Jours 1-7 : Ecris sur papier pour situations passees. Jours 8-14 : Utilise dans situations a faible enjeu. Jours 15-21 : Utilise dans situations a fort enjeu.',
+            science: 'La CNV evite la reaction defensive. Quand tu accuses, l\'amygdale de l\'autre s\'active (mode survie). Avec la CNV, tu desactives cette reaction (Marshall Rosenberg).'
         },
         satisfaction: {
-            title: 'Plan d\'action besoins - Passer de la conscience à l\'action',
+            title: 'Plan d\'action besoins - Passer de la conscience a l\'action',
             duree: '30 minutes le dimanche pendant 8 semaines',
-            protocole: 'Bilan (10 min) : Quel besoin le MOINS satisfait cette semaine ? Note score /10. Brainstorming (10 min) : Liste 5 actions concrètes. Engagement (10 min) : Choisis 1 action, planifie QUAND et COMMENT.',
-            science: 'Un besoin identifié mais non agi = source de frustration. L\'action libère de la dopamine et crée un cercle vertueux (Teresa Amabile).'
+            protocole: 'Bilan (10 min) : Quel besoin le MOINS satisfait cette semaine ? Note score /10. Brainstorming (10 min) : Liste 5 actions concretes. Engagement (10 min) : Choisis 1 action, planifie QUAND et COMMENT.',
+            science: 'Un besoin identifie mais non agi = source de frustration. L\'action libere de la dopamine et cree un cercle vertueux (Teresa Amabile).'
         },
         regulation: {
-            title: 'Technique STOP - Réguler en 30 secondes',
+            title: 'Technique STOP - Reguler en 30 secondes',
             duree: '3 fois par jour pendant 21 jours',
-            protocole: 'S = Suspends (arrête-toi) | T = Take a breath (3 respirations profondes ventre) | O = Observe (quelle émotion ? quel besoin ?) | P = Proceed (agis en conscience). Semaine 1 : 3x par jour sans émotion forte. Semaine 2 : Situations à faible tension. Semaine 3 : Situations à forte tension.',
-            science: '3 respirations profondes activent ton nerf vague qui envoie un signal "sécurité" à ton amygdale. Diminution de 40% de l\'intensité en 30 secondes (Institute HeartMath).'
+            protocole: 'S = Suspends (arrete-toi) | T = Take a breath (3 respirations profondes ventre) | O = Observe (quelle emotion ? quel besoin ?) | P = Proceed (agis en conscience). Semaine 1 : 3x par jour sans emotion forte. Semaine 2 : Situations a faible tension. Semaine 3 : Situations a forte tension.',
+            science: '3 respirations profondes activent ton nerf vague qui envoie un signal "securite" a ton amygdale. Diminution de 40% de l\'intensite en 30 secondes (Institute HeartMath).'
         },
         connexion: {
-            title: 'Body Scan émotionnel - Écouter les messages du corps',
+            title: 'Body Scan emotionnel - Ecouter les messages du corps',
             duree: '10 minutes avant de dormir pendant 21 jours',
-            protocole: 'Installation (1 min) : Allonge-toi, ferme les yeux, 3 respirations. Scan descendant (7 min) : Du crâne aux pieds, demande-toi "Y a-t-il une tension ?" Connexion émotionnelle (2 min) : Sur zones tendues, "Quelle émotion non exprimée portes-tu ?"',
-            science: '80% des émotions se manifestent d\'abord dans ton corps. Ton cortex insulaire lit ces signaux. En scannant ton corps, tu renforces la connexion corps-émotions (Antonio Damasio).'
+            protocole: 'Installation (1 min) : Allonge-toi, ferme les yeux, 3 respirations. Scan descendant (7 min) : Du crane aux pieds, demande-toi "Y a-t-il une tension ?" Connexion emotionnelle (2 min) : Sur zones tendues, "Quelle emotion non exprimee portes-tu ?"',
+            science: '80% des emotions se manifestent d\'abord dans ton corps. Ton cortex insulaire lit ces signaux. En scannant ton corps, tu renforces la connexion corps-emotions (Antonio Damasio).'
         },
         empathie: {
-            title: 'Miroir émotionnel - Développer l\'empathie émotionnelle',
+            title: 'Miroir emotionnel - Developper l\'empathie emotionnelle',
             duree: '1 observation par jour pendant 21 jours',
-            protocole: 'Choisis une personne (1 min). Observe sans parler (2 min) : posture, visage, voix, gestes. Devine l\'émotion (1 min) : "Quelle émotion ressent-elle ?" puis "Quel besoin ?" Vérifie avec empathie (1 min) : "Comment tu te sens aujourd\'hui ?"',
-            science: 'Cet exercice active tes neurones miroirs (Giacomo Rizzolatti). Plus tu les actives, plus ton empathie se développe.'
+            protocole: 'Choisis une personne (1 min). Observe sans parler (2 min) : posture, visage, voix, gestes. Devine l\'emotion (1 min) : "Quelle emotion ressent-elle ?" puis "Quel besoin ?" Verifie avec empathie (1 min) : "Comment tu te sens aujourd\'hui ?"',
+            science: 'Cet exercice active tes neurones miroirs (Giacomo Rizzolatti). Plus tu les actives, plus ton empathie se developpe.'
         },
         acceptation: {
-            title: 'Accueil émotionnel - Accepter plutôt que refouler',
-            duree: 'À chaque émotion désagréable pendant 21 jours',
-            protocole: 'Quand émotion désagréable arrive, dis : "Bienvenue [émotion]. Je te vois. Merci de me montrer que j\'ai besoin de [besoin]. Je t\'écoute." Puis 3 respirations. Jours 1-7 : Émotions faibles. Jours 8-14 : Émotions moyennes. Jours 15-21 : Toutes émotions.',
-            science: 'Refouler une émotion demande de l\'énergie et augmente son intensité de 60% (Daniel Wegner, Harvard). Accueillir la diminue de 50% instantanément.'
+            title: 'Accueil emotionnel - Accepter plutot que refouler',
+            duree: 'A chaque emotion desagreable pendant 21 jours',
+            protocole: 'Quand emotion desagreable arrive, dis : "Bienvenue [emotion]. Je te vois. Merci de me montrer que j\'ai besoin de [besoin]. Je t\'ecoute." Puis 3 respirations. Jours 1-7 : Emotions faibles. Jours 8-14 : Emotions moyennes. Jours 15-21 : Toutes emotions.',
+            science: 'Refouler une emotion demande de l\'energie et augmente son intensite de 60% (Daniel Wegner, Harvard). Accueillir la diminue de 50% instantanement.'
         }
     };
     
@@ -3193,10 +3206,10 @@ function downloadPDF() {
         }
         
         const action = actions[key];
-        const priorityLabel = index === 0 ? 'PRIORITÉ 1' : 'PRIORITÉ 2';
+        const priorityLabel = index === 0 ? 'PRIORITE 1' : 'PRIORITE 2';
         
         doc.setFillColor(255, 248, 240);
-        doc.rect(margin - 5, yPos - 5, maxWidth + 10, 80, 'F');
+        doc.rect(margin - 5, yPos - 5, maxWidth + 10, 85, 'F');
         
         doc.setFontSize(11);
         doc.setFont(undefined, 'bold');
@@ -3215,7 +3228,7 @@ function downloadPDF() {
         
         doc.setFontSize(9);
         doc.setFont(undefined, 'italic');
-        doc.text('Durée : ' + action.duree, margin, yPos);
+        doc.text('Duree : ' + action.duree, margin, yPos);
         yPos += 8;
         
         doc.setFont(undefined, 'normal');
@@ -3231,7 +3244,7 @@ function downloadPDF() {
         yPos += 5;
         
         doc.setFont(undefined, 'bold');
-        doc.text('Pourquoi ça marche : ', margin, yPos);
+        doc.text('Pourquoi ca marche : ', margin, yPos);
         doc.setFont(undefined, 'normal');
         yPos += 5;
         const scienceLines = doc.splitTextToSize(action.science, maxWidth - 10);
@@ -3267,11 +3280,11 @@ function downloadPDF() {
     
     let coachMessage = '';
     if (calculatedScores.percentage >= 75) {
-        coachMessage = 'Bravo pour cet excellent score ! En 20 ans d\'accompagnement, je rencontre rarement un profil comme le tien. Tu as développé une connexion émotions-besoins remarquable.\n\nCe que je vois dans ton profil : Tu nommes tes émotions avec précision, tu identifies rapidement le besoin derrière, tu agis en cohérence avec tes valeurs.\n\nMon conseil : Transmets cette compétence. Autour de toi, beaucoup de gens n\'ont jamais appris à faire ce lien. Tu peux être un modèle inspirant.\n\nSi tu veux aller encore plus loin, nous pourrions travailler ensemble sur des objectifs avancés : transmettre ton intelligence émotionnelle, affiner ta communication en stress intense, développer ton leadership émotionnel.';
+        coachMessage = 'Bravo pour cet excellent score ! En 20 ans d\'accompagnement, je rencontre rarement un profil comme le tien. Tu as developpe une connexion emotions-besoins remarquable.\n\nCe que je vois dans ton profil : Tu nommes tes emotions avec precision, tu identifies rapidement le besoin derriere, tu agis en coherence avec tes valeurs.\n\nMon conseil : Transmets cette competence. Autour de toi, beaucoup de gens n\'ont jamais appris a faire ce lien. Tu peux etre un modele inspirant.\n\nSi tu veux aller encore plus loin, nous pourrions travailler ensemble sur des objectifs avances : transmettre ton intelligence emotionnelle, affiner ta communication en stress intense, developper ton leadership emotionnel.';
     } else if (calculatedScores.percentage >= 55) {
-        coachMessage = 'Ton score me parle. Il montre que tu es sur le bon chemin. Tu as compris que tes émotions sont des messagères, pas des ennemies.\n\nCe que je vois : Tu commences à identifier certaines émotions, tu fais parfois le lien avec tes besoins, tu cherches à agir mais ce n\'est pas toujours fluide.\n\nMon observation après 20 ans : Les personnes à ton niveau sont à un tournant décisif. Soit elles continuent la pratique quotidienne et font un bond en avant, soit elles stagnent. La différence ? La régularité.\n\nMon conseil personnalisé : Concentre-toi sur les 2 actions prioritaires ci-dessus. Pratique-les 5 minutes par jour pendant 3 semaines. C\'est le temps neurologique minimal pour créer une connexion neuronale solide.\n\nJe te fais une promesse : Si tu fais vraiment ces 2 actions pendant 21 jours, ton score passera de ' + calculatedScores.percentage + '% à 70%+. C\'est mathématique.\n\nSi tu veux un coup de pouce, je peux t\'accompagner. En 3-4 séances, nous pouvons identifier précisément tes blocages, créer ton plan ultra-personnalisé, et te donner des outils concrets.';
+        coachMessage = 'Ton score me parle. Il montre que tu es sur le bon chemin. Tu as compris que tes emotions sont des messageres, pas des ennemies.\n\nCe que je vois : Tu commences a identifier certaines emotions, tu fais parfois le lien avec tes besoins, tu cherches a agir mais ce n\'est pas toujours fluide.\n\nMon observation apres 20 ans : Les personnes a ton niveau sont a un tournant decisif. Soit elles continuent la pratique quotidienne et font un bond en avant, soit elles stagnent. La difference ? La regularite.\n\nMon conseil personnalise : Concentre-toi sur les 2 actions prioritaires ci-dessus. Pratique-les 5 minutes par jour pendant 3 semaines. C\'est le temps neurologique minimal pour creer une connexion neuronale solide.\n\nJe te fais une promesse : Si tu fais vraiment ces 2 actions pendant 21 jours, ton score passera de ' + calculatedScores.percentage + '% a 70%+. C\'est mathematique.\n\nSi tu veux un coup de pouce, je peux t\'accompagner. En 3-4 seances, nous pouvons identifier precisement tes blocages, creer ton plan ultra-personnalise, et te donner des outils concrets.';
     } else {
-        coachMessage = 'Merci d\'avoir fait ce test avec honnêteté. Ton score révèle un grand potentiel émotionnel non révélé.\n\nLaisse-moi te dire quelque chose d\'important : Ce score ne dit RIEN sur ta valeur. Il dit juste que personne ne t\'a appris à connecter tes émotions et tes besoins. C\'est normal.\n\nEn 20 ans, j\'ai accompagné des centaines de jeunes qui partaient de là. Beaucoup sont aujourd\'hui méconnaissables. Ils ont développé une intelligence émotionnelle qui change tout.\n\nCe que je vois dans ton profil : Tu ressens des émotions (ton amygdale fonctionne parfaitement), mais tu ne sais pas toujours les nommer ni les comprendre. Résultat : tu les subis au lieu de les utiliser.\n\nLa bonne nouvelle ? Cette connexion s\'apprend. Et plus vite que tu ne le crois.\n\nMon conseil : Commence PETIT. Ne te lance pas dans les 3 actions. Choisis l\'action prioritaire n°1. Juste celle-là. Pratique-la 5 minutes par jour pendant 21 jours.\n\nFeuille de route : Semaines 1-3 = Action n°1 (ton cerveau crée les premières connexions) | Semaines 4-6 = Tu ajoutes l\'action n°2 (les connexions se renforcent) | Semaines 7-8 = Action n°3 si tu veux (nouveau circuit neuronal créé).\n\nRésultat après 8 semaines : Ton score passe de ' + calculatedScores.percentage + '% à 55-65%. Ta vie change.\n\nJe peux t\'accompagner personnellement : Séance 1 = Bilan émotionnel complet | Séances 2-3 = Plan d\'action hyper-personnalisé | Séance 4 = Ancrage des pratiques. Résultat : En 4 séances, tu passes de "je subis" à "je comprends et j\'agis".';
+        coachMessage = 'Merci d\'avoir fait ce test avec honnetete. Ton score revele un grand potentiel emotionnel non revele.\n\nLaisse-moi te dire quelque chose d\'important : Ce score ne dit RIEN sur ta valeur. Il dit juste que personne ne t\'a appris a connecter tes emotions et tes besoins. C\'est normal.\n\nEn 20 ans, j\'ai accompagne des centaines de jeunes qui partaient de la. Beaucoup sont aujourd\'hui meconnaissables. Ils ont developpe une intelligence emotionnelle qui change tout.\n\nCe que je vois dans ton profil : Tu ressens des emotions (ton amygdale fonctionne parfaitement), mais tu ne sais pas toujours les nommer ni les comprendre. Resultat : tu les subis au lieu de les utiliser.\n\nLa bonne nouvelle ? Cette connexion s\'apprend. Et plus vite que tu ne le crois.\n\nMon conseil : Commence PETIT. Ne te lance pas dans les 3 actions. Choisis l\'action prioritaire n°1. Juste celle-la. Pratique-la 5 minutes par jour pendant 21 jours.\n\nFeuille de route : Semaines 1-3 = Action n°1 (ton cerveau cree les premieres connexions) | Semaines 4-6 = Tu ajoutes l\'action n°2 (les connexions se renforcent) | Semaines 7-8 = Action n°3 si tu veux (nouveau circuit neuronal cree).\n\nResultat apres 8 semaines : Ton score passe de ' + calculatedScores.percentage + '% a 55-65%. Ta vie change.\n\nJe peux t\'accompagner personnellement : Seance 1 = Bilan emotionnel complet | Seances 2-3 = Plan d\'action hyper-personnalise | Seance 4 = Ancrage des pratiques. Resultat : En 4 seances, tu passes de "je subis" a "je comprends et j\'agis".';
     }
     
     const coachLines = doc.splitTextToSize(coachMessage, maxWidth);
@@ -3299,7 +3312,7 @@ function downloadPDF() {
     
     doc.setFontSize(12);
     doc.setFont(undefined, 'normal');
-    doc.text('Séance découverte en visio ou à mon cabinet', pageWidth / 2, yPos, { align: 'center' });
+    doc.text('Seance decouverte en visio ou a mon cabinet', pageWidth / 2, yPos, { align: 'center' });
     yPos += 8;
     doc.text('(Clermont-Ferrand)', pageWidth / 2, yPos, { align: 'center' });
     yPos += 15;
@@ -3320,8 +3333,8 @@ function downloadPDF() {
     yPos = pageHeight - 30;
     doc.setFontSize(8);
     doc.setTextColor(150, 150, 150);
-    doc.text('Document généré le ' + calculatedScores.date, pageWidth / 2, yPos, { align: 'center' });
-    doc.text('Ancien personnel de direction Éducation Nationale - 30 ans d\'expérience', pageWidth / 2, yPos + 5, { align: 'center' });
+    doc.text('Document genere le ' + calculatedScores.date, pageWidth / 2, yPos, { align: 'center' });
+    doc.text('Ancien personnel de direction Education Nationale - 30 ans d\'experience', pageWidth / 2, yPos + 5, { align: 'center' });
     
     // Téléchargement
     doc.save('Analyse-Emotions-Besoins-' + calculatedScores.date + '.pdf');
@@ -3330,6 +3343,7 @@ function downloadPDF() {
 </body>
 
 </html>
+
 
 
 
