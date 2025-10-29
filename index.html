@@ -1490,8 +1490,14 @@
 
         // ========== DÉTECTION RETOUR STRIPE ==========
         window.addEventListener('load', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('payment') === 'success') {
+    // Vérifier si on revient de Stripe avec le hash
+    if (window.location.hash === '#payment-success') {
+        // L'utilisateur revient après un paiement réussi
+        document.getElementById('test').style.display = 'none';
+        document.querySelector('.intro-section').style.display = 'none';
+        document.querySelector('.coach-bio').style.display = 'none';
+
+https://testemotion.vercel.app/#payment-success
                 // L'utilisateur revient après un paiement réussi
                 // On va recalculer les scores (normalement ils sont dans localStorage mais on peut aussi les recalculer)
                 // Pour l'instant, on affiche un message
@@ -2005,6 +2011,7 @@
     </script>
 </body>
 </html>
+
 
 
 
