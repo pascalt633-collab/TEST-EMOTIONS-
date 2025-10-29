@@ -1303,41 +1303,31 @@
             const name = document.getElementById('freeName').value;
             const email = document.getElementById('freeEmail').value;
             
-            // Créer le formulaire caché pour FormSubmit
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'https://formsubmit.co/pascalt633@gmail.com';
-            form.style.display = 'none';
-            
-            // Champs du formulaire
-            const fields = {
-                '_subject': '🎯 Nouveau test gratuit - Émotions & Besoins',
-                '_template': 'table',
-                '_captcha': 'false',
-                'Prénom': name,
-                'Email': email,
-                'Score': calculatedScores.percentage + '%',
-                'Type': 'Gratuit'
-            };
-            
-            Object.keys(fields).forEach(key => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = fields[key];
-                form.appendChild(input);
-            });
-            
-            document.body.appendChild(form);
-            
-            // Fermer le modal
+            // Fermer le modal IMMÉDIATEMENT
             document.getElementById('freeEmailModal').classList.remove('active');
             
-            // Afficher les résultats
+            // Afficher les résultats IMMÉDIATEMENT
             displayFreeResults();
             
-            // Soumettre le formulaire en arrière-plan
-            setTimeout(() => form.submit(), 100);
+            // Envoyer l'email en arrière-plan via fetch (AJAX)
+            const formData = new FormData();
+            formData.append('_subject', '🎯 Nouveau test gratuit - Émotions & Besoins');
+            formData.append('_template', 'table');
+            formData.append('_captcha', 'false');
+            formData.append('Prénom', name);
+            formData.append('Email', email);
+            formData.append('Score', calculatedScores.percentage + '%');
+            formData.append('Type', 'Gratuit');
+            
+            // Envoi asynchrone (l'utilisateur ne voit rien)
+            fetch('https://formsubmit.co/pascalt633@gmail.com', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                console.log('Email envoyé avec succès');
+            }).catch(error => {
+                console.log('Erreur envoi email:', error);
+            });
         }
 
         // ========== SOUMISSION RDV ==========
@@ -2017,3 +2007,4 @@
     </script>
 </body>
 </html>
+
