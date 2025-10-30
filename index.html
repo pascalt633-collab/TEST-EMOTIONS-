@@ -1306,9 +1306,9 @@ function selectFormula(formula) {
     }
     
     // 🔥 SAUVEGARDER LES RÉSULTATS + PRÉNOM AVANT LA REDIRECTION
+        calculatedScores.prenom = prenom;
     localStorage.setItem('testResults', JSON.stringify(calculatedScores));
     localStorage.setItem('testAnswers', JSON.stringify(userAnswers));
-    localStorage.setItem('userPrenom', prenom);
         
         // Redirection vers Stripe
         window.location.href = 'https://buy.stripe.com/bJecN53Gi1Hn0ASgDz1B601';
@@ -1585,19 +1585,22 @@ window.addEventListener('load', function() {
     if (urlPath === '/success' || urlPath.includes('/success') || urlParams.get('payment') === 'success') {
         console.log('🎉 Retour de Stripe détecté !');
         
-        // 🔥 RÉCUPÉRER LES DONNÉES DEPUIS LOCALSTORAGE
-       const savedResults = localStorage.getItem('testResults');
+       // 🔥 RÉCUPÉRER LES DONNÉES DEPUIS LOCALSTORAGE
+const savedResults = localStorage.getItem('testResults');
 const savedAnswers = localStorage.getItem('testAnswers');
-const savedPrenom = localStorage.getItem('userPrenom') || 'Ami(e)';
 
 if (savedResults && savedAnswers) {
     console.log('✅ Données récupérées depuis localStorage');
     calculatedScores = JSON.parse(savedResults);
     userAnswers = JSON.parse(savedAnswers);
-    calculatedScores.prenom = savedPrenom; // Ajouter le prénom aux scores
-    // Vérifier que le score est bien présent
-console.log('📊 Score récupéré pour PDF :', calculatedScores.percentage);
-    console.log('👤 Prénom récupéré :', savedPrenom);
+    
+    // Le prénom est déjà dans calculatedScores.prenom (ajouté avant la sauvegarde)
+    if (!calculatedScores.prenom) {
+        calculatedScores.prenom = 'Ami(e)';
+    }
+    
+    console.log('📊 Score récupéré pour PDF :', calculatedScores.percentage);
+    console.log('👤 Prénom récupéré :', calculatedScores.prenom);
         } else {
             console.log('⚠️ Aucune donnée trouvée, utilisation de scores par défaut');
             // Scores par défaut si les données sont perdues
@@ -1726,8 +1729,24 @@ console.log('📊 Score récupéré pour PDF :', calculatedScores.percentage);
 // Fonction helper pour nettoyer le texte
 function cleanText(text) {
     if (!text) return '';
-    if (typeof text !== 'string') return text;
+    if (typeof text !== 'string') return String(text);
+    
     return text
+        .replace(/é/g, 'e')
+        .replace(/è/g, 'e')
+        .replace(/ê/g, 'e')
+        .replace(/ë/g, 'e')
+        .replace(/à/g, 'a')
+        .replace(/â/g, 'a')
+        .replace(/ä/g, 'a')
+        .replace(/ù/g, 'u')
+        .replace(/û/g, 'u')
+        .replace(/ü/g, 'u')
+        .replace(/ô/g, 'o')
+        .replace(/ö/g, 'o')
+        .replace(/î/g, 'i')
+        .replace(/ï/g, 'i')
+        .replace(/ç/g, 'c')
         .replace(/'/g, "'")
         .replace(/'/g, "'")
         .replace(/"/g, '"')
@@ -1735,6 +1754,7 @@ function cleanText(text) {
         .replace(/…/g, '...')
         .replace(/–/g, '-')
         .replace(/—/g, '-');
+    // Les → et ≠ restent intacts car ils sont déjà dans le texte
 }
 // INTERCEPTER toutes les appels à doc.text pour nettoyer automatiquement
 const originalText = doc.text.bind(doc);
@@ -2566,6 +2586,7 @@ doc.text('Ou ecris-moi directement : pascalt633@gmail.com', pageWidth / 2, yPos,
     </script>
 </body>
 </html>
+
 
 
 
