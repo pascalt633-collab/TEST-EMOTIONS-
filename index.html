@@ -1595,6 +1595,9 @@ if (savedResults && savedAnswers) {
     calculatedScores = JSON.parse(savedResults);
     userAnswers = JSON.parse(savedAnswers);
     calculatedScores.prenom = savedPrenom; // Ajouter le prénom aux scores
+    // Vérifier que le score est bien présent
+console.log('📊 Score récupéré pour PDF :', calculatedScores.percentage);
+    console.log('👤 Prénom récupéré :', savedPrenom);
         } else {
             console.log('⚠️ Aucune donnée trouvée, utilisation de scores par défaut');
             // Scores par défaut si les données sont perdues
@@ -1719,8 +1722,40 @@ if (savedResults && savedAnswers) {
         // ========== GÉNÉRATION PDF COMPLÈTE CORRIGÉE ==========
         function downloadPDF() {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    
+   const doc = new jsPDF();
+// Fonction helper pour nettoyer le texte
+function cleanText(text) {
+    if (!text) return '';
+    if (typeof text !== 'string') return text;
+    return text
+        .replace(/'/g, "'")
+        .replace(/'/g, "'")
+        .replace(/"/g, '"')
+        .replace(/"/g, '"')
+        .replace(/…/g, '...')
+        .replace(/–/g, '-')
+        .replace(/—/g, '-');
+}
+// INTERCEPTER toutes les appels à doc.text pour nettoyer automatiquement
+const originalText = doc.text.bind(doc);
+doc.text = function(text, x, y, options) {
+    // Si c'est un tableau de lignes, nettoyer chaque ligne
+    if (Array.isArray(text)) {
+        text = text.map(line => cleanText(line));
+    } else {
+        text = cleanText(text);
+    }
+    return originalText(text, x, y, options);
+};
+
+// INTERCEPTER splitTextToSize aussi
+const originalSplit = doc.splitTextToSize.bind(doc);
+doc.splitTextToSize = function(text, maxWidth) {
+    return originalSplit(cleanText(text), maxWidth);
+};
+            // Configuration pour supporter les accents français
+doc.setLanguage("fr");
+            
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 20;
@@ -1728,7 +1763,11 @@ if (savedResults && savedAnswers) {
     let yPos = 20;
     
     const prenom = calculatedScores.prenom || 'Ami(e)';
-    const score = calculatedScores.percentage;
+const score = calculatedScores.percentage || 0;
+
+// DEBUG : Afficher le score dans la console
+console.log('🎯 Score utilisé dans le PDF :', score);
+console.log('👤 Prénom utilisé dans le PDF :', prenom);
     
     // Fonction helper pour ajouter une nouvelle page si nécessaire
     function checkPageBreak(neededSpace) {
@@ -2472,20 +2511,31 @@ if (savedResults && savedAnswers) {
     doc.text('Cabinet a Clermont-Ferrand ou seances en visio', pageWidth / 2, yPos, { align: 'center' });
     yPos += 15;
     
-    // QR Code simulé (texte)
-    doc.setFontSize(9);
-    doc.text('Scanne ce QR code pour prendre RDV directement :', pageWidth / 2, yPos, { align: 'center' });
-    yPos += 8;
-    doc.setFillColor(255, 255, 255);
-    doc.rect(pageWidth / 2 - 15, yPos, 30, 30, 'F');
-    doc.setFontSize(7);
-    doc.setTextColor(0, 0, 0);
-    doc.text('[QR CODE]', pageWidth / 2, yPos + 16, { align: 'center' });
-    doc.setTextColor(255, 255, 255);
-    yPos += 35;
-    
-    doc.setFontSize(10);
-    doc.text('Ou ecris-moi : pascalt633@gmail.com', pageWidth / 2, yPos, { align: 'center' });
+  // Lien vers option RDV
+doc.setFontSize(11);
+doc.setFont(undefined, 'bold');
+doc.text('Envie d\'aller plus loin ?', pageWidth / 2, yPos, { align: 'center' });
+yPos += 8;
+
+doc.setFontSize(10);
+doc.setFont(undefined, 'normal');
+doc.text('Pour reserver ta seance decouverte :', pageWidth / 2, yPos, { align: 'center' });
+yPos += 10;
+
+doc.setFontSize(10);
+doc.setFont(undefined, 'bold');
+doc.setTextColor(102, 126, 234);
+doc.text('1. Retourne sur : testemotions.netlify.app', pageWidth / 2, yPos, { align: 'center' });
+yPos += 7;
+doc.text('2. Fais le test si tu ne l\'as pas encore fait', pageWidth / 2, yPos, { align: 'center' });
+yPos += 7;
+doc.text('3. Choisis "Seance decouverte 60€"', pageWidth / 2, yPos, { align: 'center' });
+yPos += 12;
+
+doc.setTextColor(255, 255, 255);
+doc.setFont(undefined, 'normal');
+doc.setFontSize(10);
+doc.text('Ou ecris-moi directement : pascalt633@gmail.com', pageWidth / 2, yPos, { align: 'center' });
     
     // Témoignages en bas
     yPos = pageHeight - 60;
@@ -2516,6 +2566,7 @@ if (savedResults && savedAnswers) {
     </script>
 </body>
 </html>
+
 
 
 
