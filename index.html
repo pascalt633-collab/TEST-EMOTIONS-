@@ -268,7 +268,7 @@
         }
         
         .score-number {
-            font-size: 5em;
+            font-size: 3.5em;
             font-weight: bold;
             color: #FF6B4A;
             margin: 20px 0;
@@ -568,7 +568,7 @@
 
         <!-- SECTION INTRODUCTION -->
         <div class="intro-section">
-            <h2>Pourquoi ce test peut changer ta vie ?</h2>
+            <h2>Ce que ce test va t'apporter</h2>
             <p>
                 Pendant 30 ans dans l'Éducation Nationale, j'ai accompagné des milliers de jeunes. 
                 J'ai réalisé une chose : <strong>on ne leur apprend jamais à comprendre leurs émotions</strong>.
@@ -1280,19 +1280,23 @@
             document.getElementById('choiceModal').classList.add('active');
         }
 
-        // ========== SÉLECTION D'UNE FORMULE ==========
-        function selectFormula(formula) {
-            document.getElementById('choiceModal').classList.remove('active');
-            
-            if (formula === 'free') {
-                document.getElementById('freeEmailModal').classList.add('active');
-            } else if (formula === 'premium') {
-                // Redirection vers Stripe avec le nouveau lien
-               window.location.href = 'https://buy.stripe.com/bJecN53Gi1Hn0ASgDz1B601';
-            } else if (formula === 'rdv') {
-                document.getElementById('rdvModal').classList.add('active');
-            }
-        }
+       // ========== SÉLECTION D'UNE FORMULE ==========
+function selectFormula(formula) {
+    document.getElementById('choiceModal').classList.remove('active');
+    
+    if (formula === 'free') {
+        document.getElementById('freeEmailModal').classList.add('active');
+    } else if (formula === 'premium') {
+        // 🔥 SAUVEGARDER LES RÉSULTATS AVANT LA REDIRECTION
+        localStorage.setItem('testResults', JSON.stringify(calculatedScores));
+        localStorage.setItem('testAnswers', JSON.stringify(userAnswers));
+        
+        // Redirection vers Stripe
+        window.location.href = 'https://buy.stripe.com/bJecN53Gi1Hn0ASgDz1B601';
+    } else if (formula === 'rdv') {
+        document.getElementById('rdvModal').classList.add('active');
+    }
+}
 
         // ========== SOUMISSION EMAIL GRATUIT ==========
         function submitFreeEmail(event) {
@@ -1473,13 +1477,13 @@
             adviceHTML += '<li style="margin-bottom: 20px;"><strong>Partage tes progres :</strong> Parle de ce test a un proche. Explique-lui une chose que tu as apprise. Verbaliser = ancrer.</li>';
         resultsDiv.innerHTML = `
                 <div class="score-display">
-                    <h2 style="color: #FF6B4A; font-size: 2em;">Ton Score Global</h2>
+                    <h2 style="color: #FF6B4A; font-size: 1.6em;">Ton Score Global</h2>
                     <div class="score-number">${calculatedScores.percentage}%</div>
                     <div class="score-interpretation">${interpretation}</div>
                 </div>
                 
                 <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
-                    <h3 style="color: #4CAF50; font-size: 1.8em; margin-bottom: 20px;">✅ Tes 3 Forces Principales</h3>
+                    <h3 style="color: #4CAF50; font-size: 1.5em; margin-bottom: 20px;">✅ Tes 3 Forces Principales</h3>
                     ${strengths.map(s => `
                         <div class="dimension-card">
                             <div class="dimension-name">${s.name}</div>
@@ -1494,7 +1498,7 @@
                 </div>
                 
                 <div style="background: #FFF8F0; padding: 30px; border-radius: 15px; margin: 30px 0;">
-                    <h3 style="color: #FF6B4A; font-size: 1.8em; margin-bottom: 20px;">🎯 Tes 3 Axes de Progression</h3>
+                    <h3 style="color: #FF6B4A; font-size: 1.5em; margin-bottom: 20px;">🎯 Tes 3 Axes de Progression</h3>
                     ${weaknesses.map(w => `
                         <div class="dimension-card">
                             <div class="dimension-name">${w.name}</div>
@@ -1509,7 +1513,7 @@
                 </div>
                 
                 <div style="background: linear-gradient(135deg, #FF6B4A 0%, #FF8C69 100%); color: white; padding: 40px; border-radius: 15px; margin: 30px 0;">
-                    <h3 style="font-size: 1.8em; margin-bottom: 20px;">💡 Tes 5 Actions Prioritaires</h3>
+                    <h3 style="font-size: 1.5em; margin-bottom: 20px;">💡 Tes 5 Actions Prioritaires</h3>
                     <p style="font-size: 1.1em; margin-bottom: 25px;">Basees sur tes 2 axes de developpement principaux :</p>
                     <ol style="font-size: 1.1em; line-height: 1.8; padding-left: 25px;">
                         ${adviceHTML}
@@ -1519,7 +1523,7 @@
                 <div style="text-align: center; background: white; padding: 50px 30px; border-radius: 15px; margin-top: 40px;">
                     <h3 style="color: #FF6B4A; font-size: 2.2em; margin-bottom: 20px;">🚀 P
                     <div style="text-align: center; background: white; padding: 50px 30px; border-radius: 15px; margin-top: 40px;">
-                    <h3 style="color: #FF6B4A; font-size: 2.2em; margin-bottom: 20px;">🚀 Prêt(e) à aller plus loin ?</h3>
+                    <h3 style="color: #FF6B4A; font-size: 1.5em; margin-bottom: 20px;">🚀 Prêt(e) à aller plus loin ?</h3>
                     <p style="font-size: 1.2em; color: #555; margin-bottom: 30px; line-height: 1.6;">
                         Ce test t'a donné un <strong>aperçu gratuit</strong> de ton profil.<br>
                         Mais tu mérites d'aller beaucoup plus loin...
@@ -1556,39 +1560,55 @@
                 });
             }, 100);
         }    
-            // ========== DÉTECTION RETOUR STRIPE ==========
-       window.addEventListener('load', function() {
-            // Vérifier si on est sur /success (retour Stripe)
-            if (window.location.pathname === '/success' || window.location.search.includes('payment=success')) {
-                document.getElementById('test').style.display = 'none';
-                document.querySelector('.intro-section').style.display = 'none';
-                document.querySelector('.coach-bio').style.display = 'none';
-                
-                displayPremiumResults();
-            }
-        });
+           // ========== 🔥 DÉTECTION RETOUR STRIPE + RÉCUPÉRATION DES DONNÉES ==========
+window.addEventListener('load', function() {
+    // Vérifier si on revient de Stripe
+    const urlPath = window.location.pathname;
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    if (urlPath === '/success' || urlPath.includes('/success') || urlParams.get('payment') === 'success') {
+        console.log('🎉 Retour de Stripe détecté !');
+        
+        // 🔥 RÉCUPÉRER LES DONNÉES DEPUIS LOCALSTORAGE
+        const savedResults = localStorage.getItem('testResults');
+        const savedAnswers = localStorage.getItem('testAnswers');
+        
+        if (savedResults && savedAnswers) {
+            console.log('✅ Données récupérées depuis localStorage');
+            calculatedScores = JSON.parse(savedResults);
+            userAnswers = JSON.parse(savedAnswers);
+        } else {
+            console.log('⚠️ Aucune donnée trouvée, utilisation de scores par défaut');
+            // Scores par défaut si les données sont perdues
+            calculatedScores = {
+                percentage: 43,
+                dimensions: {
+                    reconnaissance: { name: "Reconnaissance des émotions", percentage: 40, total: 6, max: 16 },
+                    identification: { name: "Identification des besoins", percentage: 20, total: 3, max: 16 },
+                    expression: { name: "Expression des émotions", percentage: 45, total: 7, max: 16 },
+                    satisfaction: { name: "Satisfaction des besoins", percentage: 25, total: 4, max: 16 },
+                    regulation: { name: "Régulation émotionnelle", percentage: 40, total: 6, max: 16 },
+                    connexion: { name: "Connexion corps-émotions", percentage: 70, total: 11, max: 16 },
+                    empathie: { name: "Empathie émotionnelle", percentage: 65, total: 10, max: 16 },
+                    acceptation: { name: "Acceptation émotionnelle", percentage: 35, total: 5, max: 16 }
+                },
+                date: new Date().toLocaleDateString('fr-FR')
+            };
+        }
+        
+        // Masquer le test et les autres sections
+        document.getElementById('test').style.display = 'none';
+        document.querySelector('.intro-section').style.display = 'none';
+        document.querySelector('.coach-bio').style.display = 'none';
+        
+        // Afficher les résultats premium
+        displayPremiumResults();
+    }
+});
         // ========== AFFICHAGE RÉSULTATS PREMIUM + GÉNÉRATION PDF ==========
         function displayPremiumResults() {
             const resultsDiv = document.getElementById('results');
             resultsDiv.style.display = 'block';
-            
-            // Si on n'a pas les scores en mémoire, utiliser des valeurs par défaut
-            if (!calculatedScores.percentage) {
-                calculatedScores = {
-                    percentage: 43,
-                    dimensions: {
-                        reconnaissance: { name: "Reconnaissance des émotions", percentage: 40, total: 6, max: 16 },
-                        identification: { name: "Identification des besoins", percentage: 20, total: 3, max: 16 },
-                        expression: { name: "Expression des émotions", percentage: 45, total: 7, max: 16 },
-                        satisfaction: { name: "Satisfaction des besoins", percentage: 25, total: 4, max: 16 },
-                        regulation: { name: "Régulation émotionnelle", percentage: 40, total: 6, max: 16 },
-                        connexion: { name: "Connexion corps-émotions", percentage: 70, total: 11, max: 16 },
-                        empathie: { name: "Empathie émotionnelle", percentage: 65, total: 10, max: 16 },
-                        acceptation: { name: "Acceptation émotionnelle", percentage: 35, total: 5, max: 16 }
-                    },
-                    date: new Date().toLocaleDateString('fr-FR')
-                };
-            }
             
             resultsDiv.innerHTML = `
                 <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%); color: white; border-radius: 15px; margin-bottom: 40px;">
@@ -2069,6 +2089,7 @@
     </script>
 </body>
 </html>
+
 
 
 
