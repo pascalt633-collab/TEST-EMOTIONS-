@@ -1782,12 +1782,30 @@ doc.setLanguage("fr");
     const maxWidth = pageWidth - (margin * 2);
     let yPos = 20;
     
-    const prenom = calculatedScores.prenom || 'Ami(e)';
-const score = calculatedScores.percentage || 0;
+    // Récupérer les vraies données depuis localStorage
+const savedResults = localStorage.getItem('testResults');
+const savedPrenom = localStorage.getItem('userPrenom');
+
+let prenom = 'Ami(e)';
+let score = 28;
+
+if (savedResults) {
+    try {
+        const results = JSON.parse(savedResults);
+        score = results.percentage || 28;
+    } catch(e) {
+        console.error('Erreur parsing results:', e);
+    }
+}
+
+if (savedPrenom) {
+    prenom = savedPrenom;
+}
 
 // DEBUG : Afficher le score dans la console
 console.log('🎯 Score utilisé dans le PDF :', score);
 console.log('👤 Prénom utilisé dans le PDF :', prenom);
+console.log('📦 calculatedScores:', calculatedScores);
     
     // Fonction helper pour ajouter une nouvelle page si nécessaire
     function checkPageBreak(neededSpace) {
@@ -2586,6 +2604,7 @@ doc.text('Ou ecris-moi directement : pascalt633@gmail.com', pageWidth / 2, yPos,
     </script>
 </body>
 </html>
+
 
 
 
