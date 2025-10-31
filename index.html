@@ -1297,22 +1297,27 @@ function selectFormula(formula) {
     
     if (formula === 'free') {
         document.getElementById('freeEmailModal').classList.add('active');
-    } else if (formula === 'premium') {
-    // Vérifier que le prénom est renseigné
-    const prenom = document.getElementById('premiumName').value.trim();
-    if (!prenom) {
-        alert('⚠️ Merci d\'entrer ton prénom pour personnaliser ton analyse !');
-        return;
-    }
-    
-    // 🔥 SAUVEGARDER LES RÉSULTATS + PRÉNOM AVANT LA REDIRECTION
-        calculatedScores.prenom = prenom;
-    localStorage.setItem('userPrenom', prenom);
-    localStorage.setItem('testResults', JSON.stringify(calculatedScores));
-    localStorage.setItem('testAnswers', JSON.stringify(userAnswers));
+   } else if (formula === 'premium') {
+        // Vérifier que le prénom est renseigné
+        const prenom = document.getElementById('premiumName').value.trim();
+        if (!prenom) {
+            alert('⚠️ Merci d\'entrer ton prénom pour personnaliser ton analyse !');
+            return;
+        }
         
-        // Redirection vers Stripe
-        window.location.href = 'https://buy.stripe.com/bJecN53Gi1Hn0ASgDz1B601';
+        // ✅ CORRECTION : Sauvegarder AVANT la redirection avec un délai
+        calculatedScores.prenom = prenom;
+        localStorage.setItem('userPrenom', prenom);
+        localStorage.setItem('testResults', JSON.stringify(calculatedScores));
+        localStorage.setItem('testAnswers', JSON.stringify(userAnswers));
+        
+        // Debug : vérifier ce qui est sauvegardé
+        console.log('💾 Sauvegarde avant Stripe - Score:', calculatedScores.percentage, 'Prénom:', prenom);
+        
+        // ✅ Ajouter un délai pour s'assurer que localStorage est bien enregistré
+        setTimeout(() => {
+            window.location.href = 'https://buy.stripe.com/bJecN53Gi1Hn0ASgDz1B601';
+        }, 200); // 200ms de délai
     } else if (formula === 'rdv') {
         document.getElementById('rdvModal').classList.add('active');
     }
@@ -1579,52 +1584,53 @@ function selectFormula(formula) {
         }    
            // ========== 🔥 DÉTECTION RETOUR STRIPE + RÉCUPÉRATION DES DONNÉES ==========
 window.addEventListener('load', function() {
-    // Vérifier si on revient de Stripe
-    const urlPath = window.location.pathname;
     const urlParams = new URLSearchParams(window.location.search);
     
-    if (urlPath === '/success' || urlPath.includes('/success') || urlParams.get('payment') === 'success') {
+    // ✅ CORRECTION : Détection plus robuste avec plusieurs paramètres possibles
+    const isStripeReturn = urlParams.get('payment_success') === 'true' || 
+                           urlParams.get('session_id') !== null ||
+                           window.location.hash === '#payment-success';
+    
+    if (isStripeReturn) {
         console.log('🎉 Retour de Stripe détecté !');
         
-       // 🔥 RÉCUPÉRER LES DONNÉES DEPUIS LOCALSTORAGE
-const savedResults = localStorage.getItem('testResults');
-const savedAnswers = localStorage.getItem('testAnswers');
-
-if (savedResults && savedAnswers) {
-    console.log('✅ Données récupérées depuis localStorage');
-    calculatedScores = JSON.parse(savedResults);
-    userAnswers = JSON.parse(savedAnswers);
-    
-    // Le prénom est déjà dans calculatedScores.prenom (ajouté avant la sauvegarde)
-    if (!calculatedScores.prenom) {
-        calculatedScores.prenom = 'Ami(e)';
-    }
-    
-    console.log('📊 Score récupéré pour PDF :', calculatedScores.percentage);
-    console.log('👤 Prénom récupéré :', calculatedScores.prenom);
+        // Récupérer les données depuis localStorage
+        const savedResults = localStorage.getItem('testResults');
+        const savedAnswers = localStorage.getItem('testAnswers');
+        
+        if (savedResults && savedAnswers) {
+            console.log('✅ Données récupérées depuis localStorage');
+            
+            try {
+                calculatedScores = JSON.parse(savedResults);
+                userAnswers = JSON.parse(savedAnswers);
+                
+                // Vérifier que le prénom existe
+                if (!calculatedScores.prenom) {
+                    calculatedScores.prenom = localStorage.getItem('userPrenom') || 'Ami(e)';
+                }
+                
+                console.log('📊 Score récupéré :', calculatedScores.percentage);
+                console.log('👤 Prénom récupéré :', calculatedScores.prenom);
+                console.log('📦 Objet complet :', calculatedScores);
+                
+            } catch(e) {
+                console.error('❌ Erreur lors du parsing des données:', e);
+                alert('Erreur lors de la récupération de vos résultats. Veuillez contacter pascalt633@gmail.com');
+                return;
+            }
         } else {
-            console.log('⚠️ Aucune donnée trouvée, utilisation de scores par défaut');
-            // Scores par défaut si les données sont perdues
-            calculatedScores = {
-                percentage: 43,
-                dimensions: {
-                    reconnaissance: { name: "Reconnaissance des émotions", percentage: 40, total: 6, max: 16 },
-                    identification: { name: "Identification des besoins", percentage: 20, total: 3, max: 16 },
-                    expression: { name: "Expression des émotions", percentage: 45, total: 7, max: 16 },
-                    satisfaction: { name: "Satisfaction des besoins", percentage: 25, total: 4, max: 16 },
-                    regulation: { name: "Régulation émotionnelle", percentage: 40, total: 6, max: 16 },
-                    connexion: { name: "Connexion corps-émotions", percentage: 70, total: 11, max: 16 },
-                    empathie: { name: "Empathie émotionnelle", percentage: 65, total: 10, max: 16 },
-                    acceptation: { name: "Acceptation émotionnelle", percentage: 35, total: 5, max: 16 }
-                },
-                date: new Date().toLocaleDateString('fr-FR')
-            };
+            console.error('❌ Aucune donnée trouvée dans localStorage');
+            alert('Impossible de récupérer vos résultats. Veuillez contacter pascalt633@gmail.com avec votre confirmation de paiement Stripe.');
+            return;
         }
         
-        // Masquer le test et les autres sections
+        // Masquer les sections inutiles
         document.getElementById('test').style.display = 'none';
-        document.querySelector('.intro-section').style.display = 'none';
-        document.querySelector('.coach-bio').style.display = 'none';
+        const introSection = document.querySelector('.intro-section');
+        const coachBio = document.querySelector('.coach-bio');
+        if (introSection) introSection.style.display = 'none';
+        if (coachBio) coachBio.style.display = 'none';
         
         // Afficher les résultats premium
         displayPremiumResults();
@@ -1783,31 +1789,21 @@ doc.setLanguage("fr");
     const maxWidth = pageWidth - (margin * 2);
     let yPos = 20;
     
-    // Récupérer les vraies données depuis localStorage
-const savedResults = localStorage.getItem('testResults');
-const savedPrenom = localStorage.getItem('userPrenom');
-
-let prenom = 'Ami(e)';
-let score = 28;
-
-if (savedResults) {
-    try {
-        const results = JSON.parse(savedResults);
-        score = results.percentage || 28;
-    } catch(e) {
-        console.error('Erreur parsing results:', e);
-    }
-}
-
-if (savedPrenom) {
-    prenom = savedPrenom;
-}
-
-// DEBUG : Afficher le score dans la console
-console.log('🎯 Score utilisé dans le PDF :', score);
-console.log('👤 Prénom utilisé dans le PDF :', prenom);
-console.log('📦 calculatedScores:', calculatedScores);
+    // ✅ CORRECTION : Utiliser directement calculatedScores
+    const prenom = calculatedScores.prenom || localStorage.getItem('userPrenom') || 'Ami(e)';
+    const score = calculatedScores.percentage;
     
+    // Debug pour vérifier
+    console.log('🎯 Score pour PDF :', score);
+    console.log('👤 Prénom pour PDF :', prenom);
+    console.log('📦 calculatedScores complet :', calculatedScores);
+    
+    // Si le score n'existe toujours pas, c'est un problème critique
+    if (!score || score === undefined) {
+        alert('❌ Erreur : Impossible de récupérer vos résultats. Veuillez refaire le test.');
+        window.location.href = '/';
+        return;
+    }
     // Fonction helper pour ajouter une nouvelle page si nécessaire
     function checkPageBreak(neededSpace) {
         if (yPos + neededSpace > pageHeight - 20) {
@@ -2605,6 +2601,7 @@ doc.text('Ou ecris-moi directement : pascalt633@gmail.com', pageWidth / 2, yPos,
     </script>
 </body>
 </html>
+
 
 
 
