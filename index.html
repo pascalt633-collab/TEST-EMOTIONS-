@@ -1307,6 +1307,7 @@ function selectFormula(formula) {
     
     // 🔥 SAUVEGARDER LES RÉSULTATS + PRÉNOM AVANT LA REDIRECTION
         calculatedScores.prenom = prenom;
+    localStorage.setItem('userPrenom', prenom);
     localStorage.setItem('testResults', JSON.stringify(calculatedScores));
     localStorage.setItem('testAnswers', JSON.stringify(userAnswers));
         
@@ -2604,6 +2605,7 @@ doc.text('Ou ecris-moi directement : pascalt633@gmail.com', pageWidth / 2, yPos,
     </script>
 </body>
 </html>
+
 
 
 
