@@ -1297,13 +1297,13 @@ function sanitizeString(str) {
             document.getElementById('choiceModal').classList.add('active');
         }
 
-       // ========== SÉLECTION D'UNE FORMULE ==========
+      // ========== SÉLECTION D'UNE FORMULE ==========
 function selectFormula(formula) {
     document.getElementById('choiceModal').classList.remove('active');
     
     if (formula === 'free') {
         document.getElementById('freeEmailModal').classList.add('active');
-   } else if (formula === 'premium') {
+    } else if (formula === 'premium') {
         // Vérifier que le prénom est renseigné
         const prenomRaw = document.getElementById('premiumName').value || '';
         const prenom = sanitizeString(prenomRaw);
@@ -1329,7 +1329,6 @@ function selectFormula(formula) {
         document.getElementById('rdvModal').classList.add('active');
     }
 }
-
         // ========== SOUMISSION EMAIL GRATUIT ==========
         function submitFreeEmail(event) {
             event.preventDefault();
@@ -2696,6 +2695,7 @@ doc.text('Ou ecris-moi directement : pascalt633@gmail.com', pageWidth / 2, yPos,
     </script>
 </body>
 </html>
+
 
 
 
