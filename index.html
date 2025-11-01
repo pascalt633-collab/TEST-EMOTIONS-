@@ -1183,7 +1183,13 @@
         ];
 
         let userAnswers = {};
-        let calculatedScores = {};
+let calculatedScores = {};
+
+// ✅ CORRECTION #4A : Fonction de sanitisation contre XSS
+function sanitizeString(str) {
+    if (!str) return '';
+    return String(str).replace(/[<>'"]/g, '').trim().substring(0, 50); // Max 50 caractères
+}
 
         // ========== DÉMARRAGE DU TEST ==========
         function startTest() {
@@ -1299,7 +1305,8 @@ function selectFormula(formula) {
         document.getElementById('freeEmailModal').classList.add('active');
    } else if (formula === 'premium') {
         // Vérifier que le prénom est renseigné
-        const prenom = document.getElementById('premiumName').value.trim();
+        const prenomRaw = document.getElementById('premiumName').value || '';
+        const prenom = sanitizeString(prenomRaw);
         if (!prenom) {
             alert('⚠️ Merci d\'entrer ton prénom pour personnaliser ton analyse !');
             return;
@@ -1781,8 +1788,14 @@ doc.splitTextToSize = function(text, maxWidth) {
     return originalSplit(cleanText(text), maxWidth);
 };
             // Configuration pour supporter les accents français
-doc.setLanguage("fr");
-            
+// ✅ CORRECTION #4B : Protection setLanguage (peut ne pas exister sur toutes versions jsPDF)
+if (typeof doc.setLanguage === 'function') {
+    try { 
+        doc.setLanguage("fr"); 
+    } catch(e) { 
+        console.warn('setLanguage non supporté par cette version de jsPDF', e); 
+    }
+}        
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 20;
@@ -2601,6 +2614,7 @@ doc.text('Ou ecris-moi directement : pascalt633@gmail.com', pageWidth / 2, yPos,
     </script>
 </body>
 </html>
+
 
 
 
