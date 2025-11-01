@@ -1842,6 +1842,7 @@ function cleanText(text) {
         .replace(/→/g, '->')
         .replace(/←/g, '<-');
 }
+
 // INTERCEPTER toutes les appels à doc.text pour nettoyer automatiquement
 const originalText = doc.text.bind(doc);
 doc.text = function(text, x, y, options) {
@@ -1859,7 +1860,8 @@ const originalSplit = doc.splitTextToSize.bind(doc);
 doc.splitTextToSize = function(text, maxWidth) {
     return originalSplit(cleanText(text), maxWidth);
 };
-            // Configuration pour supporter les accents français
+
+// Configuration pour supporter les accents français
 // ✅ CORRECTION #4B : Protection setLanguage (peut ne pas exister sur toutes versions jsPDF)
 if (typeof doc.setLanguage === 'function') {
     try { 
@@ -1867,12 +1869,13 @@ if (typeof doc.setLanguage === 'function') {
     } catch(e) { 
         console.warn('setLanguage non supporté par cette version de jsPDF', e); 
     }
-}        
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const margin = 20;
-    const maxWidth = pageWidth - (margin * 2);
-    let yPos = 20;
+}
+
+const pageWidth = doc.internal.pageSize.getWidth();
+const pageHeight = doc.internal.pageSize.getHeight();
+const margin = 20;
+const maxWidth = pageWidth - (margin * 2);
+let yPos = 20;
     
     // ✅ CORRECTION : Utiliser directement calculatedScores
     const prenom = calculatedScores.prenom || localStorage.getItem('userPrenom') || 'Ami(e)';
@@ -2693,6 +2696,7 @@ doc.text('Ou ecris-moi directement : pascalt633@gmail.com', pageWidth / 2, yPos,
     </script>
 </body>
 </html>
+
 
 
 
