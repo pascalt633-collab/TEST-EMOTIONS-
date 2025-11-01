@@ -1620,60 +1620,79 @@ function selectFormula(formula) {
                 });
             }, 100);
         }    
-           // ========== 🔥 DÉTECTION RETOUR STRIPE + RÉCUPÉRATION DES DONNÉES ==========
-window.addEventListener('load', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    // ✅ CORRECTION : Détection plus robuste avec plusieurs paramètres possibles
-    const isStripeReturn = urlParams.get('payment_success') === 'true' || 
-                           urlParams.get('session_id') !== null ||
-                           window.location.hash === '#payment-success';
-    
-    if (isStripeReturn) {
-        console.log('🎉 Retour de Stripe détecté !');
+           // ========== 🔥 DÉTECTION RETOUR STRIPE + RÉCUPÉRATION DES DONNÉES (CORRIGÉ) ==========
+window.addEventListener('DOMContentLoaded', function() {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
         
-        // Récupérer les données depuis localStorage
-        const savedResults = localStorage.getItem('testResults');
-        const savedAnswers = localStorage.getItem('testAnswers');
-        
-        if (savedResults && savedAnswers) {
-            console.log('✅ Données récupérées depuis localStorage');
+        // ✅ Détection robuste avec plusieurs paramètres possibles
+        const isStripeReturn = urlParams.get('payment_success') === 'true' || 
+                               urlParams.get('session_id') !== null ||
+                               urlParams.get('payment') === 'success' ||
+                               window.location.hash === '#payment-success' ||
+                               window.location.pathname.includes('/success');
+
+        if (isStripeReturn) {
+            console.log('🎉 Retour de Stripe détecté !');
             
-            try {
-                calculatedScores = JSON.parse(savedResults);
-                userAnswers = JSON.parse(savedAnswers);
-                
-                // Vérifier que le prénom existe
-                if (!calculatedScores.prenom) {
-                    calculatedScores.prenom = localStorage.getItem('userPrenom') || 'Ami(e)';
-                }
-                
-                console.log('📊 Score récupéré :', calculatedScores.percentage);
-                console.log('👤 Prénom récupéré :', calculatedScores.prenom);
-                console.log('📦 Objet complet :', calculatedScores);
-                
-            } catch(e) {
-                console.error('❌ Erreur lors du parsing des données:', e);
-                alert('Erreur lors de la récupération de vos résultats. Veuillez contacter pascalt633@gmail.com');
-                return;
-            }
-        } else {
-            console.error('❌ Aucune donnée trouvée dans localStorage');
-            alert('Impossible de récupérer vos résultats. Veuillez contacter pascalt633@gmail.com avec votre confirmation de paiement Stripe.');
-            return;
+            // Récupération des données depuis localStorage
+let savedResults = null;
+let savedAnswers = null;
+let savedPrenom = null;
+
+try {
+    savedResults = localStorage.getItem('testResults');
+    savedAnswers = localStorage.getItem('testAnswers');
+    savedPrenom = localStorage.getItem('userPrenom');
+    console.log('📦 Données localStorage récupérées');
+} catch(e) {
+    console.warn('⚠️ localStorage indisponible', e);
+}
+
+// Parse des résultats
+if (savedResults && savedAnswers) {
+    try {
+        calculatedScores = JSON.parse(savedResults);
+        userAnswers = JSON.parse(savedAnswers);
+        
+        // Vérifier que le prénom existe
+        if (!calculatedScores.prenom) {
+            calculatedScores.prenom = savedPrenom || 'Ami(e)';
         }
         
-        // Masquer les sections inutiles
-        document.getElementById('test').style.display = 'none';
-        const introSection = document.querySelector('.intro-section');
-        const coachBio = document.querySelector('.coach-bio');
-        if (introSection) introSection.style.display = 'none';
-        if (coachBio) coachBio.style.display = 'none';
-        
-        // Afficher les résultats premium
-        displayPremiumResults();
+        console.log('✅ Scores récupérés:', calculatedScores);
+    } catch(e) {
+        console.warn('⚠️ Impossible de parser testResults', e);
+    }
+} else {
+    console.error('❌ Aucune donnée trouvée');
+    alert('Impossible de récupérer vos résultats. Veuillez contacter pascalt633@gmail.com');
+    return;
+}
+
+// Masquer les sections inutiles
+document.getElementById('test').style.display = 'none';
+const introSection = document.querySelector('.intro-section');
+const coachBio = document.querySelector('.coach-bio');
+if (introSection) introSection.style.display = 'none';
+if (coachBio) coachBio.style.display = 'none';
+
+            // Appel de la fonction pour afficher les résultats premium
+            console.log('📄 Appel de displayPremiumResults...');
+            if (typeof displayPremiumResults === 'function') {
+    displayPremiumResults();
+} else if (typeof generatePDF === 'function') {
+    generatePDF();
+} else {
+                console.error('❌ Aucune fonction displayPremiumResults/generatePDF disponible');
+                alert("Erreur technique. Contactez pascalt633@gmail.com avec votre ID de paiement.");
+            }
+        }
+    } catch (err) {
+        console.error('❌ Erreur lors de la détection du retour de paiement:', err);
     }
 });
+
         // ========== AFFICHAGE RÉSULTATS PREMIUM + GÉNÉRATION PDF ==========
         function displayPremiumResults() {
             const resultsDiv = document.getElementById('results');
@@ -1770,7 +1789,16 @@ window.addEventListener('load', function() {
         // ========== GÉNÉRATION PDF COMPLÈTE CORRIGÉE ==========
         function downloadPDF() {
     const { jsPDF } = window.jspdf;
-   const doc = new jsPDF();
+const doc = new jsPDF();
+
+// ✅ CORRECTION : Forcer police helvetica pour meilleurs accents
+try {
+    doc.setFont('helvetica', 'normal');
+    console.log('✅ Police helvetica activée pour accents');
+} catch(e) {
+    console.warn('⚠️ setFont helvetica non supportée', e);
+}
+
 // Fonction helper pour nettoyer le texte
 function cleanText(text) {
     if (!text) return '';
@@ -2402,19 +2430,26 @@ if (typeof doc.setLanguage === 'function') {
         yPos += 5;
         
         doc.setFont(undefined, 'bold');
-        doc.setTextColor(244, 67, 54);
-        doc.text('Obstacles frequents et solutions :', margin, yPos);
-        yPos += 5;
-        doc.setFont(undefined, 'normal');
-        doc.setTextColor(0, 0, 0);
-        const obstaclesLines = doc.splitTextToSize(action.obstacles, maxWidth - 10);
-        obstaclesLines.forEach(line => {
-            checkPageBreak(6);
-            doc.text(line, margin, yPos);
-            yPos += 5;
-        });
-        
-        yPos += 10;
+doc.setTextColor(244, 67, 54);
+doc.text('Obstacles frequents et solutions :', margin, yPos);
+yPos += 5;
+
+doc.setFont(undefined, 'normal');
+doc.setTextColor(0, 0, 0);
+
+// ✅ CORRECTION : Police réduite + largeur adaptée
+doc.setFontSize(9);  // ← Police plus petite
+const pageWidth = doc.internal.pageSize.getWidth();
+const adaptiveWidth = pageWidth - (margin * 2) - 20;  // ← Largeur adaptative
+
+const obstaclesLines = doc.splitTextToSize(action.obstacles, adaptiveWidth);
+obstaclesLines.forEach(line => {
+    checkPageBreak(5);
+    doc.text(line, margin, yPos);
+    yPos += 5;
+});
+
+yPos += 10;
     });
     
     // ========== PAGE 12 : TIMELINE 12 SEMAINES ==========
@@ -2645,6 +2680,7 @@ doc.text('Ou ecris-moi directement : pascalt633@gmail.com', pageWidth / 2, yPos,
     </script>
 </body>
 </html>
+
 
 
 
