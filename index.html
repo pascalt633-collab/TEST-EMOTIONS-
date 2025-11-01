@@ -1791,43 +1791,56 @@ if (coachBio) coachBio.style.display = 'none';
     const { jsPDF } = window.jspdf;
 const doc = new jsPDF();
 
-// ✅ CORRECTION : Forcer police helvetica pour meilleurs accents
+// ✅ CORRECTION : Configurer le PDF pour UTF-8
 try {
     doc.setFont('helvetica', 'normal');
-    console.log('✅ Police helvetica activée pour accents');
+    doc.setLanguage('fr-FR');
+    console.log('✅ Police helvetica + UTF-8 activés');
 } catch(e) {
-    console.warn('⚠️ setFont helvetica non supportée', e);
+    console.warn('⚠️ Configuration police non supportée', e);
 }
 
-// Fonction helper pour nettoyer le texte
+// ✅ Fonction pour encoder correctement les accents
+function encodeText(text) {
+    if (!text) return '';
+    // Convertir en UTF-8 compatible jsPDF
+    return String(text)
+        .normalize('NFC') // Normaliser les caractères
+        .replace(/[^\x00-\x7F]/g, function(char) {
+            // Mapper les caractères spéciaux
+            const map = {
+                'à': 'à', 'â': 'â', 'é': 'é', 'è': 'è', 'ê': 'ê', 
+                'ë': 'ë', 'î': 'î', 'ï': 'ï', 'ô': 'ô', 'ù': 'ù',
+                'û': 'û', 'ü': 'ü', 'ÿ': 'ÿ', 'ç': 'ç',
+                'À': 'À', 'Â': 'Â', 'É': 'É', 'È': 'È', 'Ê': 'Ê',
+                'Ë': 'Ë', 'Î': 'Î', 'Ï': 'Ï', 'Ô': 'Ô', 'Ù': 'Ù',
+                'Û': 'Û', 'Ü': 'Ü', 'Ÿ': 'Ÿ', 'Ç': 'Ç',
+                ''': "'", ''': "'", '"': '"', '"': '"',
+                '→': '->', '←': '<-', '↑': '^', '↓': 'v'
+            };
+            return map[char] || char;
+        });
+}
+// Fonction helper pour nettoyer le texte SANS supprimer les accents
 function cleanText(text) {
     if (!text) return '';
     if (typeof text !== 'string') return String(text);
     
-    return text
-        .replace(/é/g, 'e')
-        .replace(/è/g, 'e')
-        .replace(/ê/g, 'e')
-        .replace(/ë/g, 'e')
-        .replace(/à/g, 'a')
-        .replace(/â/g, 'a')
-        .replace(/ä/g, 'a')
-        .replace(/ù/g, 'u')
-        .replace(/û/g, 'u')
-        .replace(/ü/g, 'u')
-        .replace(/ô/g, 'o')
-        .replace(/ö/g, 'o')
-        .replace(/î/g, 'i')
-        .replace(/ï/g, 'i')
-        .replace(/ç/g, 'c')
+    // ✅ On garde les accents français !
+    return String(text)
+        .normalize('NFC')
+        .replace(/\u00A0/g, ' ')
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n')
         .replace(/'/g, "'")
         .replace(/'/g, "'")
         .replace(/"/g, '"')
         .replace(/"/g, '"')
         .replace(/…/g, '...')
         .replace(/–/g, '-')
-        .replace(/—/g, '-');
-    // Les → et ≠ restent intacts car ils sont déjà dans le texte
+        .replace(/—/g, '-')
+        .replace(/→/g, '->')
+        .replace(/←/g, '<-');
 }
 // INTERCEPTER toutes les appels à doc.text pour nettoyer automatiquement
 const originalText = doc.text.bind(doc);
@@ -2680,6 +2693,7 @@ doc.text('Ou ecris-moi directement : pascalt633@gmail.com', pageWidth / 2, yPos,
     </script>
 </body>
 </html>
+
 
 
 
