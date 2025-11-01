@@ -1414,7 +1414,30 @@ function selectFormula(formula) {
             // Soumettre le formulaire en arrière-plan
             setTimeout(() => form.submit(), 100);
         }
-
+// ========== UPGRADE DEPUIS GRATUIT VERS PREMIUM ==========
+        function upgradeFromFree() {
+            const prenomRaw = document.getElementById('upgradePremiumName').value || '';
+            const prenom = sanitizeString(prenomRaw);
+            
+            if (!prenom) {
+                alert('⚠️ Merci d\'entrer ton prénom pour personnaliser ton analyse !');
+                return;
+            }
+            
+            // ✅ Sauvegarder les données AVANT la redirection
+            calculatedScores.prenom = prenom;
+            localStorage.setItem('userPrenom', prenom);
+            localStorage.setItem('testResults', JSON.stringify(calculatedScores));
+            localStorage.setItem('testAnswers', JSON.stringify(userAnswers));
+            
+            // Debug
+            console.log('💾 Upgrade vers premium - Score:', calculatedScores.percentage, 'Prénom:', prenom);
+            
+            // Redirection avec délai
+            setTimeout(() => {
+                window.location.href = 'https://buy.stripe.com/bJecN53Gi1Hn0ASgDz1B601';
+            }, 200);
+        }
         // ========== AFFICHAGE RÉSULTATS GRATUITS ==========
         function displayFreeResults() {
             document.getElementById('test').style.display = 'none';
@@ -1571,10 +1594,18 @@ function selectFormula(formula) {
                         </ul>
                     </div>
                     
-                 <button class="cta-button" onclick="window.location.href='https://buy.stripe.com/bJecN53Gi1Hn0ASgDz1B601'" 
-                            style="font-size: 1.4em; padding: 22px 60px;">
-                        🔓 Débloquer l'analyse complète pour 9€
-                    </button>
+                 <div style="background: linear-gradient(135deg, #FFF8F0 0%, #FFE8DC 100%); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333; text-align: left;">
+                        Ton prénom (pour personnaliser l'analyse) :
+                    </label>
+                    <input type="text" id="upgradePremiumName" placeholder="Ton prénom" 
+                           style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; margin-bottom: 15px;">
+                </div>
+                
+                <button class="cta-button" onclick="upgradeFromFree()" 
+                        style="font-size: 1.4em; padding: 22px 60px;">
+                    🔓 Débloquer l'analyse complète pour 9€
+                </button>
                     
                     <p style="margin-top: 20px; color: #999; font-size: 0.95em;">
                         💳 Paiement sécurisé • Accès immédiat • Satisfait ou remboursé
@@ -2614,6 +2645,7 @@ doc.text('Ou ecris-moi directement : pascalt633@gmail.com', pageWidth / 2, yPos,
     </script>
 </body>
 </html>
+
 
 
 
